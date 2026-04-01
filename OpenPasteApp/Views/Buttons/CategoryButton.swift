@@ -92,7 +92,7 @@ struct CategoryButton: View {
     private var buttonBackground: some View {
         if #available(macOS 26.0, *) {
             Circle()
-                .glassEffect(.regular, in: Circle())
+                .glassEffect(.clear, in: Circle())
                 .background(
                     Circle()
                         .fill(isSelected ? Color.accentColor : Color.clear)

@@ -54,7 +54,7 @@ struct ClipboardItemCard: View {
                 .fill(.ultraThinMaterial)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 12))
+                        .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 12))
                 )
         } else {
             RoundedRectangle(cornerRadius: 12)
