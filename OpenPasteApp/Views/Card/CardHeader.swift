@@ -213,21 +213,10 @@ struct CardHeader: View {
     private var appIconView: some View {
         Group {
             if isICloudSynced {
-                // Show iCloud sync icon
-                Image(systemName: "icloud")
-                    .font(.system(size: 40, weight: .medium))
-                    .foregroundStyle(.white)
+                // Show iCloud sync icon using image resource
+                Image("ICloudIcon")
+                    .resizable()
                     .frame(width: 64, height: 64)
-                    .background(
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [Color.blue.opacity(0.8), Color.cyan.opacity(0.6)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                    )
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .offset(x: -20, y: 0)
                     .allowsHitTesting(false)
