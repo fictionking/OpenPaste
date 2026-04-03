@@ -41,15 +41,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Floating panel reference for showing on Dock icon click
     var floatingPanel: NSPanel?
 
+    /// Track the previously active application for text insertion
+    private var previousActiveApplication: NSRunningApplication?
+
     /// View model for clipboard data, persistence, and monitoring
     private var viewModel: ClipboardViewModel?
 
     /// HotKey instance
     private var hotKey: HotKey?
+    private var explosionHotKey: HotKey?
     private var globalClickMonitor: Any?
     private var localClickMonitor: Any?
     private var statusBarIcon: NSImage?
     private var statusBarAlternateIcon: NSImage?
+
+    /// Explosion panel (text explosion feature)
+    var explosionPanel: NSPanel?
+    private var explosionViewModel: TextExplosionViewModel?
+    private var explosionPanelController: TextExplosionPanelController?
 
     // MARK: - NSApplicationDelegate
 
@@ -61,6 +70,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.setupStatusBar()
         }
+
+        // Setup application tracking observer
+        NSWorkspace.shared.notificationCenter.addObserver(
+            self,
+            selector: #selector(applicationDidActivate(_:)),
+            name: NSWorkspace.didActivateApplicationNotification,
+            object: nil
+        )
 
         // Hide all windows except our floating panel
         NSApplication.shared.windows.forEach { window in
@@ -86,8 +103,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        // Cleanup hotkey
+        // Cleanup hotkeys
         hotKey = nil
+        explosionHotKey = nil
+
+        // Cleanup click monitors
         if let globalClickMonitor {
             NSEvent.removeMonitor(globalClickMonitor)
             self.globalClickMonitor = nil
@@ -96,6 +116,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSEvent.removeMonitor(localClickMonitor)
             self.localClickMonitor = nil
         }
+
+        // Cleanup explosion panel
+        explosionPanel?.close()
+        explosionPanel = nil
+        explosionViewModel = nil
+        explosionPanelController = nil
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
@@ -105,6 +131,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 window.setIsVisible(false)
             }
         }
+    }
+
+    /// Track when other applications are activated
+    @objc private func applicationDidActivate(_ notification: Notification) {
+        guard let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else {
+            return
+        }
+
+        // Ignore when our own app activates
+        if app.bundleIdentifier == Bundle.main.bundleIdentifier {
+            return
+        }
+
+        // Remember the last active non-OpenPaste application
+        previousActiveApplication = app
+        NSLog("📱 [OpenPaste] Previous active app updated: \(app.localizedName ?? "unknown")")
     }
 
     /// Copy content to clipboard without triggering new entry
@@ -148,13 +190,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupGlobalHotkey() {
         NSLog("🔧 Registering global hotkey...")
 
-        // Create hotkey with Command+Shift+V
+        // Create hotkey with Command+Shift+V for main floating panel
         hotKey = HotKey(key: .v, modifiers: [.command, .shift], keyDownHandler: { [weak self] in
             NSLog("🔥 Hotkey triggered!")
             self?.handleHotkeyToggle()
         })
 
+        // Create hotkey with Command+Shift+B for text explosion
+        explosionHotKey = HotKey(key: .b, modifiers: [.command, .shift], keyDownHandler: { [weak self] in
+            NSLog("💥 Explosion hotkey triggered!")
+            Task { @MainActor in
+                self?.handleExplosionHotkey()
+            }
+        })
+
         NSLog("✅ Hotkey ⌘⇧V registered successfully!")
+        NSLog("✅ Explosion hotkey ⌘⇧B registered successfully!")
     }
 
     private func updateStatusTitle(_ title: String) {
@@ -164,6 +215,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func toggleFloatingPanel(activateApp: Bool) {
+        // Close explosion panel if visible (mutual exclusion)
+        closeExplosionPanel()
+
         if floatingPanel == nil {
             showFloatingPanel(activateApp: activateApp)
             return
@@ -306,19 +360,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if globalClickMonitor == nil {
             // Use global monitor to detect clicks anywhere on screen
             globalClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
-                guard let self = self,
-                      let panel = self.floatingPanel,
-                      panel.isVisible else {
-                    return
-                }
+                guard let self = self else { return }
 
+                // Skip status bar clicks
                 if self.isStatusItemClick(event) {
                     return
                 }
 
                 let clickPoint = event.locationInWindow
-                if !panel.frame.contains(clickPoint) {
-                    self.hideFloatingPanel()
+
+                // Check floating panel
+                if let panel = self.floatingPanel, panel.isVisible {
+                    if !panel.frame.contains(clickPoint) {
+                        self.hideFloatingPanel()
+                    }
+                }
+
+                // Check explosion panel
+                if let explosionPanelController = self.explosionPanelController,
+                   self.explosionPanel?.isVisible == true {
+                    if explosionPanelController.shouldDismiss(for: clickPoint) {
+                        self.closeExplosionPanel()
+                    }
                 }
             }
         }
@@ -326,30 +389,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if localClickMonitor == nil {
             // Also monitor local events within the app
             localClickMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
-                guard let self = self,
-                      let panel = self.floatingPanel,
-                      panel.isVisible else {
-                    return event
-                }
+                guard let self = self else { return event }
 
+                // Skip status bar clicks
                 if self.isStatusItemClick(event) {
                     return event
                 }
 
-                if event.window !== panel {
-                    let screenLocation = event.locationInWindow
-                    if let eventWindow = event.window {
-                        let windowFrame = eventWindow.frame
-                        let clickInScreen = NSPoint(
-                            x: windowFrame.origin.x + screenLocation.x,
-                            y: windowFrame.origin.y + screenLocation.y
-                        )
+                // Calculate click position in screen coordinates
+                let screenLocation: NSPoint
+                if let eventWindow = event.window {
+                    let windowFrame = eventWindow.frame
+                    let pointInWindow = event.locationInWindow
+                    screenLocation = NSPoint(
+                        x: windowFrame.origin.x + pointInWindow.x,
+                        y: windowFrame.origin.y + pointInWindow.y
+                    )
+                } else {
+                    screenLocation = event.locationInWindow
+                }
 
-                        if !panel.frame.contains(clickInScreen) {
-                            self.hideFloatingPanel()
-                        }
-                    } else if !panel.frame.contains(screenLocation) {
+                // Check floating panel
+                if let panel = self.floatingPanel, panel.isVisible {
+                    if event.window !== panel && !panel.frame.contains(screenLocation) {
                         self.hideFloatingPanel()
+                    }
+                }
+
+                // Check explosion panel
+                if let explosionPanelController = self.explosionPanelController,
+                   self.explosionPanel?.isVisible == true {
+                    if explosionPanelController.shouldDismiss(for: screenLocation) {
+                        self.closeExplosionPanel()
                     }
                 }
 
@@ -360,6 +431,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func hideFloatingPanel() {
         guard let panel = floatingPanel else { return }
+
+        // Close explosion panel for mutual exclusion symmetry
+        closeExplosionPanel()
 
         let currentFrame = panel.frame
         let screen = NSScreen.main?.visibleFrame ?? NSRect.zero
@@ -499,6 +573,75 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             self.refreshStatusBarButtonAppearance()
         }
+    }
+
+    // MARK: - Text Explosion Feature
+
+    /// Handle the explosion hotkey (Cmd+Shift+B)
+    @MainActor
+    private func handleExplosionHotkey() {
+        // Read clipboard text content
+        guard let clipboardText = NSPasteboard.general.string(forType: .string),
+                  !clipboardText.isEmpty else {
+            showNotification("剪贴板中没有文本")
+            return
+        }
+
+        // Use the tracked previous application
+        let targetApp = previousActiveApplication
+        NSLog("📱 [OpenPaste] Target app for insertion: \(targetApp?.localizedName ?? "none")")
+
+        // Dismiss main floating panel (mutual exclusion)
+        if let panel = floatingPanel, panel.isVisible {
+            hideFloatingPanel()
+        }
+
+        // Create explosion panel
+        explosionPanelController = TextExplosionPanelController()
+
+        // Create services
+        let tokenizer = TextExplosionService()
+        let inserter = TextInsertionService()
+
+        // Set the target application to insert into
+        inserter.targetApplication = targetApp
+
+        // Create view model
+        explosionViewModel = TextExplosionViewModel(
+            tokenizer: tokenizer,
+            inserter: inserter
+        )
+
+        // Create panel
+        explosionPanel = explosionPanelController?.createPanel(
+            viewModel: explosionViewModel!,
+            onClose: { [weak self] in
+                self?.closeExplosionPanel()
+            }
+        )
+
+        // Load and show
+        Task { @MainActor in
+            await explosionViewModel?.loadFromClipboard()
+            explosionPanelController?.show()
+        }
+    }
+
+    /// Close the explosion panel
+    private func closeExplosionPanel() {
+        explosionPanel?.close()
+        explosionPanel = nil
+        explosionViewModel = nil
+        explosionPanelController = nil
+    }
+
+    /// Show a system notification
+    private func showNotification(_ message: String) {
+        let notification = NSUserNotification()
+        notification.title = "OpenPaste"
+        notification.informativeText = message
+        notification.soundName = NSUserNotificationDefaultSoundName
+        NSUserNotificationCenter.default.deliver(notification)
     }
 
     @objc private func quitApp() {
