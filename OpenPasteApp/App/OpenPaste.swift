@@ -371,7 +371,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     return
                 }
 
-                let clickPoint = event.locationInWindow
+                // Use mouseLocation for screen coordinates (more reliable than locationInWindow)
+                let clickPoint = NSEvent.mouseLocation
 
                 // Check floating panel
                 if let panel = self.floatingPanel, panel.isVisible {
@@ -400,18 +401,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     return event
                 }
 
-                // Calculate click position in screen coordinates
-                let screenLocation: NSPoint
-                if let eventWindow = event.window {
-                    let windowFrame = eventWindow.frame
-                    let pointInWindow = event.locationInWindow
-                    screenLocation = NSPoint(
-                        x: windowFrame.origin.x + pointInWindow.x,
-                        y: windowFrame.origin.y + pointInWindow.y
-                    )
-                } else {
-                    screenLocation = event.locationInWindow
-                }
+                // Use mouseLocation for screen coordinates (more reliable)
+                let screenLocation = NSEvent.mouseLocation
 
                 // Check floating panel
                 if let panel = self.floatingPanel, panel.isVisible {

@@ -39,6 +39,7 @@ class TextExplosionPanelController {
         newPanel.backgroundColor = .clear
         newPanel.becomesKeyOnlyIfNeeded = false
         newPanel.hidesOnDeactivate = false
+        newPanel.isMovableByWindowBackground = true
 
         newPanel.contentViewController = hostingController
 
