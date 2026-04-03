@@ -60,6 +60,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var explosionViewModel: TextExplosionViewModel?
     private var explosionPanelController: TextExplosionPanelController?
 
+    /// Services for text explosion (reused across panel displays)
+    private var explosionTokenizer: TextTokenizing?
+    private var explosionInserter: TextInserting?
+
     // MARK: - NSApplicationDelegate
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -596,43 +600,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             hideFloatingPanel()
         }
 
-        // Create explosion panel
-        explosionPanelController = TextExplosionPanelController()
+        // Lazy initialization: create services and panel controller only on first use
+        if explosionTokenizer == nil {
+            explosionTokenizer = TextExplosionService()
+        }
+        if explosionInserter == nil {
+            explosionInserter = TextInsertionService()
+        }
 
-        // Create services
-        let tokenizer = TextExplosionService()
-        let inserter = TextInsertionService()
+        // Update the target application for insertion
+        explosionInserter?.targetApplication = targetApp
 
-        // Set the target application to insert into
-        inserter.targetApplication = targetApp
+        // Create view model and panel controller if not exists
+        if explosionViewModel == nil {
+            explosionViewModel = TextExplosionViewModel(
+                tokenizer: explosionTokenizer!,
+                inserter: explosionInserter!
+            )
+        }
 
-        // Create view model
-        explosionViewModel = TextExplosionViewModel(
-            tokenizer: tokenizer,
-            inserter: inserter
-        )
+        if explosionPanelController == nil {
+            explosionPanelController = TextExplosionPanelController()
+        }
 
-        // Create panel
-        explosionPanel = explosionPanelController?.createPanel(
+        // Get or create the panel (reuse existing panel if available)
+        explosionPanel = explosionPanelController?.getOrCreatePanel(
             viewModel: explosionViewModel!,
             onClose: { [weak self] in
                 self?.closeExplosionPanel()
             }
         )
 
-        // Load and show
+        // Load clipboard content and show the panel
         Task { @MainActor in
             await explosionViewModel?.loadFromClipboard()
             explosionPanelController?.show()
         }
     }
 
-    /// Close the explosion panel
+    /// Close the explosion panel (hide without destroying for reuse)
     private func closeExplosionPanel() {
-        explosionPanel?.close()
-        explosionPanel = nil
-        explosionViewModel = nil
-        explosionPanelController = nil
+        explosionPanelController?.hide()
     }
 
     /// Show a system notification

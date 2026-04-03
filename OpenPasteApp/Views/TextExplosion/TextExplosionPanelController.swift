@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 
 /// Manages the explosion panel lifecycle and positioning
+/// Panel is created once and reused across hotkey presses
 class TextExplosionPanelController {
     private var panel: NSPanel?
     private var hostingController: NSHostingController<TextExplosionView>?
@@ -10,72 +11,88 @@ class TextExplosionPanelController {
     private var showTimestamp: Date?
     private let debounceInterval: TimeInterval = 0.3
 
-    /// Create and configure the explosion panel
-    func createPanel(viewModel: TextExplosionViewModel, onClose: @escaping () -> Void) -> NSPanel {
-        let contentView = TextExplosionView(viewModel: viewModel, onClose: onClose)
+    /// Lazy-create or reuse the panel
+    @MainActor
+    func getOrCreatePanel(viewModel: TextExplosionViewModel, onClose: @escaping () -> Void) -> NSPanel {
+        if let existingPanel = panel {
+            // Reuse existing panel - just update the hosting controller
+            let contentView = TextExplosionView(viewModel: viewModel, onClose: onClose)
+            hostingController = NSHostingController(rootView: contentView)
+            existingPanel.contentViewController = hostingController
+            self.panel = existingPanel
+            return existingPanel
+        }
 
+        // First time: create new panel
+        let contentView = TextExplosionView(viewModel: viewModel, onClose: onClose)
         hostingController = NSHostingController(rootView: contentView)
 
-        let panel = CustomPanel(
+        let newPanel = CustomPanel(
             contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
             styleMask: [.fullSizeContentView, .nonactivatingPanel],
             backing: .buffered,
             defer: false
         )
 
-        panel.isFloatingPanel = true
-        panel.level = .popUpMenu
-        panel.backgroundColor = .clear
+        newPanel.isFloatingPanel = true
+        newPanel.level = .popUpMenu
+        newPanel.backgroundColor = .clear
+        newPanel.becomesKeyOnlyIfNeeded = false
+        newPanel.hidesOnDeactivate = false
 
-        // Key settings for non-activating panel - doesn't steal focus
-        panel.becomesKeyOnlyIfNeeded = false
-        panel.hidesOnDeactivate = false
+        newPanel.contentViewController = hostingController
 
-        // Position at cursor location
+        self.panel = newPanel
+        return newPanel
+    }
+
+    /// Reposition panel at cursor location
+    func repositionAtCursor() {
+        guard let panel = panel else { return }
+
         if let screen = NSScreen.main {
             let mouseLocation = NSEvent.mouseLocation
             var panelRect = panel.frame
 
-            // Center panel at mouse position
             panelRect.origin.x = mouseLocation.x - panelRect.width / 2
-            panelRect.origin.y = mouseLocation.y - panelRect.height - 30 // Offset above cursor
+            panelRect.origin.y = mouseLocation.y - panelRect.height - 30
 
-            // Constrain to visible screen frame
             let visibleFrame = screen.visibleFrame
             panelRect.origin.x = max(visibleFrame.minX, min(panelRect.origin.x, visibleFrame.maxX - panelRect.width))
             panelRect.origin.y = max(visibleFrame.minY, min(panelRect.origin.y, visibleFrame.maxY - panelRect.height))
 
             panel.setFrame(panelRect, display: false)
         }
-
-        panel.contentViewController = hostingController
-
-        self.panel = panel
-        return panel
     }
 
-    /// Show the panel
+    /// Show the panel at cursor location
     func show() {
         guard let panel = panel else { return }
         showTimestamp = Date()
-        panel.orderFront(nil)  // Use orderFront instead of makeKeyAndOrderFront
+        repositionAtCursor()
+        // Order front and make key to ensure panel has focus for click events
+        panel.orderFront(nil)
+        panel.makeKey()
+    }
+
+    /// Hide the panel (doesn't destroy it)
+    func hide() {
+        panel?.orderOut(nil)
     }
 
     /// Check if point is outside panel frame (with debounce protection)
     func shouldDismiss(for point: NSPoint) -> Bool {
         guard let panel = panel else { return false }
 
-        // Debounce: don't dismiss immediately after showing
         if let timestamp = showTimestamp,
            Date().timeIntervalSince(timestamp) < debounceInterval {
-            NSLog("⏱️ [ExplosionPanel] Debounce active, ignoring click")
             return false
         }
 
         return !panel.frame.contains(point)
     }
 
-    /// Close and dismiss the panel
+    /// Close and destroy the panel
     func close() {
         panel?.close()
         panel = nil
@@ -87,10 +104,4 @@ class TextExplosionPanelController {
         guard let panel = panel else { return false }
         return panel.frame.contains(point)
     }
-}
-
-/// Custom NSPanel subclass for the explosion panel
-class ExplosionPanel: NSPanel {
-    override var canBecomeKey: Bool { false }
-    override var canBecomeMain: Bool { false }
 }
