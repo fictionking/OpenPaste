@@ -66,12 +66,9 @@ class TextInsertionService: TextInserting {
 
         let pid = targetApp.processIdentifier
 
-        // Wait a moment for any click events to complete
-        try? await Task.sleep(nanoseconds: 50_000_000) // 50ms for click event completion
-
         // Activate target app to ensure it has keyboard focus
         targetApp.activate(options: [.activateIgnoringOtherApps])
-        try? await Task.sleep(nanoseconds: 300_000_000) // 300ms for activation (increased from 250ms)
+        try? await Task.sleep(nanoseconds: 100_000_000) // 100ms for activation
 
         var successCount = 0
         let chars = Array(text)

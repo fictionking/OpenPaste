@@ -48,7 +48,6 @@ struct TextExplosionView: View {
                 Spacer()
             } else {
                 tokenGrid
-                footer
             }
 
             // Permission request overlay
@@ -121,47 +120,6 @@ struct TextExplosionView: View {
                         handleTap(on: token)
                     }
                 }
-            }
-            .padding()
-        }
-    }
-
-    // MARK: - Footer
-
-    private var footer: some View {
-        VStack(spacing: 0) {
-            Divider()
-
-            HStack(spacing: 12) {
-                Button(action: {
-                    Task { await viewModel.insertAll() }
-                }) {
-                    Label("插入全部", systemImage: "doc.text")
-                        .font(.system(size: 13))
-                }
-                .buttonStyle(.bordered)
-                .disabled(viewModel.isProcessing)
-
-                Spacer()
-
-                if viewModel.selectedCount > 0 {
-                    Text("\(viewModel.selectedCount)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.secondary.opacity(0.1))
-                        .clipShape(Capsule())
-                }
-
-                Button(action: {
-                    Task { await viewModel.insertSelected() }
-                }) {
-                    Label("插入选中", systemImage: "checkmark.circle")
-                        .font(.system(size: 13))
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(viewModel.selectedCount == 0 || viewModel.isProcessing)
             }
             .padding()
         }

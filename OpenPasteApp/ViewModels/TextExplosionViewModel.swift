@@ -138,14 +138,11 @@ class TextExplosionViewModel: ObservableObject {
 
     private func insert(_ text: String) async {
         NSLog("🔄 [TextExplosion] Starting insertion for: \(text)")
-        isProcessing = true
         errorMessage = nil
 
         let result = await inserter.insertText(text)
         insertionResult = result
 
         NSLog("📤 [TextExplosion] Insertion result: \(result)")
-
-        isProcessing = false
     }
 }
