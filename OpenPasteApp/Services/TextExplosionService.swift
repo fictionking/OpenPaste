@@ -155,6 +155,11 @@ class TextExplosionService: TextTokenizing {
                 }
             }
 
+            // Skip whitespace-only tokens
+            if word.allSatisfy({ $0.isWhitespace }) {
+                return true
+            }
+
             // Add all words (overlaps will be handled later)
             if !word.isEmpty {
                 wordRanges.append((range, tokenType))
@@ -197,7 +202,7 @@ class TextExplosionService: TextTokenizing {
 
     // Helper: Check if text is only punctuation (commas, periods, etc.)
     private func isPunctuationOnly(_ text: String) -> Bool {
-        return text.allSatisfy { $0.isPunctuation }
+        return !text.isEmpty && text.allSatisfy { $0.isPunctuation }
     }
 
     // Helper: Convert NSRange to Range<String.Index>
@@ -214,23 +219,34 @@ class TextExplosionService: TextTokenizing {
         return start..<end
     }
 
-    // Helper: Remove overlapping ranges, keeping longer/earlier ones
+    // Helper: Remove overlapping ranges, prioritizing special detections
     private func removeOverlaps(_ ranges: [(Range<String.Index>, TokenType)], in text: String) -> [(Range<String.Index>, TokenType)] {
-        let sorted = ranges.sorted(by: { (a, b) -> Bool in
-            if a.0.lowerBound != b.0.lowerBound {
-                return a.0.lowerBound < b.0.lowerBound
+        // Separate special detections from plain words
+        let specialTypes: Set<TokenType> = [.url, .phoneNumber, .currency, .flightNumber, .shipmentTrackingNumber, .personalName, .organizationName, .placeName]
+
+        var specialRanges: [(Range<String.Index>, TokenType)] = []
+        var wordRanges: [(Range<String.Index>, TokenType)] = []
+
+        for (range, type) in ranges {
+            if specialTypes.contains(type) {
+                specialRanges.append((range, type))
+            } else {
+                wordRanges.append((range, type))
             }
-            // At same position, prefer longer range (special detections)
-            let aLen = text.distance(from: a.0.lowerBound, to: a.0.upperBound)
-            let bLen = text.distance(from: b.0.lowerBound, to: b.0.upperBound)
-            return aLen > bLen
-        })
+        }
 
         var result: [(Range<String.Index>, TokenType)] = []
-        for (range, type) in sorted {
+
+        // Add all special ranges first
+        for (range, type) in specialRanges.sorted(by: { $0.0.lowerBound < $1.0.lowerBound }) {
+            result.append((range, type))
+        }
+
+        // Add word ranges only if they don't overlap with any special range
+        for (range, type) in wordRanges {
             var overlaps = false
-            for (existing, _) in result {
-                if range.overlaps(existing) || existing.overlaps(range) {
+            for (specialRange, _) in specialRanges {
+                if range.overlaps(specialRange) {
                     overlaps = true
                     break
                 }
