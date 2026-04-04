@@ -6,11 +6,8 @@ struct TextExplosionView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header with close button
-            header
-
-            // Type filter bar
-            filterBar
+            // Filter bar with close button
+            filterBarWithClose
 
             // Content area
             if viewModel.isProcessing {
@@ -58,15 +55,16 @@ struct TextExplosionView: View {
         }
         .frame(width: 700, height: 280)
         .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Header
 
     private var header: some View {
         HStack {
-            Text("文本大爆炸")
-                .font(.headline)
-                .fontWeight(.semibold)
+            Image(systemName: "sparkles")
+                .font(.system(size: 16))
+                .foregroundColor(.secondary)
             Spacer()
             Button(action: onClose) {
                 Image(systemName: "xmark.circle.fill")
