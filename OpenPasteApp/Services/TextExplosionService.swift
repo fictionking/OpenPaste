@@ -29,7 +29,7 @@ class TextExplosionService: TextTokenizing {
 
         tagger.enumerateTags(in: text.startIndex..<text.endIndex, unit: .word, scheme: .nameType) { tag, range in
             if let tag = tag {
-                let tokenType: TokenType
+                let tokenType: TokenType?
                 switch tag {
                 case .personalName:
                     tokenType = .personalName
@@ -38,10 +38,12 @@ class TextExplosionService: TextTokenizing {
                 case .placeName:
                     tokenType = .placeName
                 default:
-                    return true // Continue
+                    tokenType = nil
                 }
-                entityRanges.append((range, tokenType))
-                NSLog("   🏷️ Entity: \(text[range]) -> \(tokenType)")
+                if let type = tokenType {
+                    entityRanges.append((range, type))
+                    NSLog("   🏷️ Entity: \(text[range]) -> \(type)")
+                }
             }
             return true
         }
@@ -129,10 +131,22 @@ class TextExplosionService: TextTokenizing {
             }
         }
 
-        // Additional detection for URLs and numbers
+        // Additional detection for other entity types
         if entityType == .plain {
             if detectURL(in: tokenText) {
                 entityType = .url
+            } else if detectPhoneNumber(in: tokenText) {
+                entityType = .phoneNumber
+            } else if detectCurrency(in: tokenText) {
+                entityType = .currency
+            } else if detectDate(in: tokenText) {
+                entityType = .date
+            } else if detectAddress(in: tokenText) {
+                entityType = .address
+            } else if detectTrackingNumber(in: tokenText) {
+                entityType = .shipmentTrackingNumber
+            } else if detectFlightNumber(in: tokenText) {
+                entityType = .flightNumber
             } else if detectNumber(in: tokenText) {
                 entityType = .number
             }
@@ -142,7 +156,7 @@ class TextExplosionService: TextTokenizing {
         return TextToken(text: tokenText, entityType: entityType)
     }
 
-    // MARK: - Helpers
+    // MARK: - Detection Helpers
 
     private func detectURL(in text: String) -> Bool {
         guard let detector = try? NSDataDetector(types: UInt64(NSTextCheckingResult.CheckingType.link.rawValue)) else {
@@ -150,6 +164,63 @@ class TextExplosionService: TextTokenizing {
         }
         let matches = detector.matches(in: text, range: NSRange(location: 0, length: text.utf16.count))
         return !matches.isEmpty
+    }
+
+    private func detectPhoneNumber(in text: String) -> Bool {
+        // Phone number pattern: starts with digit, contains digits and common separators
+        let phonePattern = "^\\d+[\\-\\s]?\\d+[\\-\\s]?\\d+"
+        if let regex = try? NSRegularExpression(pattern: phonePattern) {
+            return regex.firstMatch(in: text, range: NSRange(location: 0, length: text.utf16.count)) != nil
+        }
+        return false
+    }
+
+    private func detectCurrency(in text: String) -> Bool {
+        // Currency pattern: ¥, $, €, etc. followed by digits
+        let currencyPattern = "^[¥$€£¢₽₩₪]\\s*\\d+(\\.\\d+)?"
+        if let regex = try? NSRegularExpression(pattern: currencyPattern) {
+            return regex.firstMatch(in: text, range: NSRange(location: 0, length: text.utf16.count)) != nil
+        }
+        return false
+    }
+
+    private func detectDate(in text: String) -> Bool {
+        // Try parsing as date
+        guard let detector = try? NSDataDetector(types: UInt64(NSTextCheckingResult.CheckingType.date.rawValue)) else {
+            return false
+        }
+        let matches = detector.matches(in: text, range: NSRange(location: 0, length: text.utf16.count))
+        return !matches.isEmpty
+    }
+
+    private func detectAddress(in text: String) -> Bool {
+        // Address keywords
+        let addressKeywords = ["省", "市", "区", "街", "路", "号", "栋", "室", "层"]
+        return addressKeywords.contains { text.contains($0) }
+    }
+
+    private func detectTrackingNumber(in text: String) -> Bool {
+        // Tracking number pattern: letters and numbers, typically 10-20 chars
+        let trackingPattern = "^[A-Z0-9]{10,20}$"
+        if let regex = try? NSRegularExpression(pattern: trackingPattern) {
+            let match = regex.firstMatch(in: text, range: NSRange(location: 0, length: text.utf16.count))
+            if match != nil {
+                // Check if it looks like a tracking number (contains letters and numbers)
+                let hasLetter = text.range(of: "[A-Z]", options: .regularExpression) != nil
+                let hasNumber = text.range(of: "[0-9]", options: .regularExpression) != nil
+                return hasLetter && hasNumber
+            }
+        }
+        return false
+    }
+
+    private func detectFlightNumber(in text: String) -> Bool {
+        // Flight number pattern: airline code (2-3 letters) + flight number (3-4 digits)
+        let flightPattern = "^[A-Z]{2,3}\\d{3,4}$"
+        if let regex = try? NSRegularExpression(pattern: flightPattern) {
+            return regex.firstMatch(in: text, range: NSRange(location: 0, length: text.utf16.count)) != nil
+        }
+        return false
     }
 
     private func detectNumber(in text: String) -> Bool {
