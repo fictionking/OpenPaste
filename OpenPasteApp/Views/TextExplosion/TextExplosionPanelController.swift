@@ -6,6 +6,7 @@ import SwiftUI
 class TextExplosionPanelController {
     private var panel: NSPanel?
     private var hostingController: NSHostingController<TextExplosionView>?
+    private var hideOnResignKeyObserver: AnyObject?
 
     // Prevent immediate dismissal after showing (debounce period)
     private var showTimestamp: Date?
@@ -42,6 +43,15 @@ class TextExplosionPanelController {
         newPanel.isMovableByWindowBackground = true
 
         newPanel.contentViewController = hostingController
+
+        // Add observer for window losing key status to auto-hide
+        hideOnResignKeyObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.didResignKeyNotification,
+            object: newPanel,
+            queue: .main
+        ) { [weak self] _ in
+            self?.hide()
+        }
 
         self.panel = newPanel
         return newPanel
@@ -95,6 +105,11 @@ class TextExplosionPanelController {
 
     /// Close and destroy the panel
     func close() {
+        // Remove notification observer
+        if let observer = hideOnResignKeyObserver {
+            NotificationCenter.default.removeObserver(observer)
+            hideOnResignKeyObserver = nil
+        }
         panel?.close()
         panel = nil
         hostingController = nil
