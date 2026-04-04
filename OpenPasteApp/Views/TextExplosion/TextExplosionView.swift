@@ -80,25 +80,37 @@ struct TextExplosionView: View {
 
     // MARK: - Filter Bar
 
-    private var filterBar: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                FilterChip(title: "全部", type: nil, isSelected: viewModel.filterType == nil) {
-                    viewModel.filterType = nil
-                }
+    private var filterBarWithClose: some View {
+        HStack {
+            // Filter chips
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    FilterChip(title: "全部", type: nil, isSelected: viewModel.filterType == nil) {
+                        viewModel.filterType = nil
+                    }
 
-                ForEach(TokenType.allCases.filter({ $0 != .plain }), id: \.self) { type in
-                    FilterChip(
-                        title: type.displayName,
-                        type: type,
-                        isSelected: viewModel.filterType == type,
-                        color: type.color
-                    ) {
-                        viewModel.filterType = viewModel.filterType == type ? nil : type
+                    ForEach(TokenType.allCases.filter({ $0 != .plain }), id: \.self) { type in
+                        FilterChip(
+                            title: type.displayName,
+                            type: type,
+                            isSelected: viewModel.filterType == type,
+                            color: type.color
+                        ) {
+                            viewModel.filterType = viewModel.filterType == type ? nil : type
+                        }
                     }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
+
+            // Close button
+            Button(action: onClose) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.secondary)
+                    .imageScale(.large)
+            }
+            .buttonStyle(.plain)
+            .padding(.trailing, 12)
         }
         .padding(.vertical, 8)
     }
