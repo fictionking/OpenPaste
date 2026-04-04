@@ -7,6 +7,7 @@
 
 import AppKit
 import SwiftUI
+import Carbon
 
 // MARK: - Layout Constants
 
@@ -80,6 +81,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self,
             selector: #selector(applicationDidActivate(_:)),
             name: NSWorkspace.didActivateApplicationNotification,
+            object: nil
+        )
+
+        // Setup hotkey reload observer
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(reloadHotkeys),
+            name: NSNotification.Name("ReloadHotkeys"),
             object: nil
         )
 
@@ -194,22 +203,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupGlobalHotkey() {
         NSLog("🔧 Registering global hotkey...")
 
-        // Create hotkey with Command+Shift+V for main floating panel
-        hotKey = HotKey(key: .v, modifiers: [.command, .shift], keyDownHandler: { [weak self] in
-            NSLog("🔥 Hotkey triggered!")
-            self?.handleHotkeyToggle()
-        })
+        let settings = AppSettings.shared
 
-        // Create hotkey with Command+Shift+B for text explosion
-        explosionHotKey = HotKey(key: .b, modifiers: [.command, .shift], keyDownHandler: { [weak self] in
-            NSLog("💥 Explosion hotkey triggered!")
-            Task { @MainActor in
-                self?.handleExplosionHotkey()
-            }
-        })
+        // Create hotkey for main floating panel using AppSettings
+        if let key = Key(carbonKeyCode: settings.hotkeyCode) {
+            var modifiers: NSEvent.ModifierFlags = []
+            if settings.hotkeyModifiers & UInt32(cmdKey) != 0 { modifiers.insert(.command) }
+            if settings.hotkeyModifiers & UInt32(shiftKey) != 0 { modifiers.insert(.shift) }
+            if settings.hotkeyModifiers & UInt32(optionKey) != 0 { modifiers.insert(.option) }
+            if settings.hotkeyModifiers & UInt32(controlKey) != 0 { modifiers.insert(.control) }
 
-        NSLog("✅ Hotkey ⌘⇧V registered successfully!")
-        NSLog("✅ Explosion hotkey ⌘⇧B registered successfully!")
+            hotKey = HotKey(key: key, modifiers: modifiers, keyDownHandler: { [weak self] in
+                NSLog("🔥 Hotkey triggered!")
+                self?.handleHotkeyToggle()
+            })
+            NSLog("✅ Clipboard hotkey \(settings.hotkeyDescription) registered successfully!")
+        }
+
+        // Create hotkey for text explosion using AppSettings
+        if let explosionKey = Key(carbonKeyCode: settings.explosionHotkeyCode) {
+            var explosionModifiers: NSEvent.ModifierFlags = []
+            if settings.explosionHotkeyModifiers & UInt32(cmdKey) != 0 { explosionModifiers.insert(.command) }
+            if settings.explosionHotkeyModifiers & UInt32(shiftKey) != 0 { explosionModifiers.insert(.shift) }
+            if settings.explosionHotkeyModifiers & UInt32(optionKey) != 0 { explosionModifiers.insert(.option) }
+            if settings.explosionHotkeyModifiers & UInt32(controlKey) != 0 { explosionModifiers.insert(.control) }
+
+            explosionHotKey = HotKey(key: explosionKey, modifiers: explosionModifiers, keyDownHandler: { [weak self] in
+                NSLog("💥 Explosion hotkey triggered!")
+                Task { @MainActor in
+                    self?.handleExplosionHotkey()
+                }
+            })
+            NSLog("✅ Explosion hotkey \(settings.explosionHotkeyDescription) registered successfully!")
+        }
+    }
+
+    /// Reload hotkeys when settings change
+    @objc private func reloadHotkeys() {
+        NSLog("🔄 Reloading hotkeys...")
+        // HotKey automatically unregisters when set to nil
+        hotKey = nil
+        explosionHotKey = nil
+        // Re-register with new settings
+        setupGlobalHotkey()
     }
 
     private func updateStatusTitle(_ title: String) {
