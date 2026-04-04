@@ -612,6 +612,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if explosionPanelController == nil {
             explosionPanelController = TextExplosionPanelController()
+            // 设置面板显示在光标上方，避免遮挡输入区域
+            explosionPanelController?.position = .above
         }
 
         // Get or create the panel (reuse existing panel if available)
