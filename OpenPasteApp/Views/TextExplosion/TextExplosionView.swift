@@ -56,7 +56,7 @@ struct TextExplosionView: View {
                 overlayPermission(message: message)
             }
         }
-        .frame(width: 500, height: 400)
+        .frame(width: 700, height: 280)
         .background(.ultraThinMaterial)
     }
 
@@ -109,12 +109,7 @@ struct TextExplosionView: View {
 
     private var tokenGrid: some View {
         ScrollView {
-            LazyVGrid(
-                columns: [
-                    GridItem(.adaptive(minimum: 80, maximum: 120), spacing: 8)
-                ],
-                spacing: 8
-            ) {
+            FlowLayout(spacing: 6) {
                 ForEach(viewModel.filteredTokens) { token in
                     TokenChipView(token: token) {
                         handleTap(on: token)

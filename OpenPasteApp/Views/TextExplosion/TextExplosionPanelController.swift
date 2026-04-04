@@ -40,7 +40,7 @@ class TextExplosionPanelController {
         hostingController = NSHostingController(rootView: contentView)
 
         let newPanel = CustomPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+            contentRect: NSRect(x: 0, y: 0, width: 700, height: 280),
             styleMask: [.fullSizeContentView, .nonactivatingPanel],
             backing: .buffered,
             defer: false
