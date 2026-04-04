@@ -209,7 +209,11 @@ struct FilterChip: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(isSelected ? (color ?? .blue) : Color.secondary.opacity(0.1))
                 )
-                .foregroundColor(isSelected ? .white : .secondary)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke((color ?? .blue).opacity(isSelected ? 1.0 : 0.5), lineWidth: isSelected ? 2 : 1)
+                )
+                .foregroundColor(isSelected ? .white : (color ?? .secondary))
         }
         .buttonStyle(.plain)
     }
