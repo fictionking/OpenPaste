@@ -39,47 +39,52 @@ enum TokenType: String, CaseIterable {
     var color: Color {
         switch self {
         case .personalName:
-            return Color(red: 0x4A / 255, green: 0x90 / 255, blue: 0xD9 / 255) // Blue
+            return Color(red: 0xFF / 255, green: 0x3B / 255, blue: 0x30 / 255) // Red
         case .organizationName:
-            return Color(red: 0x9B / 255, green: 0x59 / 255, blue: 0xB6 / 255) // Purple
+            return Color(red: 0xFF / 255, green: 0x9F / 255, blue: 0x00 / 255) // Orange
         case .placeName:
-            return Color(red: 0x27 / 255, green: 0xAE / 255, blue: 0x60 / 255) // Green
+            return Color(red: 0xFF / 255, green: 0xFF / 255, blue: 0x00 / 255) // Yellow
         case .phoneNumber:
-            return Color(red: 0x00 / 255, green: 0x7A / 255, blue: 0xD9 / 255) // Cyan
+            return Color(red: 0x00 / 255, green: 0xFF / 255, blue: 0x00 / 255) // Green
         case .url:
-            return Color(red: 0xE6 / 255, green: 0x7E / 255, blue: 0x22 / 255) // Orange
+            return Color(red: 0x00 / 255, green: 0xFF / 255, blue: 0xFF / 255) // Cyan
         case .currency:
-            return Color(red: 0x2E / 255, green: 0x7D / 255, blue: 0x32 / 255) // Green
+            return Color(red: 0x00 / 255, green: 0x7F / 255, blue: 0xFF / 255) // Sky Blue
         case .date:
-            return Color(red: 0xD9 / 255, green: 0x4A / 255, blue: 0x4A / 255) // Red
+            return Color(red: 0xB4 / 255, green: 0x00 / 255, blue: 0xFF / 255) // Bright Purple
         case .address:
-            return Color(red: 0x7E / 255, green: 0x57 / 255, blue: 0xC2 / 255) // Pink
+            return Color(red: 0xFF / 255, green: 0x00 / 255, blue: 0xFF / 255) // Magenta
         case .shipmentTrackingNumber:
-            return Color(red: 0x57 / 255, green: 0x7E / 255, blue: 0xD9 / 255) // Light Blue
+            return Color(red: 0xFF / 255, green: 0x00 / 255, blue: 0x7F / 255) // Pink
         case .flightNumber:
-            return Color(red: 0x80 / 255, green: 0x80 / 255, blue: 0x80 / 255) // Gray
+            return Color(red: 0xFF / 255, green: 0x00 / 255, blue: 0xFF / 255) // Bright Pink
         case .number:
-            return Color(red: 0xF3 / 255, green: 0x9C / 255, blue: 0x12 / 255) // Yellow
+            return Color(red: 0x80 / 255, green: 0x80 / 255, blue: 0x80 / 255) // Gray
         case .plain:
-            return Color.primary.opacity(0.6)
+            return Color(red: 0x60 / 255, green: 0x60 / 255, blue: 0x60 / 255) // Dark Gray
         }
     }
 
     /// Localized display name
     var displayName: String {
+        return "*"
+    }
+
+    /// SF Symbol icon name for this token type
+    var iconName: String {
         switch self {
-        case .personalName: return "人名"
-        case .organizationName: return "组织"
-        case .placeName: return "地点"
-        case .phoneNumber: return "电话"
-        case .url: return "链接"
-        case .currency: return "货币"
-        case .date: return "日期"
-        case .address: return "地址"
-        case .shipmentTrackingNumber: return "运单号"
-        case .flightNumber: return "航班号"
-        case .number: return "数字"
-        case .plain: return "普通"
+        case .personalName: return "person.fill"
+        case .organizationName: return "building.2.fill"
+        case .placeName: return "location.fill"
+        case .phoneNumber: return "phone.fill"
+        case .url: return "link"
+        case .currency: return "dollarsign.circle"  // Use non-fill version
+        case .date: return "calendar"
+        case .address: return "house.fill"
+        case .shipmentTrackingNumber: return "truck.box.fill"
+        case .flightNumber: return "airplane.departure"
+        case .number: return "number"
+        case .plain: return "asterisk"
         }
     }
 }

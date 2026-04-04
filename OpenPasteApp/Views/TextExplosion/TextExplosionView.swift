@@ -85,7 +85,7 @@ struct TextExplosionView: View {
             // Filter chips
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    FilterChip(title: "全部", type: nil, isSelected: viewModel.filterType == nil) {
+                    FilterChip(title: "全部", type: nil, isSelected: viewModel.filterType == nil, color: .gray) {
                         viewModel.filterType = nil
                     }
 
@@ -201,19 +201,30 @@ struct FilterChip: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(.system(size: 12, weight: .medium))
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(isSelected ? (color ?? .blue) : Color.secondary.opacity(0.1))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke((color ?? .blue).opacity(isSelected ? 1.0 : 0.5), lineWidth: isSelected ? 2 : 1)
-                )
-                .foregroundColor(isSelected ? .white : (color ?? .secondary))
+            ZStack {
+                Circle()
+                    .fill(isSelected ? (color ?? .blue) : Color.secondary.opacity(0.1))
+                    .frame(width: 28, height: 28)
+                    .overlay(
+                        Circle()
+                            .stroke((color ?? .blue), lineWidth: isSelected ? 2 : 1.5)
+                    )
+
+                Group {
+                    if type == .currency {
+                        Text("$")
+                            .font(.system(size: 13, weight: .medium))
+                    } else if type == .date {
+                        Image(systemName: type?.iconName ?? "calendar")
+                            .font(.system(size: 11))
+                    } else {
+                        Image(systemName: type?.iconName ?? "asterisk")
+                            .font(.system(size: 11))
+                    }
+                }
+                .foregroundColor(isSelected ? .white : (color ?? .blue))
+            }
+            .frame(width: 32, height: 32)
         }
         .buttonStyle(.plain)
     }
