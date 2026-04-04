@@ -8,7 +8,7 @@ A modern macOS clipboard management application built with SwiftUI.
 
 ## Overview
 
-OpenPaste is a clipboard companion for macOS that helps you manage your copy/paste history with ease.
+OpenPaste is a clipboard companion for macOS that helps you manage your copy/paste history with ease. It features intelligent text explosion for multilingual content, making it easy to extract and insert specific entities like names, dates, phone numbers, and more.
 
 ## Requirements
 
@@ -62,13 +62,19 @@ brew install --cask openpaste
 - **Search**: Multi-dimensional search by content, type, date, and source
 - **Privacy**: All data stored locally, no cloud sync
 
+### Text Explosion (New in v1.1)
+
+- **Intelligent Tokenization**: Automatically detects and extracts entities from clipboard text using Apple's Natural Language framework
+- **Multilingual Support**: Works with Chinese, English, Japanese, Korean, Russian, Arabic, and more
+- **Entity Types**: Personal names, organizations, places, phone numbers, URLs, currency, dates, addresses, flight numbers, tracking numbers
+- **Quick Insert**: Click any token to instantly insert it into the active application
+- **Visual Filtering**: Filter by entity type with colorful icon-based chips
+- **Customizable Hotkey**: Set your preferred hotkey for text explosion in Settings
+
 ## Keyboard Shortcuts
 
 - ⌘⇧V - Show/hide clipboard history
-
-## License
-
-This project is licensed under the MIT License - see the [MIT-LICENSE](MIT-LICENSE) file for details.
+- ⌘⇧B - Show text explosion panel (default, customizable in Settings)
 
 ## License
 
