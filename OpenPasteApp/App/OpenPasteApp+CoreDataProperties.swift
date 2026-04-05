@@ -26,6 +26,9 @@ extension ClipboardItem {
     @NSManaged public var isPinned: Bool
     @NSManaged public var sourceApp: String?
     @NSManaged public var title: String?
+    @NSManaged public var ocrText: String?
+    @NSManaged public var ocrLanguage: String?
+    @NSManaged public var ocrRecognizedAt: Date?
     @NSManaged public var category: Category?
 }
 

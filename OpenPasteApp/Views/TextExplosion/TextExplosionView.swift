@@ -10,7 +10,24 @@ struct TextExplosionView: View {
             filterBarWithClose
 
             // Content area
-            if viewModel.isProcessing {
+            if viewModel.isProcessingOCR {
+                Spacer()
+                VStack(spacing: 12) {
+                    ProgressView(value: viewModel.ocrProgress)
+                        .progressViewStyle(.linear)
+                        .frame(width: 200)
+
+                    Text("正在识别图片中的文本...")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(20)
+                .background(Color(NSColor.controlBackgroundColor))
+                .cornerRadius(8)
+                .shadow(radius: 4)
+                .transition(.opacity)
+                Spacer()
+            } else if viewModel.isProcessing {
                 Spacer()
                 ProgressView()
                 Text("正在分析...")
@@ -56,26 +73,6 @@ struct TextExplosionView: View {
         .frame(width: 700, height: 280)
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
-
-    // MARK: - Header
-
-    private var header: some View {
-        HStack {
-            Image(systemName: "sparkles")
-                .font(.system(size: 16))
-                .foregroundColor(.secondary)
-            Spacer()
-            Button(action: onClose) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.secondary)
-                    .imageScale(.large)
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, 12)
-        .padding(.bottom, 4)
     }
 
     // MARK: - Filter Bar
