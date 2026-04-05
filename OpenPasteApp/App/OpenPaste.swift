@@ -64,6 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Services for text explosion (reused across panel displays)
     private var explosionTokenizer: TextTokenizing?
     private var explosionInserter: TextInserting?
+    private var explosionOCR: OCRService?
 
     // MARK: - NSApplicationDelegate
 
@@ -611,16 +612,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     /// Handle the explosion hotkey (Cmd+Shift+B)
     @MainActor
     private func handleExplosionHotkey() {
-        // Read clipboard text content
-        guard let clipboardText = NSPasteboard.general.string(forType: .string),
-                  !clipboardText.isEmpty else {
-            showNotification("剪贴板中没有文本")
-            return
-        }
-
         // Use the tracked previous application
         let targetApp = previousActiveApplication
         NSLog("📱 [OpenPaste] Target app for insertion: \(targetApp?.localizedName ?? "none")")
+        NSLog("💥 [OpenPaste] Explosion hotkey triggered, loading clipboard content...")
 
         // Dismiss main floating panel (mutual exclusion)
         if let panel = floatingPanel, panel.isVisible {
@@ -633,6 +628,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         if explosionInserter == nil {
             explosionInserter = TextInsertionService()
+        }
+        if explosionOCR == nil {
+            explosionOCR = OCRService()
         }
 
         // Update the target application for insertion
@@ -662,6 +660,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Load clipboard content and show the panel
         Task { @MainActor in
+            NSLog("🔍 [OpenPaste] About to call loadFromClipboard...")
             await explosionViewModel?.loadFromClipboard()
             explosionPanelController?.show()
         }
