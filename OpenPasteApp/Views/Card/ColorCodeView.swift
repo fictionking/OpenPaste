@@ -40,7 +40,7 @@ struct ColorCodeView: View {
                     .frame(height: 44)
                 }
                 .buttonStyle(.plain)
-                .help("点击复制")
+                .help(L10n.Help.clickToCopy)
             } else {
                 Text(content)
                     .font(.system(.footnote, design: .monospaced))

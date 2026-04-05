@@ -46,11 +46,11 @@ class TextInsertionService: TextInserting {
 
     func insertText(_ text: String) async -> InsertionResult {
         guard checkAccessibilityPermission() else {
-            return .failed("需要辅助功能权限才能插入文本")
+            return .failed(L10n.Error.needAccessibilityPermission)
         }
 
         let success = await simulateTyping(text)
-        return success ? .insertedDirectly : .failed("文本插入失败")
+        return success ? .insertedDirectly : .failed(L10n.Error.insertFailed)
     }
 
     // MARK: - Private Methods

@@ -2,46 +2,65 @@ import Foundation
 import SwiftUI
 
 /// Preset category types for sidebar navigation
-/// Represents built-in categories and 5 fixed favorite categories
+/// Represents built-in categories and 4 fixed favorite categories
 enum PresetCategory: String, CaseIterable {
     // Sort order 1: Recent items (all items, sorted by date)
-    case recent = "最近"
+    case recent
 
     // Sort order 2: Text content (plain + rich text combined)
-    case text = "文本"
+    case text
 
     // Sort order 3: Code snippets
-    case code = "代码"
+    case code
 
     // Sort order 4: Images
-    case image = "图片"
+    case image
 
     // Sort order 6: Files
-    case file = "文件"
+    case file
 
     // Sort order 7: Links/URLs
-    case link = "链接"
+    case link
 
     // Sort order 8: Email addresses
-    case email = "邮箱"
+    case email
 
     // Sort order 9: Phone numbers
-    case phoneNumber = "电话"
+    case phoneNumber
 
     // Sort order 10: Color codes (hex, rgb, etc.)
-    case colorCode = "颜色"
+    case colorCode
 
     // Sort order 11-14: Fixed favorite categories
-    case favorite1 = "收藏1"
-    case favorite2 = "收藏2"
-    case favorite3 = "收藏3"
-    case favorite4 = "收藏4"
+    case favorite1
+    case favorite2
+    case favorite3
+    case favorite4
 
     // MARK: - Properties
 
-    /// Display name for the category
+    /// Localized display name for the category
+    var localizedName: String {
+        switch self {
+        case .recent: return L10n.Category.recent
+        case .text: return L10n.Category.text
+        case .code: return L10n.Category.code
+        case .image: return L10n.Category.image
+        case .file: return L10n.Category.file
+        case .link: return L10n.Category.link
+        case .email: return L10n.Category.email
+        case .phoneNumber: return L10n.Category.phone
+        case .colorCode: return L10n.Category.color
+        case .favorite1: return L10n.Category.favorite1
+        case .favorite2: return L10n.Category.favorite2
+        case .favorite3: return L10n.Category.favorite3
+        case .favorite4: return L10n.Category.favorite4
+        }
+    }
+
+    /// Display name for the category (with custom name fallback)
     var displayName: String {
-        return self.rawValue
+        return customDisplayName ?? localizedName
     }
 
     /// SF Symbol icon for the category
@@ -113,12 +132,12 @@ enum PresetCategory: String, CaseIterable {
 
     /// Custom display name (can be modified in settings)
     var customDisplayName: String? {
-        return UserDefaults.standard.string(forKey: "preset_\(rawValue)_name")
+        return UserDefaults.standard.string(forKey: "preset_\(self.rawValue)_name")
     }
 
     /// Update custom display name
     func setCustomDisplayName(_ name: String) {
-        UserDefaults.standard.set(name, forKey: "preset_\(rawValue)_name")
+        UserDefaults.standard.set(name, forKey: "preset_\(self.rawValue)_name")
     }
 
     // MARK: - Content Matching

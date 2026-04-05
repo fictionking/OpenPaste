@@ -33,11 +33,11 @@ struct FolderView: View {
                             .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
                             .lineLimit(2)
 
-                        Text("文件夹")
+                        Text(L10n.ContentType.folder)
                             .font(.caption2)
                             .foregroundColor(Color(red: 0.4, green: 0.4, blue: 0.4))
                     } else {
-                        Text("文件夹")
+                        Text(L10n.ContentType.folder)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
                     }

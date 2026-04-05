@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Dutch)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Zoeken";
+"common.settings" = "Instellingen";
+"common.recent" = "Recent";
+"common.text" = "Tekst";
+"common.image" = "Afbeelding";
+"common.file" = "Bestand";
+"common.link" = "Link";
+"common.email" = "E-mail";
+"common.phone" = "Telefoon";
+"common.color" = "Kleur";
+"common.code" = "Code";
+"common.all" = "Alles";
+"common.folder" = "Map";
+"common.clipboard_content" = "Klembordinhoud";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analyseren...";
+"text_explosion.processing" = "Herkenning van tekst uit afbeelding...";
+"text_explosion.empty_hint" = "Kopieer tekst en druk op Cmd+Shift+B";
+"text_explosion.no_text" = "Geen tekst om weer te geven";
+"text_explosion.need_permission" = "Toegankelijkheidsmachtiging Vereist";
+"text_explosion.open_settings" = "Systeeminstellingen Openen";
+"text_explosion.restart_after_auth" = "Start de app opnieuw na autorisatie";
+
+// MARK: - Search
+"search.placeholder" = "Klembord doorzoeken...";
+"search.empty_title" = "Klembordgeschiedenis Doorzoeken";
+"search.empty_message" = "Voer trefwoorden in om titels en inhoud te zoeken";
+"search.no_results" = "Geen overeenkomsten gevonden";
+"search.try_different" = "Probeer verschillende trefwoorden";
+"search.results_count" = "%d resultaten gevonden";
+
+// MARK: - Category
+"category.recent" = "Recent";
+"category.text" = "Tekst";
+"category.code" = "Code";
+"category.image" = "Afbeelding";
+"category.file" = "Bestand";
+"category.link" = "Link";
+"category.email" = "E-mail";
+"category.phone" = "Telefoon";
+"category.color" = "Kleur";
+"category.custom" = "Aangepaste Categorie";
+"category.add_to" = "Toevoegen aan Categorie";
+"category.remove_from" = "Verwijderen uit Categorie";
+"category.none" = "Geen Categorie";
+"category.favorite_1" = "Favoriet 1";
+"category.favorite_2" = "Favoriet 2";
+"category.favorite_3" = "Favoriet 3";
+"category.favorite_4" = "Favoriet 4";
+
+// MARK: - Content Type
+"content_type.text" = "Tekst";
+"content_type.image" = "Afbeelding";
+"content_type.folder" = "Map";
+"content_type.file" = "Bestand";
+"content_type.link" = "Link";
+"content_type.email" = "E-mail";
+"content_type.phone" = "Telefoon";
+"content_type.color" = "Kleur";
+"content_type.rich_text" = "Opgemaakte Tekst";
+"content_type.content" = "Inhoud";
+
+// MARK: - OCR
+"ocr.processing" = "Herkenning van tekst uit afbeelding...";
+"ocr.failed" = "Afbeeldingsverwerking mislukt";
+"ocr.no_text_found" = "Geen tekst herkend uit afbeelding";
+"ocr.unsupported_format" = "Niet-ondersteund afbeeldingsformaat";
+"ocr.init_failed" = "OCR-service initialisatie mislukt";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Klembordgeschiedenis Openen";
+"status_bar.quit" = "Afsluiten";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Toegankelijkheidsmachtiging vereist om tekst in te voegen";
+"error.insert_failed" = "Tekstinvoeging mislukt";
+"error.no_clipboard_content" = "Geen tekst of afbeelding op klembord";
+
+// MARK: - Help
+"help.click_to_copy" = "Klik om te kopiëren";
+
+// MARK: - Settings
+"settings.keyboard" = "Toetsenbord";
+"settings.clipboard_history" = "Klembordgeschiedenis";
+"settings.text_explosion" = "Tekst Explosie";
+"settings.data_management" = "Gegevensbeheer";
+"settings.retention_period" = "Bewaarperiode";
+"settings.retention_days" = "%d dagen";
+"settings.retention_hint" = "Items worden automatisch verwijderd na dit aantal dagen, tenzij vastgezet";
+"settings.history" = "Geschiedenis";
+"settings.maximum_history" = "Maximale Geschiedenisgrootte";
+"settings.maximum_history_items" = "%@ items";
+"settings.history_hint" = "Oudste items worden verwijderd wanneer deze limiet wordt bereikt";
+"settings.about" = "Over";
+"settings.version" = "Versie %@";
+"settings.view_license" = "Licentie Bekijken";
+"settings.quit_app" = "OpenPaste Afsluiten";
+"settings.settings" = "Instellingen";
+"settings.record_explosion_hotkey" = "Tekst Explosie Sneltoets Opnemen";
+"settings.record_clipboard_hotkey" = "Klembord Sneltoets Opnemen";
+"settings.press_key_combo" = "Druk op de toetscombinatie die u wilt gebruiken";
+"settings.recording" = "Opname...";
+"settings.cancel" = "Annuleren";
+"settings.save" = "Opslaan";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Veeg om Alle Gegevens Wissen";
+"slide_action.slide_to_clear" = "Veeg om te Wissen";
+"slide_action.slide_to_delete" = "Veeg om Verwijderen";
+"slide_action.slide_to_confirm" = "Veeg om Bevestigen";

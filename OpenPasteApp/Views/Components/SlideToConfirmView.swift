@@ -159,7 +159,7 @@ struct SlideToConfirmView: View {
             .padding()
 
         SlideToConfirmView(
-            title: "Slide to Clear",
+            title: L10n.SlideAction.slideToClear,
             themeColor: .red,
             onConfirm: {
                 print("Clear confirmed!")
@@ -167,7 +167,7 @@ struct SlideToConfirmView: View {
         )
 
         SlideToConfirmView(
-            title: "Slide to Delete",
+            title: L10n.SlideAction.slideToDelete,
             themeColor: .orange,
             onConfirm: {
                 print("Delete confirmed!")
@@ -175,7 +175,7 @@ struct SlideToConfirmView: View {
         )
 
         SlideToConfirmView(
-            title: "Slide to Confirm",
+            title: L10n.SlideAction.slideToConfirm,
             themeColor: .blue,
             onConfirm: {
                 print("Action confirmed!")

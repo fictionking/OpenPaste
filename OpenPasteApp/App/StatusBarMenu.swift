@@ -27,9 +27,9 @@ class StatusBarMenu: NSObject {
         }
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "打开剪贴板历史", action: #selector(showPanel), keyEquivalent: "v"))
+        menu.addItem(NSMenuItem(title: L10n.StatusBar.openHistory, action: #selector(showPanel), keyEquivalent: "v"))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "退出", action: #selector(quit), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: L10n.StatusBar.quit, action: #selector(quit), keyEquivalent: "q"))
         statusItem?.menu = menu
 
         // Register global hotkey using Carbon API

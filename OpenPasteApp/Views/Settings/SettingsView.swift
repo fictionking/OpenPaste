@@ -52,13 +52,13 @@ struct SettingsView: View {
     /// Keyboard shortcut section
     private var keyboardShortcutSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Keyboard")
+            Text(L10n.Settings.keyboard)
                 .font(.headline)
                 .padding(.bottom, 4)
 
             // Clipboard history hotkey
             HStack {
-                Text("Clipboard History")
+                Text(L10n.Settings.clipboardHistory)
                     .accessibilityLabel("Global keyboard shortcut for clipboard history")
 
                 Spacer()
@@ -77,7 +77,7 @@ struct SettingsView: View {
 
             // Text explosion hotkey
             HStack {
-                Text("Text Explosion")
+                Text(L10n.Settings.textExplosion)
                     .accessibilityLabel("Global keyboard shortcut for text explosion")
 
                 Spacer()
@@ -100,20 +100,20 @@ struct SettingsView: View {
     /// Data management section
     private var dataManagementSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Data Management")
+            Text(L10n.Settings.dataManagement)
                 .font(.headline)
                 .padding(.bottom, 4)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Retention Period")
+                    Text(L10n.Settings.retentionPeriod)
                         .accessibilityLabel("Clipboard item retention period")
 
                     Spacer()
 
-                    Text("\(settings.retentionDays) days")
+                    Text(L10n.Settings.retentionDays.localized(with: settings.retentionDays))
                         .foregroundColor(.secondary)
-                        .accessibilityLabel("\(settings.retentionDays) days")
+                        .accessibilityLabel(L10n.Settings.retentionDays.localized(with: settings.retentionDays))
                         .accessibilityAddTraits(.updatesFrequently)
                 }
 
@@ -125,10 +125,10 @@ struct SettingsView: View {
                     in: 7...90,
                     step: 1
                 )
-                .accessibilityValue("\(settings.retentionDays) days")
+                .accessibilityValue(L10n.Settings.retentionDays.localized(with: settings.retentionDays))
                 .labelsHidden()
 
-                Text("Items are automatically deleted after this many days, unless pinned")
+                Text(L10n.Settings.retentionHint)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -138,7 +138,7 @@ struct SettingsView: View {
             Divider()
 
             SlideToConfirmView(
-                title: "Slide to Clear All Data",
+                title: L10n.SlideAction.slideToClearAll,
                 themeColor: .red,
                 onConfirm: {
                     Task {
@@ -157,20 +157,20 @@ struct SettingsView: View {
     /// History section
     private var historySection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("History")
+            Text(L10n.Settings.history)
                 .font(.headline)
                 .padding(.bottom, 4)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text("Maximum History Size")
+                    Text(L10n.Settings.maximumHistory)
                         .accessibilityLabel("Maximum clipboard history size")
 
                     Spacer()
 
-                    Text("\(settings.maxHistorySize.formatted()) items")
+                    Text(L10n.Settings.maximumHistoryItems.localized(with: settings.maxHistorySize.formatted()))
                         .foregroundColor(.secondary)
-                        .accessibilityLabel("\(settings.maxHistorySize.formatted()) items")
+                        .accessibilityLabel(L10n.Settings.maximumHistoryItems.localized(with: settings.maxHistorySize.formatted()))
                         .accessibilityAddTraits(.updatesFrequently)
                 }
 
@@ -182,10 +182,10 @@ struct SettingsView: View {
                     in: 1_000...50_000,
                     step: 1_000
                 )
-                .accessibilityValue("\(settings.maxHistorySize) items")
+                .accessibilityValue(L10n.Settings.maximumHistoryItems.localized(with: settings.maxHistorySize.formatted()))
                 .labelsHidden()
 
-                Text("Oldest items are removed when this limit is reached")
+                Text(L10n.Settings.historyHint)
                     .font(.caption)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -200,7 +200,7 @@ struct SettingsView: View {
     /// About section
     private var aboutSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("About")
+            Text(L10n.Settings.about)
                 .font(.headline)
                 .padding(.bottom, 4)
 
@@ -209,21 +209,21 @@ struct SettingsView: View {
                     Text("OpenPaste")
                         .font(.headline)
 
-                    Text("Version \(settings.appVersion)")
+                    Text(L10n.Settings.version.localized(with: settings.appVersion))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
                 Spacer()
 
-                Link("View License", destination: URL(string: "https://opensource.org/licenses/MIT")!)
+                Link(L10n.Settings.viewLicense, destination: URL(string: "https://opensource.org/licenses/MIT")!)
                     .font(.caption)
             }
 
             Divider()
 
             Button(action: quitApp) {
-                Text("Quit OpenPaste")
+                Text(L10n.Settings.quitApp)
                     .foregroundColor(.red)
             }
             .accessibilityLabel("Quit OpenPaste application")
@@ -246,7 +246,7 @@ struct SettingsView: View {
             .padding()
         }
         .background(settingsBackground)
-        .navigationTitle("Settings")
+        .navigationTitle(L10n.Settings.settings)
         .sheet(isPresented: $showingHotkeyAlert) {
             hotkeyRecordingSheet
         }
@@ -259,10 +259,10 @@ struct SettingsView: View {
 
     private var hotkeyRecordingSheet: some View {
         VStack(spacing: 20) {
-            Text(recordingExplosionHotkey ? "Record Text Explosion Hotkey" : "Record Clipboard Hotkey")
+            Text(recordingExplosionHotkey ? L10n.Settings.recordExplosionHotkey : L10n.Settings.recordClipboardHotkey)
                 .font(.headline)
 
-            Text("Press the key combination you want to use")
+            Text(L10n.Settings.pressKeyCombo)
                 .font(.body)
                 .foregroundColor(.secondary)
 
@@ -290,20 +290,20 @@ struct SettingsView: View {
                 }
                 .padding()
             } else {
-                Text("Recording...")
+                Text(L10n.Settings.recording)
                     .font(.body.monospaced())
                     .foregroundColor(.secondary)
                     .padding()
             }
 
             HStack(spacing: 12) {
-                Button("Cancel") {
+                Button(L10n.Settings.cancel) {
                     stopRecording()
                     showingHotkeyAlert = false
                 }
                 .keyboardShortcut(.escape)
 
-                Button("Save") {
+                Button(L10n.Settings.save) {
                     saveHotkey()
                     showingHotkeyAlert = false
                 }

@@ -30,7 +30,7 @@ struct SidebarView: View {
 
             // Search button (pinned above settings)
             CategoryButton(
-                title: "搜索",
+                title: L10n.Common.search,
                 icon: "magnifyingglass",
                 isSelected: selectedCategory == .search
             ) {
@@ -38,10 +38,10 @@ struct SidebarView: View {
             }
             .padding(.trailing, 10)
             .padding(.bottom, 6)
-            
+
             // Settings button (pinned to bottom)
             CategoryButton(
-                title: "设置",
+                title: L10n.Common.settings,
                 icon: "gearshape",
                 isSelected: selectedCategory.isSettings
             ) {

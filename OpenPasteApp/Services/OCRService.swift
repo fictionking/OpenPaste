@@ -127,11 +127,11 @@ enum OCRError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .imageProcessingFailed:
-            return "图片处理失败"
+            return L10n.OCR.failed
         case .noTextFound:
-            return "无法从图片中识别文本"
+            return L10n.OCR.noTextFound
         case .unsupportedFormat:
-            return "不支持的图片格式"
+            return L10n.OCR.unsupportedFormat
         }
     }
 }

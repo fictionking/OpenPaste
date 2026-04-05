@@ -38,11 +38,11 @@ struct SearchView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.secondary.opacity(0.5))
 
-            Text("搜索剪贴板历史")
+            Text(L10n.Search.emptyTitle)
                 .font(.title3)
                 .foregroundColor(.secondary)
 
-            Text("输入关键词搜索标题和内容")
+            Text(L10n.Search.emptyMessage)
                 .font(.body)
                 .foregroundColor(.secondary)
 
@@ -62,11 +62,11 @@ struct SearchView: View {
                 .font(.system(size: 48))
                 .foregroundColor(.secondary.opacity(0.5))
 
-            Text("未找到匹配内容")
+            Text(L10n.Search.noResults)
                 .font(.title3)
                 .foregroundColor(.secondary)
 
-            Text("尝试使用不同的关键词")
+            Text(L10n.Search.tryDifferent)
                 .font(.body)
                 .foregroundColor(.secondary)
 
@@ -81,7 +81,7 @@ struct SearchView: View {
     private var resultsList: some View {
         VStack(alignment: .leading, spacing: 8) {
             // Result count
-            Text("找到 \(viewModel.filteredSearchItems.count) 个结果")
+            Text(L10n.Search.resultsCount.localized(with: viewModel.filteredSearchItems.count))
                 .font(.caption)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
@@ -131,7 +131,7 @@ struct SearchView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
 
-            TextField("搜索剪贴板...", text: $viewModel.searchText)
+            TextField(L10n.Search.placeholder, text: $viewModel.searchText)
                 .focused($isSearchFieldFocused)
                 .textFieldStyle(.plain)
                 .onAppear {

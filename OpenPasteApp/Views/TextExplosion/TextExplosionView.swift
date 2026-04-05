@@ -17,7 +17,7 @@ struct TextExplosionView: View {
                         .progressViewStyle(.linear)
                         .frame(width: 200)
 
-                    Text("正在识别图片中的文本...")
+                    Text(L10n.TextExplosion.processing)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -30,7 +30,7 @@ struct TextExplosionView: View {
             } else if viewModel.isProcessing {
                 Spacer()
                 ProgressView()
-                Text("正在分析...")
+                Text(L10n.TextExplosion.analyzing)
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Spacer()
@@ -42,7 +42,7 @@ struct TextExplosionView: View {
                         .foregroundColor(.orange)
                     Text(error)
                         .font(.body)
-                    Text("复制文本后按 Cmd+Shift+B")
+                    Text(L10n.TextExplosion.emptyHint)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -53,9 +53,9 @@ struct TextExplosionView: View {
                     Image(systemName: "doc.on.doc")
                         .font(.system(size: 48))
                         .foregroundColor(.secondary)
-                    Text("没有可显示的文本")
+                    Text(L10n.TextExplosion.noText)
                         .font(.body)
-                    Text("请先复制一些文本")
+                    Text(L10n.TextExplosion.emptyHint)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -66,7 +66,7 @@ struct TextExplosionView: View {
 
             // Permission request overlay
             if case .failed(let message) = viewModel.insertionResult,
-               message.contains("授权") || message.contains("权限") {
+               message.contains(L10n.TextExplosion.needPermission) || message.contains("permission") || message.contains("授权") || message.contains("权限") {
                 overlayPermission(message: message)
             }
         }
@@ -82,7 +82,7 @@ struct TextExplosionView: View {
             // Filter chips
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
-                    FilterChip(title: "全部", type: nil, isSelected: viewModel.filterType == nil, color: .gray) {
+                    FilterChip(title: L10n.Common.all, type: nil, isSelected: viewModel.filterType == nil, color: .gray) {
                         viewModel.filterType = nil
                     }
 
@@ -151,7 +151,7 @@ struct TextExplosionView: View {
                     .font(.system(size: 48))
                     .foregroundColor(.orange)
 
-                Text("需要辅助功能权限")
+                Text(L10n.TextExplosion.needPermission)
                     .font(.system(size: 20, weight: .semibold))
 
                 Text(message)
@@ -163,7 +163,7 @@ struct TextExplosionView: View {
                 Button(action: { openAccessibilitySettings() }) {
                     HStack {
                         Image(systemName: "gear")
-                        Text("打开系统设置")
+                        Text(L10n.TextExplosion.openSettings)
                         Image(systemName: "arrow.up.right")
                     }
                     .font(.system(size: 14, weight: .medium))
@@ -174,7 +174,7 @@ struct TextExplosionView: View {
                     .cornerRadius(8)
                 }
 
-                Text("授权后请重启应用")
+                Text(L10n.TextExplosion.restartAfterAuth)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

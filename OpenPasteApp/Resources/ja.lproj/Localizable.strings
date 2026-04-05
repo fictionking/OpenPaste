@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Japanese)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "検索";
+"common.settings" = "設定";
+"common.recent" = "最近";
+"common.text" = "テキスト";
+"common.image" = "画像";
+"common.file" = "ファイル";
+"common.link" = "リンク";
+"common.email" = "メール";
+"common.phone" = "電話";
+"common.color" = "カラー";
+"common.code" = "コード";
+"common.all" = "すべて";
+"common.folder" = "フォルダ";
+"common.clipboard_content" = "クリップボードの内容";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "分析中...";
+"text_explosion.processing" = "画像からテキストを認識中...";
+"text_explosion.empty_hint" = "テキストをコピーしてから Cmd+Shift+B を押してください";
+"text_explosion.no_text" = "表示するテキストがありません";
+"text_explosion.need_permission" = "アクセシビリティ権限が必要です";
+"text_explosion.open_settings" = "システム設定を開く";
+"text_explosion.restart_after_auth" = "認証後にアプリを再起動してください";
+
+// MARK: - Search
+"search.placeholder" = "クリップボードを検索...";
+"search.empty_title" = "クリップボード履歴を検索";
+"search.empty_message" = "キーワードを入力してタイトルと内容を検索";
+"search.no_results" = "一致する結果が見つかりませんでした";
+"search.try_different" = "別のキーワードを試してください";
+"search.results_count" = "%d件の結果が見つかりました";
+
+// MARK: - Category
+"category.recent" = "最近";
+"category.text" = "テキスト";
+"category.code" = "コード";
+"category.image" = "画像";
+"category.file" = "ファイル";
+"category.link" = "リンク";
+"category.email" = "メール";
+"category.phone" = "電話";
+"category.color" = "カラー";
+"category.custom" = "カスタムカテゴリ";
+"category.add_to" = "カテゴリに追加";
+"category.remove_from" = "カテゴリから削除";
+"category.none" = "カテゴリなし";
+"category.favorite_1" = "お気に入り1";
+"category.favorite_2" = "お気に入り2";
+"category.favorite_3" = "お気に入り3";
+"category.favorite_4" = "お気に入り4";
+
+// MARK: - Content Type
+"content_type.text" = "テキスト";
+"content_type.image" = "画像";
+"content_type.folder" = "フォルダ";
+"content_type.file" = "ファイル";
+"content_type.link" = "リンク";
+"content_type.email" = "メール";
+"content_type.phone" = "電話";
+"content_type.color" = "カラー";
+"content_type.rich_text" = "リッチテキスト";
+"content_type.content" = "コンテンツ";
+
+// MARK: - OCR
+"ocr.processing" = "画像からテキストを認識中...";
+"ocr.failed" = "画像の処理に失敗しました";
+"ocr.no_text_found" = "画像からテキストを認識できませんでした";
+"ocr.unsupported_format" = "サポートされていない画像形式です";
+"ocr.init_failed" = "OCRサービスの初期化に失敗しました";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "クリップボード履歴を開く";
+"status_bar.quit" = "終了";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "テキストを挿入するにはアクセシビリティ権限が必要です";
+"error.insert_failed" = "テキストの挿入に失敗しました";
+"error.no_clipboard_content" = "クリップボードにテキストまたは画像がありません";
+
+// MARK: - Help
+"help.click_to_copy" = "クリックしてコピー";
+
+// MARK: - Settings
+"settings.keyboard" = "キーボード";
+"settings.clipboard_history" = "クリップボード履歴";
+"settings.text_explosion" = "テキスト爆発";
+"settings.data_management" = "データ管理";
+"settings.retention_period" = "保持期間";
+"settings.retention_days" = "%d 日";
+"settings.retention_hint" = "固定されていない項目は、この日数後に自動的に削除されます";
+"settings.history" = "履歴";
+"settings.maximum_history" = "最大履歴サイズ";
+"settings.maximum_history_items" = "%@ 項目";
+"settings.history_hint" = "この制限に達すると、最も古い項目が削除されます";
+"settings.about" = "について";
+"settings.version" = "バージョン %@";
+"settings.view_license" = "ライセンスを表示";
+"settings.quit_app" = "OpenPaste を終了";
+"settings.settings" = "設定";
+"settings.record_explosion_hotkey" = "テキスト爆発のショートカットキーを登録";
+"settings.record_clipboard_hotkey" = "クリップボードのショートカットキーを登録";
+"settings.press_key_combo" = "使用したいキーの組み合わせを押してください";
+"settings.recording" = "録音中...";
+"settings.cancel" = "キャンセル";
+"settings.save" = "保存";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "スライドしてすべてのデータを消去";
+"slide_action.slide_to_clear" = "スライドして消去";
+"slide_action.slide_to_delete" = "スライドして削除";
+"slide_action.slide_to_confirm" = "スライドして確認";

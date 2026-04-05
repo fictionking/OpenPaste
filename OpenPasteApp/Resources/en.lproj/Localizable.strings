@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (English)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Search";
+"common.settings" = "Settings";
+"common.recent" = "Recent";
+"common.text" = "Text";
+"common.image" = "Image";
+"common.file" = "File";
+"common.link" = "Link";
+"common.email" = "Email";
+"common.phone" = "Phone";
+"common.color" = "Color";
+"common.code" = "Code";
+"common.all" = "All";
+"common.folder" = "Folder";
+"common.clipboard_content" = "Clipboard Content";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analyzing...";
+"text_explosion.processing" = "Recognizing text from image...";
+"text_explosion.empty_hint" = "Copy text then press Cmd+Shift+B";
+"text_explosion.no_text" = "No text to display";
+"text_explosion.need_permission" = "Accessibility Permission Required";
+"text_explosion.open_settings" = "Open System Settings";
+"text_explosion.restart_after_auth" = "Please restart the app after authorization";
+
+// MARK: - Search
+"search.placeholder" = "Search clipboard...";
+"search.empty_title" = "Search Clipboard History";
+"search.empty_message" = "Enter keywords to search titles and content";
+"search.no_results" = "No matches found";
+"search.try_different" = "Try using different keywords";
+"search.results_count" = "Found %d results";
+
+// MARK: - Category
+"category.recent" = "Recent";
+"category.text" = "Text";
+"category.code" = "Code";
+"category.image" = "Image";
+"category.file" = "File";
+"category.link" = "Link";
+"category.email" = "Email";
+"category.phone" = "Phone";
+"category.color" = "Color";
+"category.custom" = "Custom Category";
+"category.add_to" = "Add to Category";
+"category.remove_from" = "Remove from Category";
+"category.none" = "No Category";
+"category.favorite_1" = "Favorite 1";
+"category.favorite_2" = "Favorite 2";
+"category.favorite_3" = "Favorite 3";
+"category.favorite_4" = "Favorite 4";
+
+// MARK: - Content Type
+"content_type.text" = "Text";
+"content_type.image" = "Image";
+"content_type.folder" = "Folder";
+"content_type.file" = "File";
+"content_type.link" = "Link";
+"content_type.email" = "Email";
+"content_type.phone" = "Phone";
+"content_type.color" = "Color";
+"content_type.rich_text" = "Rich Text";
+"content_type.content" = "Content";
+
+// MARK: - OCR
+"ocr.processing" = "Recognizing text from image...";
+"ocr.failed" = "Image processing failed";
+"ocr.no_text_found" = "No text recognized from image";
+"ocr.unsupported_format" = "Unsupported image format";
+"ocr.init_failed" = "OCR service initialization failed";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Open Clipboard History";
+"status_bar.quit" = "Quit";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Accessibility permission is required to insert text";
+"error.insert_failed" = "Text insertion failed";
+"error.no_clipboard_content" = "No text or image in clipboard";
+
+// MARK: - Help
+"help.click_to_copy" = "Click to copy";
+
+// MARK: - Settings
+"settings.keyboard" = "Keyboard";
+"settings.clipboard_history" = "Clipboard History";
+"settings.text_explosion" = "Text Explosion";
+"settings.data_management" = "Data Management";
+"settings.retention_period" = "Retention Period";
+"settings.retention_days" = "%d days";
+"settings.retention_hint" = "Items are automatically deleted after this many days, unless pinned";
+"settings.history" = "History";
+"settings.maximum_history" = "Maximum History Size";
+"settings.maximum_history_items" = "%@ items";
+"settings.history_hint" = "Oldest items are removed when this limit is reached";
+"settings.about" = "About";
+"settings.version" = "Version %@";
+"settings.view_license" = "View License";
+"settings.quit_app" = "Quit OpenPaste";
+"settings.settings" = "Settings";
+"settings.record_explosion_hotkey" = "Record Text Explosion Hotkey";
+"settings.record_clipboard_hotkey" = "Record Clipboard Hotkey";
+"settings.press_key_combo" = "Press the key combination you want to use";
+"settings.recording" = "Recording...";
+"settings.cancel" = "Cancel";
+"settings.save" = "Save";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Slide to Clear All Data";
+"slide_action.slide_to_clear" = "Slide to Clear";
+"slide_action.slide_to_delete" = "Slide to Delete";
+"slide_action.slide_to_confirm" = "Slide to Confirm";

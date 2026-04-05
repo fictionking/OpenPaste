@@ -7,7 +7,7 @@ struct DefaultView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("剪贴板内容")
+            Text(L10n.Common.clipboardContent)
                 .font(.system(size: 13))
                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
 

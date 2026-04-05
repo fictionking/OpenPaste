@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Turkish)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Ara";
+"common.settings" = "Ayarlar";
+"common.recent" = "Son Kullanılanlar";
+"common.text" = "Metin";
+"common.image" = "Görsel";
+"common.file" = "Dosya";
+"common.link" = "Bağlantı";
+"common.email" = "E-posta";
+"common.phone" = "Telefon";
+"common.color" = "Renk";
+"common.code" = "Kod";
+"common.all" = "Tümü";
+"common.folder" = "Klasör";
+"common.clipboard_content" = "Pano İçeriği";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analiz ediliyor...";
+"text_explosion.processing" = "Görüntüden metin tanıma...";
+"text_explosion.empty_hint" = "Metin kopyalayın ve Cmd+Shift+B tuşuna basın";
+"text_explosion.no_text" = "Gösterilecek metin yok";
+"text_explosion.need_permission" = "Erişilebilirlik İzni Gerekli";
+"text_explosion.open_settings" = "Sistem Ayarlarını Aç";
+"text_explosion.restart_after_auth" = "Yetkilendirmeden sonra uygulamayı yeniden başlatın";
+
+// MARK: - Search
+"search.placeholder" = "Panoda ara...";
+"search.empty_title" = "Pano Geçmişini Ara";
+"search.empty_message" = "Başlık ve içerik aramak için anahtar kelimeler girin";
+"search.no_results" = "Eşleşme bulunamadı";
+"search.try_different" = "Farklı anahtar kelimeler deneyin";
+"search.results_count" = "%d sonuç bulundu";
+
+// MARK: - Category
+"category.recent" = "Son Kullanılanlar";
+"category.text" = "Metin";
+"category.code" = "Kod";
+"category.image" = "Görsel";
+"category.file" = "Dosya";
+"category.link" = "Bağlantı";
+"category.email" = "E-posta";
+"category.phone" = "Telefon";
+"category.color" = "Renk";
+"category.custom" = "Özel Kategori";
+"category.add_to" = "Kategoriye Ekle";
+"category.remove_from" = "Kategoriden Kaldır";
+"category.none" = "Kategori Yok";
+"category.favorite_1" = "Favori 1";
+"category.favorite_2" = "Favori 2";
+"category.favorite_3" = "Favori 3";
+"category.favorite_4" = "Favori 4";
+
+// MARK: - Content Type
+"content_type.text" = "Metin";
+"content_type.image" = "Görsel";
+"content_type.folder" = "Klasör";
+"content_type.file" = "Dosya";
+"content_type.link" = "Bağlantı";
+"content_type.email" = "E-posta";
+"content_type.phone" = "Telefon";
+"content_type.color" = "Renk";
+"content_type.rich_text" = "Zengin Metin";
+"content_type.content" = "İçerik";
+
+// MARK: - OCR
+"ocr.processing" = "Görüntüden metin tanıma...";
+"ocr.failed" = "Görüntü işleme başarısız";
+"ocr.no_text_found" = "Görüntüden metin tanınmadı";
+"ocr.unsupported_format" = "Desteklenmeyen görsel formatı";
+"ocr.init_failed" = "OCR hizmeti başlatılamadı";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Pano Geçmişini Aç";
+"status_bar.quit" = "Çıkış";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Metin eklemek için erişilebilirlik izni gerekli";
+"error.insert_failed" = "Metin ekleme başarısız";
+"error.no_clipboard_content" = "Panoda metin veya görsel yok";
+
+// MARK: - Help
+"help.click_to_copy" = "Kopyalamak için tıklayın";
+
+// MARK: - Settings
+"settings.keyboard" = "Klavye";
+"settings.clipboard_history" = "Pano Geçmişi";
+"settings.text_explosion" = "Metin Patlaması";
+"settings.data_management" = "Veri Yönetimi";
+"settings.retention_period" = "Saklama Süresi";
+"settings.retention_days" = "%d gün";
+"settings.retention_hint" = "Öğeler, sabitlenmediği sürece bu kadar gün sonra otomatik olarak silinir";
+"settings.history" = "Geçmiş";
+"settings.maximum_history" = "Maksimum Geçmiş Boyutu";
+"settings.maximum_history_items" = "%@ öğe";
+"settings.history_hint" = "Bu limite ulaşıldığında en eski öğeler kaldırılır";
+"settings.about" = "Hakkında";
+"settings.version" = "Sürüm %@";
+"settings.view_license" = "Lisansı Görüntüle";
+"settings.quit_app" = "OpenPaste'tan Çık";
+"settings.settings" = "Ayarlar";
+"settings.record_explosion_hotkey" = "Metin Patlaması Kısayolu Kaydet";
+"settings.record_clipboard_hotkey" = "Pano Kısayolu Kaydet";
+"settings.press_key_combo" = "Kullanmak istediğiniz tuş kombinasyonuna basın";
+"settings.recording" = "Kaydediliyor...";
+"settings.cancel" = "İptal";
+"settings.save" = "Kaydet";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Tüm Verileri Temizlemek İçin Kaydır";
+"slide_action.slide_to_clear" = "Temizlemek İçin Kaydır";
+"slide_action.slide_to_delete" = "Silmek İçin Kaydır";
+"slide_action.slide_to_confirm" = "Onaylamak İçin Kaydır";

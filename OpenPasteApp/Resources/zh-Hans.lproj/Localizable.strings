@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Chinese Simplified)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "搜索";
+"common.settings" = "设置";
+"common.recent" = "最近";
+"common.text" = "文本";
+"common.image" = "图片";
+"common.file" = "文件";
+"common.link" = "链接";
+"common.email" = "邮箱";
+"common.phone" = "电话";
+"common.color" = "颜色";
+"common.code" = "代码";
+"common.all" = "全部";
+"common.folder" = "文件夹";
+"common.clipboard_content" = "剪贴板内容";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "正在分析...";
+"text_explosion.processing" = "正在识别图片中的文本...";
+"text_explosion.empty_hint" = "复制文本后按 Cmd+Shift+B";
+"text_explosion.no_text" = "没有可显示的文本";
+"text_explosion.need_permission" = "需要辅助功能权限";
+"text_explosion.open_settings" = "打开系统设置";
+"text_explosion.restart_after_auth" = "授权后请重启应用";
+
+// MARK: - Search
+"search.placeholder" = "搜索剪贴板...";
+"search.empty_title" = "搜索剪贴板历史";
+"search.empty_message" = "输入关键词搜索标题和内容";
+"search.no_results" = "未找到匹配内容";
+"search.try_different" = "尝试使用不同的关键词";
+"search.results_count" = "找到 %d 个结果";
+
+// MARK: - Category
+"category.recent" = "最近";
+"category.text" = "文本";
+"category.code" = "代码";
+"category.image" = "图片";
+"category.file" = "文件";
+"category.link" = "链接";
+"category.email" = "邮箱";
+"category.phone" = "电话";
+"category.color" = "颜色";
+"category.custom" = "自定义分类";
+"category.add_to" = "添加到分类";
+"category.remove_from" = "从分类中移除";
+"category.none" = "暂无分类";
+"category.favorite_1" = "收藏1";
+"category.favorite_2" = "收藏2";
+"category.favorite_3" = "收藏3";
+"category.favorite_4" = "收藏4";
+
+// MARK: - Content Type
+"content_type.text" = "文本";
+"content_type.image" = "图片";
+"content_type.folder" = "文件夹";
+"content_type.file" = "文件";
+"content_type.link" = "链接";
+"content_type.email" = "邮箱";
+"content_type.phone" = "电话";
+"content_type.color" = "颜色";
+"content_type.rich_text" = "富文本";
+"content_type.content" = "内容";
+
+// MARK: - OCR
+"ocr.processing" = "正在识别图片中的文本...";
+"ocr.failed" = "图片处理失败";
+"ocr.no_text_found" = "无法从图片中识别文本";
+"ocr.unsupported_format" = "不支持的图片格式";
+"ocr.init_failed" = "OCR服务初始化失败";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "打开剪贴板历史";
+"status_bar.quit" = "退出";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "需要辅助功能权限才能插入文本";
+"error.insert_failed" = "文本插入失败";
+"error.no_clipboard_content" = "剪贴板中没有文本或图片";
+
+// MARK: - Help
+"help.click_to_copy" = "点击复制";
+
+// MARK: - Settings
+"settings.keyboard" = "键盘";
+"settings.clipboard_history" = "剪贴板历史";
+"settings.text_explosion" = "文本爆炸";
+"settings.data_management" = "数据管理";
+"settings.retention_period" = "保留期限";
+"settings.retention_days" = "%d 天";
+"settings.retention_hint" = "除非已固定，否则项目将在此天数后自动删除";
+"settings.history" = "历史";
+"settings.maximum_history" = "最大历史大小";
+"settings.maximum_history_items" = "%@ 项";
+"settings.history_hint" = "达到此限制时，将删除最早的项目";
+"settings.about" = "关于";
+"settings.version" = "版本 %@";
+"settings.view_license" = "查看许可证";
+"settings.quit_app" = "退出 OpenPaste";
+"settings.settings" = "设置";
+"settings.record_explosion_hotkey" = "录制文本爆炸快捷键";
+"settings.record_clipboard_hotkey" = "录制剪贴板快捷键";
+"settings.press_key_combo" = "按下您想使用的组合键";
+"settings.recording" = "录制中...";
+"settings.cancel" = "取消";
+"settings.save" = "保存";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "滑动清除所有数据";
+"slide_action.slide_to_clear" = "滑动清除";
+"slide_action.slide_to_delete" = "滑动删除";
+"slide_action.slide_to_confirm" = "滑动确认";

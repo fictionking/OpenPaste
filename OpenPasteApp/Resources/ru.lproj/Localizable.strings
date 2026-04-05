@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Russian)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Поиск";
+"common.settings" = "Настройки";
+"common.recent" = "Недавние";
+"common.text" = "Текст";
+"common.image" = "Изображение";
+"common.file" = "Файл";
+"common.link" = "Ссылка";
+"common.email" = "Эл. почта";
+"common.phone" = "Телефон";
+"common.color" = "Цвет";
+"common.code" = "Код";
+"common.all" = "Все";
+"common.folder" = "Папка";
+"common.clipboard_content" = "Содержимое Буфера Обмена";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Анализ...";
+"text_explosion.processing" = "Распознавание текста на изображении...";
+"text_explosion.empty_hint" = "Скопируйте текст и нажмите Cmd+Shift+B";
+"text_explosion.no_text" = "Нет текста для отображения";
+"text_explosion.need_permission" = "Требуется Разрешение Специальных Возможностей";
+"text_explosion.open_settings" = "Открыть Системные Настройки";
+"text_explosion.restart_after_auth" = "Пожалуйста перезапустите приложение после авторизации";
+
+// MARK: - Search
+"search.placeholder" = "Поиск в буфере обмена...";
+"search.empty_title" = "Поиск Истории Буфера Обмена";
+"search.empty_message" = "Введите ключевые слова для поиска заголовков и содержимого";
+"search.no_results" = "Совпадений не найдено";
+"search.try_different" = "Попробуйте использовать другие ключевые слова";
+"search.results_count" = "Найдено результатов: %d";
+
+// MARK: - Category
+"category.recent" = "Недавние";
+"category.text" = "Текст";
+"category.code" = "Код";
+"category.image" = "Изображение";
+"category.file" = "Файл";
+"category.link" = "Ссылка";
+"category.email" = "Эл. почта";
+"category.phone" = "Телефон";
+"category.color" = "Цвет";
+"category.custom" = "Пользовательская Категория";
+"category.add_to" = "Добавить в Категорию";
+"category.remove_from" = "Удалить из Категории";
+"category.none" = "Без Категории";
+"category.favorite_1" = "Избранное 1";
+"category.favorite_2" = "Избранное 2";
+"category.favorite_3" = "Избранное 3";
+"category.favorite_4" = "Избранное 4";
+
+// MARK: - Content Type
+"content_type.text" = "Текст";
+"content_type.image" = "Изображение";
+"content_type.folder" = "Папка";
+"content_type.file" = "Файл";
+"content_type.link" = "Ссылка";
+"content_type.email" = "Эл. почта";
+"content_type.phone" = "Телефон";
+"content_type.color" = "Цвет";
+"content_type.rich_text" = "Форматированный Текст";
+"content_type.content" = "Содержимое";
+
+// MARK: - OCR
+"ocr.processing" = "Распознавание текста на изображении...";
+"ocr.failed" = "Ошибка обработки изображения";
+"ocr.no_text_found" = "Текст не распознан на изображении";
+"ocr.unsupported_format" = "Неподдерживаемый формат изображения";
+"ocr.init_failed" = "Ошибка инициализации службы OCR";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Открыть Историю Буфера Обмена";
+"status_bar.quit" = "Выход";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Требуется разрешение специальных возможностей для вставки текста";
+"error.insert_failed" = "Ошибка вставки текста";
+"error.no_clipboard_content" = "Нет текста или изображения в буфере обмена";
+
+// MARK: - Help
+"help.click_to_copy" = "Нажмите для копирования";
+
+// MARK: - Settings
+"settings.keyboard" = "Клавиатура";
+"settings.clipboard_history" = "История Буфера Обмена";
+"settings.text_explosion" = "Взрыв Текста";
+"settings.data_management" = "Управление Данными";
+"settings.retention_period" = "Период Хранения";
+"settings.retention_days" = "%d дней";
+"settings.retention_hint" = "Элементы автоматически удаляются после этого количества дней, если они не закреплены";
+"settings.history" = "История";
+"settings.maximum_history" = "Максимальный Размер Истории";
+"settings.maximum_history_items" = "%@ элементов";
+"settings.history_hint" = "Самые старые элементы удаляются при достижении этого лимита";
+"settings.about" = "О Программе";
+"settings.version" = "Версия %@";
+"settings.view_license" = "Просмотреть Лицензию";
+"settings.quit_app" = "Выйти из OpenPaste";
+"settings.settings" = "Настройки";
+"settings.record_explosion_hotkey" = "Записать Горячую Клавишу Взрыва Текста";
+"settings.record_clipboard_hotkey" = "Записать Горячую Клавишу Буфера Обмена";
+"settings.press_key_combo" = "Нажмите комбинацию клавиш, которую хотите использовать";
+"settings.recording" = "Запись...";
+"settings.cancel" = "Отмена";
+"settings.save" = "Сохранить";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Слайд для Очистки Всех Данных";
+"slide_action.slide_to_clear" = "Слайд для Очистки";
+"slide_action.slide_to_delete" = "Слайд для Удаления";
+"slide_action.slide_to_confirm" = "Слайд для Подтверждения";

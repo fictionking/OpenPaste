@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (German)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Suchen";
+"common.settings" = "Einstellungen";
+"common.recent" = "Kürzlich";
+"common.text" = "Text";
+"common.image" = "Bild";
+"common.file" = "Datei";
+"common.link" = "Link";
+"common.email" = "E-Mail";
+"common.phone" = "Telefon";
+"common.color" = "Farbe";
+"common.code" = "Code";
+"common.all" = "Alle";
+"common.folder" = "Ordner";
+"common.clipboard_content" = "Zwischenablage-Inhalt";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analysiere...";
+"text_explosion.processing" = "Erkenne Text aus Bild...";
+"text_explosion.empty_hint" = "Text kopieren und dann Cmd+Shift+B drücken";
+"text_explosion.no_text" = "Kein Text zum Anzeigen";
+"text_explosion.need_permission" = "Eingabehilfen-Berechtigung Erforderlich";
+"text_explosion.open_settings" = "Systemeinstellungen Öffnen";
+"text_explosion.restart_after_auth" = "Bitte App nach Autorisierung neu starten";
+
+// MARK: - Search
+"search.placeholder" = "Zwischenablage durchsuchen...";
+"search.empty_title" = "Zwischenablage-Verlauf Durchsuchen";
+"search.empty_message" = "Schlüsselwörter eingeben, um Titel und Inhalte zu suchen";
+"search.no_results" = "Keine Übereinstimmungen gefunden";
+"search.try_different" = "Versuchen Sie andere Schlüsselwörter";
+"search.results_count" = "%d Ergebnisse gefunden";
+
+// MARK: - Category
+"category.recent" = "Kürzlich";
+"category.text" = "Text";
+"category.code" = "Code";
+"category.image" = "Bild";
+"category.file" = "Datei";
+"category.link" = "Link";
+"category.email" = "E-Mail";
+"category.phone" = "Telefon";
+"category.color" = "Farbe";
+"category.custom" = "Benutzerdefinierte Kategorie";
+"category.add_to" = "Zu Kategorie Hinzufügen";
+"category.remove_from" = "Aus Kategorie Entfernen";
+"category.none" = "Keine Kategorie";
+"category.favorite_1" = "Favorit 1";
+"category.favorite_2" = "Favorit 2";
+"category.favorite_3" = "Favorit 3";
+"category.favorite_4" = "Favorit 4";
+
+// MARK: - Content Type
+"content_type.text" = "Text";
+"content_type.image" = "Bild";
+"content_type.folder" = "Ordner";
+"content_type.file" = "Datei";
+"content_type.link" = "Link";
+"content_type.email" = "E-Mail";
+"content_type.phone" = "Telefon";
+"content_type.color" = "Farbe";
+"content_type.rich_text" = "Rich Text";
+"content_type.content" = "Inhalt";
+
+// MARK: - OCR
+"ocr.processing" = "Erkenne Text aus Bild...";
+"ocr.failed" = "Bildverarbeitung fehlgeschlagen";
+"ocr.no_text_found" = "Kein Text aus Bild erkannt";
+"ocr.unsupported_format" = "Nicht unterstütztes Bildformat";
+"ocr.init_failed" = "OCR-Service-Initialisierung fehlgeschlagen";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Zwischenablage-Verlauf Öffnen";
+"status_bar.quit" = "Beenden";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Eingabehilfen-Berechtigung erforderlich zum Einfügen von Text";
+"error.insert_failed" = "Text-Einfügen fehlgeschlagen";
+"error.no_clipboard_content" = "Kein Text oder Bild in der Zwischenablage";
+
+// MARK: - Help
+"help.click_to_copy" = "Klicken zum Kopieren";
+
+// MARK: - Settings
+"settings.keyboard" = "Tastatur";
+"settings.clipboard_history" = "Zwischenablage-Verlauf";
+"settings.text_explosion" = "Text-Explosion";
+"settings.data_management" = "Datenverwaltung";
+"settings.retention_period" = "Aufbewahrungszeitraum";
+"settings.retention_days" = "%d Tage";
+"settings.retention_hint" = "Elemente werden nach dieser Anzahl von Tagen automatisch gelöscht, es sei denn, sie sind angeheftet";
+"settings.history" = "Verlauf";
+"settings.maximum_history" = "Maximale Verlaufsgröße";
+"settings.maximum_history_items" = "%@ Elemente";
+"settings.history_hint" = "Die ältesten Elemente werden entfernt, wenn dieses Limit erreicht wird";
+"settings.about" = "Über";
+"settings.version" = "Version %@";
+"settings.view_license" = "Lizenz Anzeigen";
+"settings.quit_app" = "OpenPaste Beenden";
+"settings.settings" = "Einstellungen";
+"settings.record_explosion_hotkey" = "Text-Explosion-Tastenkombination Aufzeichnen";
+"settings.record_clipboard_hotkey" = "Zwischenablage-Tastenkombination Aufzeichnen";
+"settings.press_key_combo" = "Drücken Sie die Tastenkombination, die Sie verwenden möchten";
+"settings.recording" = "Aufnahme...";
+"settings.cancel" = "Abbrechen";
+"settings.save" = "Speichern";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Wischen, um Alle Daten zu Löschen";
+"slide_action.slide_to_clear" = "Wischen, um zu Löschen";
+"slide_action.slide_to_delete" = "Wischen, um zu Entfernen";
+"slide_action.slide_to_confirm" = "Wischen, um zu Bestätigen";

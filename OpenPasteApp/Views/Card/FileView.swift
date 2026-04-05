@@ -54,7 +54,7 @@ struct FileView: View {
                         }
                     }
                 } else {
-                    Text("文件")
+                    Text(L10n.ContentType.file)
                         .font(.system(size: 13, weight: .medium))
                         .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
                 }

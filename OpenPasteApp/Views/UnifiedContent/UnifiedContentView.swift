@@ -147,9 +147,9 @@ struct UnifiedContentView: View {
         case .custom:
             return "No items in this category"
         case .search:
-            return "搜索"
+            return L10n.Common.search
         case .settings:
-            return "Settings"
+            return L10n.Common.settings
         }
     }
 
@@ -176,7 +176,7 @@ struct UnifiedContentView: View {
     @ViewBuilder
     private func categoryMenuContent(for item: ClipboardItemData) -> some View {
         if !viewModel.categories.isEmpty {
-            Menu("添加到分类") {
+            Menu(L10n.Category.addTo) {
                 ForEach(viewModel.categories) { category in
                     Button(category.name) {
                         Task {
@@ -188,13 +188,13 @@ struct UnifiedContentView: View {
 
             Divider()
 
-            Button("从分类中移除", role: .destructive) {
+            Button(L10n.Category.removeFrom, role: .destructive) {
                 Task {
                     await viewModel.removeFromCategory(item)
                 }
             }
         } else {
-            Button("暂无分类") {
+            Button(L10n.Category.none) {
                 // TODO: Navigate to categories
             }
             .disabled(true)

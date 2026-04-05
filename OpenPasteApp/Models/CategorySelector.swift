@@ -30,11 +30,11 @@ enum CategorySelector: Equatable {
         case .preset(let preset):
             return preset.displayName
         case .custom:
-            return "自定义分类"
+            return L10n.Category.custom
         case .search:
-            return "搜索"
+            return L10n.Common.search
         case .settings:
-            return "设置"
+            return L10n.Common.settings
         }
     }
 

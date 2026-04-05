@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (French)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Rechercher";
+"common.settings" = "Paramètres";
+"common.recent" = "Récent";
+"common.text" = "Texte";
+"common.image" = "Image";
+"common.file" = "Fichier";
+"common.link" = "Lien";
+"common.email" = "E-mail";
+"common.phone" = "Téléphone";
+"common.color" = "Couleur";
+"common.code" = "Code";
+"common.all" = "Tout";
+"common.folder" = "Dossier";
+"common.clipboard_content" = "Contenu du Presse-papier";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analyse en cours...";
+"text_explosion.processing" = "Reconnaissance du texte de l'image...";
+"text_explosion.empty_hint" = "Copiez du texte puis appuyez sur Cmd+Shift+B";
+"text_explosion.no_text" = "Aucun texte à afficher";
+"text_explosion.need_permission" = "Autorisation d'Accessibilité Requise";
+"text_explosion.open_settings" = "Ouvrir les Paramètres Système";
+"text_explosion.restart_after_auth" = "Veuillez redémarrer l'application après l'autorisation";
+
+// MARK: - Search
+"search.placeholder" = "Rechercher dans le presse-papier...";
+"search.empty_title" = "Rechercher l'Historique du Presse-papier";
+"search.empty_message" = "Entrez des mots-clés pour rechercher les titres et le contenu";
+"search.no_results" = "Aucune correspondance trouvée";
+"search.try_different" = "Essayez d'utiliser différents mots-clés";
+"search.results_count" = "%d correspondances trouvées";
+
+// MARK: - Category
+"category.recent" = "Récent";
+"category.text" = "Texte";
+"category.code" = "Code";
+"category.image" = "Image";
+"category.file" = "Fichier";
+"category.link" = "Lien";
+"category.email" = "E-mail";
+"category.phone" = "Téléphone";
+"category.color" = "Couleur";
+"category.custom" = "Catégorie Personnalisée";
+"category.add_to" = "Ajouter à la Catégorie";
+"category.remove_from" = "Retirer de la Catégorie";
+"category.none" = "Aucune Catégorie";
+"category.favorite_1" = "Favori 1";
+"category.favorite_2" = "Favori 2";
+"category.favorite_3" = "Favori 3";
+"category.favorite_4" = "Favori 4";
+
+// MARK: - Content Type
+"content_type.text" = "Texte";
+"content_type.image" = "Image";
+"content_type.folder" = "Dossier";
+"content_type.file" = "Fichier";
+"content_type.link" = "Lien";
+"content_type.email" = "E-mail";
+"content_type.phone" = "Téléphone";
+"content_type.color" = "Couleur";
+"content_type.rich_text" = "Texte Enrichi";
+"content_type.content" = "Contenu";
+
+// MARK: - OCR
+"ocr.processing" = "Reconnaissance du texte de l'image...";
+"ocr.failed" = "Échec du traitement de l'image";
+"ocr.no_text_found" = "Aucun texte reconnu dans l'image";
+"ocr.unsupported_format" = "Format d'image non pris en charge";
+"ocr.init_failed" = "Échec de l'initialisation du service OCR";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Ouvrir l'Historique du Presse-papier";
+"status_bar.quit" = "Quitter";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "L'autorisation d'accessibilité est requise pour insérer du texte";
+"error.insert_failed" = "Échec de l'insertion du texte";
+"error.no_clipboard_content" = "Aucun texte ou image dans le presse-papier";
+
+// MARK: - Help
+"help.click_to_copy" = "Cliquez pour copier";
+
+// MARK: - Settings
+"settings.keyboard" = "Clavier";
+"settings.clipboard_history" = "Historique du Presse-papier";
+"settings.text_explosion" = "Explosion de Texte";
+"settings.data_management" = "Gestion des Données";
+"settings.retention_period" = "Période de Rétention";
+"settings.retention_days" = "%d jours";
+"settings.retention_hint" = "Les éléments sont automatiquement supprimés après ce nombre de jours, sauf s'ils sont épinglés";
+"settings.history" = "Historique";
+"settings.maximum_history" = "Taille Maximale de l'Historique";
+"settings.maximum_history_items" = "%@ éléments";
+"settings.history_hint" = "Les éléments les plus anciens sont supprimés lorsque cette limite est atteinte";
+"settings.about" = "À propos";
+"settings.version" = "Version %@";
+"settings.view_license" = "Voir la Licence";
+"settings.quit_app" = "Quitter OpenPaste";
+"settings.settings" = "Paramètres";
+"settings.record_explosion_hotkey" = "Enregistrer le Raccourci d'Explosion de Texte";
+"settings.record_clipboard_hotkey" = "Enregistrer le Raccourci du Presse-papier";
+"settings.press_key_combo" = "Appuyez sur la combinaison de touches que vous souhaitez utiliser";
+"settings.recording" = "Enregistrement...";
+"settings.cancel" = "Annuler";
+"settings.save" = "Enregistrer";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Glisser pour Effacer Toutes les Données";
+"slide_action.slide_to_clear" = "Glisser pour Effacer";
+"slide_action.slide_to_delete" = "Glisser pour Supprimer";
+"slide_action.slide_to_confirm" = "Glisser pour Confirmer";

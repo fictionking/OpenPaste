@@ -135,6 +135,19 @@
 			knownRegions = (
 				en,
 				Base,
+				tr,
+				es,
+				fr,
+				de,
+				"zh-Hans",
+				pt,
+				ko,
+				pl,
+				it,
+				ru,
+				nl,
+				"zh-Hant",
+				ja,
 			);
 			mainGroup = 5D07F4C62B474DDA9EEEDD01;
 			productRefGroup = 308F19D54CAB43A6AFBF5D1D /* Products */;

@@ -95,7 +95,7 @@ class TextExplosionViewModel: ObservableObject {
 
         // 既没有文本也没有图片
         NSLog("❌ [TextExplosion] Clipboard is empty or unsupported content")
-        errorMessage = "剪贴板中没有文本或图片"
+        errorMessage = L10n.Error.noClipboardContent
         isProcessing = false
     }
 
@@ -130,7 +130,7 @@ class TextExplosionViewModel: ObservableObject {
         }
 
         guard let service = ocrService else {
-            errorMessage = "OCR服务初始化失败"
+            errorMessage = L10n.OCR.initFailed
             isProcessingOCR = false
             isProcessing = false
             return

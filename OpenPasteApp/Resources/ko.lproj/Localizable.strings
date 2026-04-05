@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Korean)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "검색";
+"common.settings" = "설정";
+"common.recent" = "최근";
+"common.text" = "텍스트";
+"common.image" = "이미지";
+"common.file" = "파일";
+"common.link" = "링크";
+"common.email" = "이메일";
+"common.phone" = "전화번호";
+"common.color" = "색상";
+"common.code" = "코드";
+"common.all" = "전체";
+"common.folder" = "폴더";
+"common.clipboard_content" = "클립보드 내용";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "분석 중...";
+"text_explosion.processing" = "이미지에서 텍스트 인식 중...";
+"text_explosion.empty_hint" = "텍스트를 복사하고 Cmd+Shift+B를 누르세요";
+"text_explosion.no_text" = "표시할 텍스트가 없습니다";
+"text_explosion.need_permission" = "접근성 권한 필요";
+"text_explosion.open_settings" = "시스템 설정 열기";
+"text_explosion.restart_after_auth" = "권한 부여 후 앱을 다시 시작하세요";
+
+// MARK: - Search
+"search.placeholder" = "클립보드 검색...";
+"search.empty_title" = "클립보드 기록 검색";
+"search.empty_message" = "제목과 내용을 검색하려면 키워드를 입력하세요";
+"search.no_results" = "일치하는 항목을 찾을 수 없습니다";
+"search.try_different" = "다른 키워드를 사용해 보세요";
+"search.results_count" = "%d개의 결과를 찾았습니다";
+
+// MARK: - Category
+"category.recent" = "최근";
+"category.text" = "텍스트";
+"category.code" = "코드";
+"category.image" = "이미지";
+"category.file" = "파일";
+"category.link" = "링크";
+"category.email" = "이메일";
+"category.phone" = "전화번호";
+"category.color" = "색상";
+"category.custom" = "사용자 정의 카테고리";
+"category.add_to" = "카테고리에 추가";
+"category.remove_from" = "카테고리에서 제거";
+"category.none" = "카테고리 없음";
+"category.favorite_1" = "즐겨찾기 1";
+"category.favorite_2" = "즐겨찾기 2";
+"category.favorite_3" = "즐겨찾기 3";
+"category.favorite_4" = "즐겨찾기 4";
+
+// MARK: - Content Type
+"content_type.text" = "텍스트";
+"content_type.image" = "이미지";
+"content_type.folder" = "폴더";
+"content_type.file" = "파일";
+"content_type.link" = "링크";
+"content_type.email" = "이메일";
+"content_type.phone" = "전화번호";
+"content_type.color" = "색상";
+"content_type.rich_text" = "서식 있는 텍스트";
+"content_type.content" = "내용";
+
+// MARK: - OCR
+"ocr.processing" = "이미지에서 텍스트 인식 중...";
+"ocr.failed" = "이미지 처리 실패";
+"ocr.no_text_found" = "이미지에서 텍스트를 인식할 수 없습니다";
+"ocr.unsupported_format" = "지원되지 않는 이미지 형식입니다";
+"ocr.init_failed" = "OCR 서비스 초기화 실패";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "클립보드 기록 열기";
+"status_bar.quit" = "종료";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "텍스트를 삽입하려면 접근성 권한이 필요합니다";
+"error.insert_failed" = "텍스트 삽입 실패";
+"error.no_clipboard_content" = "클립보드에 텍스트 또는 이미지가 없습니다";
+
+// MARK: - Help
+"help.click_to_copy" = "클릭하여 복사";
+
+// MARK: - Settings
+"settings.keyboard" = "키보드";
+"settings.clipboard_history" = "클립보드 기록";
+"settings.text_explosion" = "텍스트 폭발";
+"settings.data_management" = "데이터 관리";
+"settings.retention_period" = "보관 기간";
+"settings.retention_days" = "%d일";
+"settings.retention_hint" = "고정되지 않은 항목은 이 일수 후 자동으로 삭제됩니다";
+"settings.history" = "기록";
+"settings.maximum_history" = "최대 기록 크기";
+"settings.maximum_history_items" = "%@개 항목";
+"settings.history_hint" = "이 제한에 도달하면 가장 오래된 항목이 제거됩니다";
+"settings.about" = "정보";
+"settings.version" = "버전 %@";
+"settings.view_license" = "라이선스 보기";
+"settings.quit_app" = "OpenPaste 종료";
+"settings.settings" = "설정";
+"settings.record_explosion_hotkey" = "텍스트 폭발 단축키 녹음";
+"settings.record_clipboard_hotkey" = "클립보드 단축키 녹음";
+"settings.press_key_combo" = "사용할 키 조합을 누르세요";
+"settings.recording" = "녹음 중...";
+"settings.cancel" = "취소";
+"settings.save" = "저장";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "밀어서 모든 데이터 지우기";
+"slide_action.slide_to_clear" = "밀어서 지우기";
+"slide_action.slide_to_delete" = "밀어서 삭제";
+"slide_action.slide_to_confirm" = "밀어서 확인";

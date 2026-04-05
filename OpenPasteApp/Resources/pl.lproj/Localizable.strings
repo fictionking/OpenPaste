@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Polish)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Szukaj";
+"common.settings" = "Ustawienia";
+"common.recent" = "Ostatnie";
+"common.text" = "Tekst";
+"common.image" = "Obraz";
+"common.file" = "Plik";
+"common.link" = "Link";
+"common.email" = "E-mail";
+"common.phone" = "Telefon";
+"common.color" = "Kolor";
+"common.code" = "Kod";
+"common.all" = "Wszystkie";
+"common.folder" = "Folder";
+"common.clipboard_content" = "Zawartość Schowka";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analizowanie...";
+"text_explosion.processing" = "Rozpoznawanie tekstu z obrazu...";
+"text_explosion.empty_hint" = "Skopiuj tekst i naciśnij Cmd+Shift+B";
+"text_explosion.no_text" = "Brak tekstu do wyświetlenia";
+"text_explosion.need_permission" = "Wymagane Uprawnienie Dostępu";
+"text_explosion.open_settings" = "Otwórz Ustawienia Systemowe";
+"text_explosion.restart_after_auth" = "Uruchom ponownie aplikację po autoryzacji";
+
+// MARK: - Search
+"search.placeholder" = "Przeszukaj schowek...";
+"search.empty_title" = "Przeszukaj Historię Schowka";
+"search.empty_message" = "Wprowadź słowa kluczowe, aby wyszukać tytuły i zawartość";
+"search.no_results" = "Nie znaleziono dopasowań";
+"search.try_different" = "Spróbuj użyć różnych słów kluczowych";
+"search.results_count" = "Znaleziono %d wyników";
+
+// MARK: - Category
+"category.recent" = "Ostatnie";
+"category.text" = "Tekst";
+"category.code" = "Kod";
+"category.image" = "Obraz";
+"category.file" = "Plik";
+"category.link" = "Link";
+"category.email" = "E-mail";
+"category.phone" = "Telefon";
+"category.color" = "Kolor";
+"category.custom" = "Kategoria Niestandardowa";
+"category.add_to" = "Dodaj do Kategorii";
+"category.remove_from" = "Usuń z Kategorii";
+"category.none" = "Brak Kategorii";
+"category.favorite_1" = "Ulubione 1";
+"category.favorite_2" = "Ulubione 2";
+"category.favorite_3" = "Ulubione 3";
+"category.favorite_4" = "Ulubione 4";
+
+// MARK: - Content Type
+"content_type.text" = "Tekst";
+"content_type.image" = "Obraz";
+"content_type.folder" = "Folder";
+"content_type.file" = "Plik";
+"content_type.link" = "Link";
+"content_type.email" = "E-mail";
+"content_type.phone" = "Telefon";
+"content_type.color" = "Kolor";
+"content_type.rich_text" = "Tekst Sformatowany";
+"content_type.content" = "Zawartość";
+
+// MARK: - OCR
+"ocr.processing" = "Rozpoznawanie tekstu z obrazu...";
+"ocr.failed" = "Przetwarzanie obrazu nie powiodło się";
+"ocr.no_text_found" = "Nie rozpoznano tekstu na obrazie";
+"ocr.unsupported_format" = "Nieobsługiwany format obrazu";
+"ocr.init_failed" = "Inicjalizacja usługi OCR nie powiodła się";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Otwórz Historię Schowka";
+"status_bar.quit" = "Wyjdź";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Wymagane uprawnienie dostępu do wstawiania tekstu";
+"error.insert_failed" = "Wstawianie tekstu nie powiodło się";
+"error.no_clipboard_content" = "Brak tekstu lub obrazu w schowku";
+
+// MARK: - Help
+"help.click_to_copy" = "Kliknij, aby skopiować";
+
+// MARK: - Settings
+"settings.keyboard" = "Klawiatura";
+"settings.clipboard_history" = "Historia Schowka";
+"settings.text_explosion" = "Eksplozja Tekstu";
+"settings.data_management" = "Zarządzanie Danymi";
+"settings.retention_period" = "Okres Retencji";
+"settings.retention_days" = "%d dni";
+"settings.retention_hint" = "Elementy są automatycznie usuwane po tej liczbie dni, chyba że są przypięte";
+"settings.history" = "Historia";
+"settings.maximum_history" = "Maksymalny Rozmiar Historii";
+"settings.maximum_history_items" = "%@ elementów";
+"settings.history_hint" = "Najstarsze elementy są usuwane po osiągnięciu tego limitu";
+"settings.about" = "O Aplikacji";
+"settings.version" = "Wersja %@";
+"settings.view_license" = "Wyświetl Licencję";
+"settings.quit_app" = "Zakończ OpenPaste";
+"settings.settings" = "Ustawienia";
+"settings.record_explosion_hotkey" = "Nagraj Skrót Eksplozji Tekstu";
+"settings.record_clipboard_hotkey" = "Nagraj Skrót Schowka";
+"settings.press_key_combo" = "Naciśnij kombinację klawiszy, której chcesz użyć";
+"settings.recording" = "Nagrywanie...";
+"settings.cancel" = "Anuluj";
+"settings.save" = "Zapisz";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Przesuń, aby Wyczyścić Wszystkie Dane";
+"slide_action.slide_to_clear" = "Przesuń, aby Wyczyścić";
+"slide_action.slide_to_delete" = "Przesuń, aby Usunąć";
+"slide_action.slide_to_confirm" = "Przesuń, aby Potwierdzić";

@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Spanish)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Buscar";
+"common.settings" = "Configuración";
+"common.recent" = "Reciente";
+"common.text" = "Texto";
+"common.image" = "Imagen";
+"common.file" = "Archivo";
+"common.link" = "Enlace";
+"common.email" = "Correo";
+"common.phone" = "Teléfono";
+"common.color" = "Color";
+"common.code" = "Código";
+"common.all" = "Todos";
+"common.folder" = "Carpeta";
+"common.clipboard_content" = "Contenido del Portapapeles";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analizando...";
+"text_explosion.processing" = "Reconociendo texto de la imagen...";
+"text_explosion.empty_hint" = "Copia texto y luego presiona Cmd+Shift+B";
+"text_explosion.no_text" = "No hay texto para mostrar";
+"text_explosion.need_permission" = "Se Requiere Permiso de Accesibilidad";
+"text_explosion.open_settings" = "Abrir Configuración del Sistema";
+"text_explosion.restart_after_auth" = "Por favor reinicia la app después de la autorización";
+
+// MARK: - Search
+"search.placeholder" = "Buscar en el portapapeles...";
+"search.empty_title" = "Buscar Historial del Portapapeles";
+"search.empty_message" = "Ingresa palabras clave para buscar títulos y contenido";
+"search.no_results" = "No se encontraron coincidencias";
+"search.try_different" = "Intenta usar diferentes palabras clave";
+"search.results_count" = "Se encontraron %d resultados";
+
+// MARK: - Category
+"category.recent" = "Reciente";
+"category.text" = "Texto";
+"category.code" = "Código";
+"category.image" = "Imagen";
+"category.file" = "Archivo";
+"category.link" = "Enlace";
+"category.email" = "Correo";
+"category.phone" = "Teléfono";
+"category.color" = "Color";
+"category.custom" = "Categoría Personalizada";
+"category.add_to" = "Añadir a Categoría";
+"category.remove_from" = "Eliminar de Categoría";
+"category.none" = "Sin Categoría";
+"category.favorite_1" = "Favorito 1";
+"category.favorite_2" = "Favorito 2";
+"category.favorite_3" = "Favorito 3";
+"category.favorite_4" = "Favorito 4";
+
+// MARK: - Content Type
+"content_type.text" = "Texto";
+"content_type.image" = "Imagen";
+"content_type.folder" = "Carpeta";
+"content_type.file" = "Archivo";
+"content_type.link" = "Enlace";
+"content_type.email" = "Correo";
+"content_type.phone" = "Teléfono";
+"content_type.color" = "Color";
+"content_type.rich_text" = "Texto Enriquecido";
+"content_type.content" = "Contenido";
+
+// MARK: - OCR
+"ocr.processing" = "Reconociendo texto de la imagen...";
+"ocr.failed" = "Falló el procesamiento de la imagen";
+"ocr.no_text_found" = "No se pudo reconocer texto de la imagen";
+"ocr.unsupported_format" = "Formato de imagen no soportado";
+"ocr.init_failed" = "Falló la inicialización del servicio OCR";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Abrir Historial del Portapapeles";
+"status_bar.quit" = "Salir";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Se requiere permiso de accesibilidad para insertar texto";
+"error.insert_failed" = "Falló la inserción de texto";
+"error.no_clipboard_content" = "No hay texto o imagen en el portapapeles";
+
+// MARK: - Help
+"help.click_to_copy" = "Haz clic para copiar";
+
+// MARK: - Settings
+"settings.keyboard" = "Teclado";
+"settings.clipboard_history" = "Historial del Portapapeles";
+"settings.text_explosion" = "Explosión de Texto";
+"settings.data_management" = "Gestión de Datos";
+"settings.retention_period" = "Período de Retención";
+"settings.retention_days" = "%d días";
+"settings.retention_hint" = "Los elementos se eliminan automáticamente después de este número de días, a menos que estén fijados";
+"settings.history" = "Historial";
+"settings.maximum_history" = "Tamaño Máximo del Historial";
+"settings.maximum_history_items" = "%@ elementos";
+"settings.history_hint" = "Los elementos más antiguos se eliminan cuando se alcanza este límite";
+"settings.about" = "Acerca de";
+"settings.version" = "Versión %@";
+"settings.view_license" = "Ver Licencia";
+"settings.quit_app" = "Salir de OpenPaste";
+"settings.settings" = "Configuración";
+"settings.record_explosion_hotkey" = "Registrar Atajo de Explosión de Texto";
+"settings.record_clipboard_hotkey" = "Registrar Atajo del Portapapeles";
+"settings.press_key_combo" = "Presiona la combinación de teclas que deseas usar";
+"settings.recording" = "Grabando...";
+"settings.cancel" = "Cancelar";
+"settings.save" = "Guardar";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Desliza para Borrar Todos los Datos";
+"slide_action.slide_to_clear" = "Desliza para Borrar";
+"slide_action.slide_to_delete" = "Desliza para Eliminar";
+"slide_action.slide_to_confirm" = "Desliza para Confirmar";

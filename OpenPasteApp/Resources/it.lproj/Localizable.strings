@@ -1,0 +1,119 @@
+/*
+  Localizable.strings (Italian)
+  OpenPaste
+
+  Created by OpenPaste
+*/
+
+// MARK: - Common
+"common.search" = "Cerca";
+"common.settings" = "Impostazioni";
+"common.recent" = "Recente";
+"common.text" = "Testo";
+"common.image" = "Immagine";
+"common.file" = "File";
+"common.link" = "Link";
+"common.email" = "E-mail";
+"common.phone" = "Telefono";
+"common.color" = "Colore";
+"common.code" = "Codice";
+"common.all" = "Tutti";
+"common.folder" = "Cartella";
+"common.clipboard_content" = "Contenuto degli Appunti";
+
+// MARK: - Text Explosion
+"text_explosion.analyzing" = "Analisi...";
+"text_explosion.processing" = "Riconoscimento del testo dall'immagine...";
+"text_explosion.empty_hint" = "Copia il testo e premi Cmd+Shift+B";
+"text_explosion.no_text" = "Nessun testo da visualizzare";
+"text_explosion.need_permission" = "Permesso Accessibilità Richiesto";
+"text_explosion.open_settings" = "Apri Impostazioni di Sistema";
+"text_explosion.restart_after_auth" = "Riavvia l'app dopo l'autorizzazione";
+
+// MARK: - Search
+"search.placeholder" = "Cerca negli appunti...";
+"search.empty_title" = "Cerca Cronologia Appunti";
+"search.empty_message" = "Inserisci parole chiave per cercare titoli e contenuti";
+"search.no_results" = "Nessuna corrispondenza trovata";
+"search.try_different" = "Prova a usare parole chiave diverse";
+"search.results_count" = "Trovati %d risultati";
+
+// MARK: - Category
+"category.recent" = "Recente";
+"category.text" = "Testo";
+"category.code" = "Codice";
+"category.image" = "Immagine";
+"category.file" = "File";
+"category.link" = "Link";
+"category.email" = "E-mail";
+"category.phone" = "Telefono";
+"category.color" = "Colore";
+"category.custom" = "Categoria Personalizzata";
+"category.add_to" = "Aggiungi a Categoria";
+"category.remove_from" = "Rimuovi da Categoria";
+"category.none" = "Nessuna Categoria";
+"category.favorite_1" = "Preferito 1";
+"category.favorite_2" = "Preferito 2";
+"category.favorite_3" = "Preferito 3";
+"category.favorite_4" = "Preferito 4";
+
+// MARK: - Content Type
+"content_type.text" = "Testo";
+"content_type.image" = "Immagine";
+"content_type.folder" = "Cartella";
+"content_type.file" = "File";
+"content_type.link" = "Link";
+"content_type.email" = "E-mail";
+"content_type.phone" = "Telefono";
+"content_type.color" = "Colore";
+"content_type.rich_text" = "Testo Formattato";
+"content_type.content" = "Contenuto";
+
+// MARK: - OCR
+"ocr.processing" = "Riconoscimento del testo dall'immagine...";
+"ocr.failed" = "Elaborazione immagine fallita";
+"ocr.no_text_found" = "Nessun testo riconosciuto dall'immagine";
+"ocr.unsupported_format" = "Formato immagine non supportato";
+"ocr.init_failed" = "Inizializzazione servizio OCR fallita";
+
+// MARK: - Status Bar
+"status_bar.open_history" = "Apri Cronologia Appunti";
+"status_bar.quit" = "Esci";
+
+// MARK: - Error
+"error.need_accessibility_permission" = "Il permesso di accessibilità è richiesto per inserire testo";
+"error.insert_failed" = "Inserimento del testo fallito";
+"error.no_clipboard_content" = "Nessun testo o immagine negli appunti";
+
+// MARK: - Help
+"help.click_to_copy" = "Clicca per copiare";
+
+// MARK: - Settings
+"settings.keyboard" = "Tastiera";
+"settings.clipboard_history" = "Cronologia Appunti";
+"settings.text_explosion" = "Explosione di Testo";
+"settings.data_management" = "Gestione Dati";
+"settings.retention_period" = "Periodo di Conservazione";
+"settings.retention_days" = "%d giorni";
+"settings.retention_hint" = "Gli elementi vengono eliminati automaticamente dopo questo numero di giorni, se non fissati";
+"settings.history" = "Cronologia";
+"settings.maximum_history" = "Dimensione Massima Cronologia";
+"settings.maximum_history_items" = "%@ elementi";
+"settings.history_hint" = "Gli elementi più vecchi vengono rimossi quando questo limite viene raggiunto";
+"settings.about" = "Info";
+"settings.version" = "Versione %@";
+"settings.view_license" = "Visualizza Licenza";
+"settings.quit_app" = "Esci da OpenPaste";
+"settings.settings" = "Impostazioni";
+"settings.record_explosion_hotkey" = "Registra Scelta Rapida Esplosione Testo";
+"settings.record_clipboard_hotkey" = "Registra Scelta Rapida Appunti";
+"settings.press_key_combo" = "Premi la combinazione di tasti che desideri utilizzare";
+"settings.recording" = "Registrazione...";
+"settings.cancel" = "Annulla";
+"settings.save" = "Salva";
+
+// MARK: - Slide Action
+"slide_action.slide_to_clear_all" = "Scorri per Cancellare Tutti i Dati";
+"slide_action.slide_to_clear" = "Scorri per Cancellare";
+"slide_action.slide_to_delete" = "Scorri per Eliminare";
+"slide_action.slide_to_confirm" = "Scorri per Confermare";

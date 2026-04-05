@@ -265,23 +265,23 @@ struct CardHeader: View {
     private var typeTitle: String {
         switch contentType {
         case "public.utf8-plain-text", "public.text":
-            return "文本"
+            return L10n.ContentType.text
         case "public.image", "public.tiff", "public.png":
-            return "图片"
+            return L10n.ContentType.image
         case "public.folder":
-            return "文件夹"
+            return L10n.ContentType.folder
         case "public.file-url":
-            return "文件"
+            return L10n.ContentType.file
         case "public.url":
-            return "链接"
+            return L10n.ContentType.link
         case "public.email":
-            return "邮箱"
+            return L10n.ContentType.email
         case "public.phone-number":
-            return "电话"
+            return L10n.ContentType.phone
         case "public.color-code":
-            return "颜色"
+            return L10n.ContentType.color
         default:
-            return "内容"
+            return L10n.ContentType.content
         }
     }
 
