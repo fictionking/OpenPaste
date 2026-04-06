@@ -13,8 +13,59 @@ final class OCRService {
 
     // MARK: - Properties
 
-    /// 支持的OCR语言
-    private let recognitionLanguages = ["zh-Hans", "zh-Hant", "en-US", "ja-JP", "ko-KR"]
+    /// 支持的OCR语言（根据系统语言动态生成）
+    private var recognitionLanguages: [String] {
+        let systemLang = Locale.current.language.languageCode?.identifier ?? "en"
+
+        // Vision框架语言代码映射
+        let langMap: [String: String] = [
+            "zh": "zh-Hans",
+            "ja": "ja-JP",
+            "ko": "ko-KR",
+            "fr": "fr-FR",
+            "de": "de-DE",
+            "es": "es-ES",
+            "it": "it-IT",
+            "pt": "pt-PT",
+            "ru": "ru-RU",
+            "ar": "ar-AE",
+            "hi": "hi-IN",
+            "th": "th-TH",
+            "vi": "vi-VN",
+            "tr": "tr-TR",
+            "pl": "pl-PL",
+            "nl": "nl-NL",
+            "sv": "sv-SE",
+            "da": "da-DK",
+            "no": "no-NO",
+            "fi": "fi-FI",
+            "cs": "cs-CZ",
+            "el": "el-GR",
+            "he": "he-IL",
+            "id": "id-ID",
+            "ms": "ms-MY",
+            "uk": "uk-UA"
+        ]
+
+        var languages: [String] = []
+
+        // 添加系统语言（如果支持）
+        if let visionLang = langMap[systemLang] {
+            languages.append(visionLang)
+
+            // 中文特殊处理：同时添加简繁体
+            if systemLang == "zh" {
+                languages.append("zh-Hant")
+            }
+        }
+
+        // 确保英文始终存在
+        if !languages.contains("en-US") {
+            languages.append("en-US")
+        }
+
+        return languages.isEmpty ? ["en-US"] : languages
+    }
 
     /// 最大图片尺寸（超过此尺寸的图片会被缩小）
     private let maxImageSize: CGFloat = 4096
