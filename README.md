@@ -35,9 +35,9 @@ xcodebuild -project OpenPaste.xcodeproj -scheme OpenPaste -configuration Debug
 
 ### Direct Download (Recommended)
 
-Download the latest `OpenPaste.dmg` from the repository and open it to install.
+Download the latest `OpenPaste.dmg` from [GitHub Releases](https://github.com/fictionking/OpenPaste/releases/latest) and open it to install.
 
-1. Download [OpenPaste.dmg](./OpenPaste.dmg)
+1. Download [OpenPaste.dmg](https://github.com/fictionking/OpenPaste/releases/latest)
 2. Open the downloaded DMG file
 3. Drag OpenPaste to Applications folder
 
