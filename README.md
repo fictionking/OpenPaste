@@ -3,6 +3,9 @@
 <div align="center">
   <img src="openpaste_app.png" alt="OpenPaste Application Screenshot" width="600">
 </div>
+<div align="center">
+  <img src="openpaste_app_2.png" alt="OpenPaste Application Screenshot" width="600">
+</div>
 
 A modern macOS clipboard management application built with SwiftUI.
 
@@ -61,20 +64,19 @@ brew install --cask openpaste
 - **Pinning**: Pin important items to prevent expiry
 - **Search**: Multi-dimensional search by content, type, date, and source
 - **Privacy**: All data stored locally, no cloud sync
-
-### Text Explosion (New in v1.1)
-
-- **Intelligent Tokenization**: Automatically detects and extracts entities from clipboard text using Apple's Natural Language framework
-- **Multilingual Support**: Works with Chinese, English, Japanese, Korean, Russian, Arabic, and more
-- **Entity Types**: Personal names, organizations, places, phone numbers, URLs, currency, dates, addresses, flight numbers, tracking numbers
-- **Quick Insert**: Click any token to instantly insert it into the active application
-- **Visual Filtering**: Filter by entity type with colorful icon-based chips
-- **Customizable Hotkey**: Set your preferred hotkey for text explosion in Settings
+- **Text Explosion**: Extract and insert entities (names, dates, phone numbers, URLs, etc.) from clipboard text with multilingual support
+- **OCR Recognition**: Extract text from images using Apple's Vision framework with 20+ language support
+- **Internationalization**: Complete localization for 14 languages (English, Chinese, Japanese, Korean, and more)
 
 ## Keyboard Shortcuts
 
 - ⌘⇧V - Show/hide clipboard history
-- ⌘⇧B - Show text explosion panel (default, customizable in Settings)
+- ⌘⇧B - Show text explosion panel 
+(default, customizable in Settings)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and release notes.
 
 ## License
 
