@@ -50,12 +50,6 @@ xcodebuild -project OpenPaste.xcodeproj -scheme OpenPaste
 open build/Release/OpenPaste.app
 ```
 
-### Homebrew (Coming Soon)
-
-```bash
-brew install --cask openpaste
-```
-
 ## Features
 
 - **Clipboard History**: Automatically captures all copy/paste operations
