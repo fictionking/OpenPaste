@@ -35,11 +35,6 @@ struct SettingsView: View {
 
     // MARK: - Computed Properties
 
-    /// Progressive glass background for settings view
-    @ViewBuilder
-    private var settingsBackground: some View {
-        Rectangle().fill(.thinMaterial)
-    }
 
     /// Progressive glass background for settings sections
     @ViewBuilder
@@ -245,7 +240,6 @@ struct SettingsView: View {
             }
             .padding()
         }
-        .background(settingsBackground)
         .navigationTitle(L10n.Settings.settings)
         .sheet(isPresented: $showingHotkeyAlert) {
             hotkeyRecordingSheet

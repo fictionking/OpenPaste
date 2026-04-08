@@ -699,12 +699,17 @@ struct FloatingPanelView: View {
 
     @ViewBuilder
     private var panelBackground: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.white.opacity(0.18), lineWidth: 1)
-            )
+        if #available(macOS 26.0, *) {
+            RoundedRectangle(cornerRadius: 12)
+                .glassEffect(.clear,in: RoundedRectangle(cornerRadius: 12))
+        }else{
+            RoundedRectangle(cornerRadius: 12)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                        )
+        }
     }
 
     var body: some View {
