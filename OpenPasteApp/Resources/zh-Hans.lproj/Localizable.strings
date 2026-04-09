@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "点击复制";
 
+// MARK: - Empty State
+"empty_state.no_items" = "没有 %@ 项目";
+"empty_state.no_items_in_category" = "此分类中没有项目";
+"empty_state.copy_to_get_started" = "复制一些内容以开始使用";
+"empty_state.no_items_match_category" = "没有项目匹配此分类";
+"empty_state.drag_items_hint" = "将项目拖拽到此处或从上下文菜单分配";
+
 // MARK: - Settings
 "settings.keyboard" = "键盘";
 "settings.clipboard_history" = "剪贴板历史";

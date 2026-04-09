@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "點擊復製";
 
+// MARK: - Empty State
+"empty_state.no_items" = "沒有 %@ 項目";
+"empty_state.no_items_in_category" = "此分類中沒有項目";
+"empty_state.copy_to_get_started" = "復製一些內容以開始使用";
+"empty_state.no_items_match_category" = "沒有項目匹配此分類";
+"empty_state.drag_items_hint" = "將項目拖拽到此處或從上下文菜單分配";
+
 // MARK: - Settings
 "settings.keyboard" = "鍵盤";
 "settings.clipboard_history" = "剪貼板歷史";

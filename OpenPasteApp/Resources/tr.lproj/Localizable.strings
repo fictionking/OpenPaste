@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "Kopyalamak için tıklayın";
 
+// MARK: - Empty State
+"empty_state.no_items" = "%@ öğesi yok";
+"empty_state.no_items_in_category" = "Bu kategoride öğe yok";
+"empty_state.copy_to_get_started" = "Başlamak için biraz içerik kopyalayın";
+"empty_state.no_items_match_category" = "Bu kategoriyle eşleşen öğe yok";
+"empty_state.drag_items_hint" = "Öğeleri buraya sürükleyin veya bağlam menüsünden atayın";
+
 // MARK: - Settings
 "settings.keyboard" = "Klavye";
 "settings.clipboard_history" = "Pano Geçmişi";

@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "Cliquez pour copier";
 
+// MARK: - Empty State
+"empty_state.no_items" = "Aucun élément %@";
+"empty_state.no_items_in_category" = "Aucun élément dans cette catégorie";
+"empty_state.copy_to_get_started" = "Copiez du contenu pour commencer";
+"empty_state.no_items_match_category" = "Aucun élément ne correspond à cette catégorie";
+"empty_state.drag_items_hint" = "Faites glisser des éléments ici ou attribuez-les depuis le menu contextuel";
+
 // MARK: - Settings
 "settings.keyboard" = "Clavier";
 "settings.clipboard_history" = "Historique du Presse-papier";

@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "Clique para copiar";
 
+// MARK: - Empty State
+"empty_state.no_items" = "Sem itens de %@";
+"empty_state.no_items_in_category" = "Nenhum item nesta categoria";
+"empty_state.copy_to_get_started" = "Copie algum conteúdo para começar";
+"empty_state.no_items_match_category" = "Nenhum item corresponde a esta categoria";
+"empty_state.drag_items_hint" = "Arraste itens aqui ou atribua pelo menu de contexto";
+
 // MARK: - Settings
 "settings.keyboard" = "Teclado";
 "settings.clipboard_history" = "Histórico da Área de Transferência";

@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "클릭하여 복사";
 
+// MARK: - Empty State
+"empty_state.no_items" = "%@ 항목 없음";
+"empty_state.no_items_in_category" = "이 카테고리에 항목이 없습니다";
+"empty_state.copy_to_get_started" = "콘텐츠를 복사하여 시작하세요";
+"empty_state.no_items_match_category" = "이 카테고리에 일치하는 항목이 없습니다";
+"empty_state.drag_items_hint" = "항목을 여기로 드래그하거나 컨텍스트 메뉴에서 할당하세요";
+
 // MARK: - Settings
 "settings.keyboard" = "키보드";
 "settings.clipboard_history" = "클립보드 기록";

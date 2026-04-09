@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "Klik om te kopiëren";
 
+// MARK: - Empty State
+"empty_state.no_items" = "Geen %@ items";
+"empty_state.no_items_in_category" = "Geen items in deze categorie";
+"empty_state.copy_to_get_started" = "Kopieer some inhoud om te beginnen";
+"empty_state.no_items_match_category" = "Geen items komen overeen met deze categorie";
+"empty_state.drag_items_hint" = "Sleep items hier of wijs ze toe via het contextmenu";
+
 // MARK: - Settings
 "settings.keyboard" = "Toetsenbord";
 "settings.clipboard_history" = "Klembordgeschiedenis";

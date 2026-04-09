@@ -88,6 +88,13 @@
 // MARK: - Help
 "help.click_to_copy" = "Нажмите для копирования";
 
+// MARK: - Empty State
+"empty_state.no_items" = "Нет элементов %@";
+"empty_state.no_items_in_category" = "Нет элементов в этой категории";
+"empty_state.copy_to_get_started" = "Скопируйте содержимое, чтобы начать";
+"empty_state.no_items_match_category" = "Нет элементов, соответствующих этой категории";
+"empty_state.drag_items_hint" = "Перетащите элементы сюда или назначьте через контекстное меню";
+
 // MARK: - Settings
 "settings.keyboard" = "Клавиатура";
 "settings.clipboard_history" = "История Буфера Обмена";

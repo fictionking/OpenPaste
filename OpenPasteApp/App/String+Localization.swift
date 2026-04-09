@@ -158,4 +158,15 @@ enum L10n {
     static var slideToDelete: String { "slide_action.slide_to_delete".localized }
     static var slideToConfirm: String { "slide_action.slide_to_confirm".localized }
   }
+
+  // MARK: - Empty State
+  enum EmptyState {
+    static func noItems(in category: String) -> String {
+      "empty_state.no_items".localized(with: category)
+    }
+    static var noItemsInCategory: String { "empty_state.no_items_in_category".localized }
+    static var copyToGetStarted: String { "empty_state.copy_to_get_started".localized }
+    static var noItemsMatchCategory: String { "empty_state.no_items_match_category".localized }
+    static var dragItemsHint: String { "empty_state.drag_items_hint".localized }
+  }
 }

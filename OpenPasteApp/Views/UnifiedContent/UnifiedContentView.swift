@@ -79,15 +79,18 @@ struct UnifiedContentView: View {
 
             Image(systemName: emptyStateIcon)
                 .font(.system(size: 48))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Text(emptyStateTitle)
                 .font(.title3)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Text(emptyStateMessage)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Spacer()
         }
@@ -143,9 +146,9 @@ struct UnifiedContentView: View {
     private var emptyStateTitle: String {
         switch selectedCategory {
         case .preset(let preset):
-            return "No \(preset.displayName) items"
+            return L10n.EmptyState.noItems(in: preset.displayName)
         case .custom:
-            return "No items in this category"
+            return L10n.EmptyState.noItemsInCategory
         case .search:
             return L10n.Common.search
         case .settings:
@@ -158,12 +161,12 @@ struct UnifiedContentView: View {
         case .preset(let preset):
             switch preset {
             case .recent:
-                return "Copy some content to get started"
+                return L10n.EmptyState.copyToGetStarted
             default:
-                return "No items match this category"
+                return L10n.EmptyState.noItemsMatchCategory
             }
         case .custom:
-            return "Drag items here or assign from context menu"
+            return L10n.EmptyState.dragItemsHint
         case .search:
             return ""
         case .settings:
