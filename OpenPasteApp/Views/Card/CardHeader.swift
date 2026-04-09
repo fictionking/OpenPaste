@@ -337,9 +337,19 @@ struct CardHeader: View {
 
     private func loadDominantColor(for appName: String) {
         Task { @MainActor in
-            // Use iCloud brand color for synced content or when no app icon
-            if appName == iCloudSyncIdentifier || appIcon == nil {
-                dominantColor = Color.blue.opacity(0.15)
+            // Check if this is a valid app with icon
+            let hasValidIcon = checkValidApp(for: appName)
+
+            // Use iCloud icon color for synced content or when no valid app
+            if appName == iCloudSyncIdentifier || !hasValidIcon {
+                // Extract color from iCloud icon image resource
+                if let icloudIcon = NSImage(named: "ICloudIcon") {
+                    let extractedColor = await AppIconColorExtractor.shared.extractColor(from: icloudIcon)
+                    dominantColor = adjustBrightnessIfNeeded(extractedColor)
+                } else {
+                    // Fallback to Safari blue if icon loading fails
+                    dominantColor = Color(red: 0.0, green: 0.45, blue: 0.9)
+                }
                 return
             }
 
@@ -347,6 +357,24 @@ struct CardHeader: View {
             // Adjust brightness if too high (for white text readability)
             dominantColor = adjustBrightnessIfNeeded(extractedColor)
         }
+    }
+
+    /// Check if an app exists and has a valid icon
+    private func checkValidApp(for appName: String) -> Bool {
+        // Try bundle identifier first
+        if #available(macOS 13.0, *) {
+            if NSWorkspace.shared.urlForApplication(withBundleIdentifier: appName) != nil {
+                return true
+            }
+        }
+
+        // Try by app name using LSCopyApplicationURLsForBundleIdentifier
+        if let appUrls = LSCopyApplicationURLsForBundleIdentifier(appName as CFString, nil)?.takeRetainedValue() as? [URL],
+           !appUrls.isEmpty {
+            return true
+        }
+
+        return false
     }
 
     /// Adjust color brightness if it's too high for white text readability

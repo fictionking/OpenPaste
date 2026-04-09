@@ -9,25 +9,6 @@ actor AppIconColorExtractor {
     /// Cache for extracted colors
     private var colorCache: [String: Color] = [:]
 
-    /// Predefined colors for common apps (fallback)
-    private let predefinedColors: [String: Color] = [
-        "com.apple.Safari": Color(red: 0.0, green: 0.45, blue: 0.9),
-        "com.apple.finder": Color(red: 0.0, green: 0.45, blue: 0.9),
-        "com.apple.Terminal": Color(red: 0.1, green: 0.1, blue: 0.1),
-        "com.apple.notes": Color(red: 0.95, green: 0.95, blue: 0.9),
-        "com.apple.Mail": Color(red: 0.0, green: 0.45, blue: 0.9),
-        "com.apple.Spotlight": Color(red: 0.3, green: 0.3, blue: 0.3),
-        "com.google.Chrome": Color(red: 0.2, green: 0.4, blue: 0.8),
-        "com.microsoft.VSCode": Color(red: 0.1, green: 0.3, blue: 0.5),
-        "com.figma.Desktop": Color(red: 0.9, green: 0.3, blue: 0.5),
-        "com.spotify.client": Color(red: 0.1, green: 0.7, blue: 0.3),
-        "com.slack.Slack": Color(red: 0.6, green: 0.2, blue: 0.9),
-        "com.hnc.Discord": Color(red: 0.4, green: 0.2, blue: 0.8),
-        "org.mozilla.firefox": Color(red: 0.9, green: 0.4, blue: 0.1),
-        "com.tinyspeck.slackmacgap": Color(red: 0.6, green: 0.2, blue: 0.9),
-        "com.apple.Xcode": Color(red: 0.5, green: 0.2, blue: 0.9),
-    ]
-
     private init() {}
 
     /// Extract dominant color for an app by name or bundle identifier
@@ -49,6 +30,16 @@ actor AppIconColorExtractor {
         let defaultColor = Color(red: 0.5, green: 0.5, blue: 0.5)
         colorCache[appName] = defaultColor
         return defaultColor
+    }
+
+    /// Extract dominant color directly from an NSImage
+    /// - Parameter image: The image to extract color from
+    /// - Returns: Dominant color, or default gray if extraction fails
+    func extractColor(from image: NSImage) -> Color {
+        if let color = extractDominantColor(from: image) {
+            return color
+        }
+        return Color(red: 0.5, green: 0.5, blue: 0.5)
     }
 
     /// Extract dominant color from app icon
@@ -163,23 +154,5 @@ actor AppIconColorExtractor {
     /// Clear the color cache (useful for testing or theme changes)
     func clearCache() {
         colorCache.removeAll()
-    }
-}
-
-/// SwiftUI wrapper for AppIconColorExtractor
-@MainActor
-struct AppIconColorView: View {
-    let appName: String?
-    @State private var dominantColor: Color = .gray
-
-    var body: some View {
-        dominantColor
-            .onAppear {
-                if let appName = appName {
-                    Task {
-                        dominantColor = await AppIconColorExtractor.shared.extractColor(for: appName)
-                    }
-                }
-            }
     }
 }
