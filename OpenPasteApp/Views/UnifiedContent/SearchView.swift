@@ -36,15 +36,18 @@ struct SearchView: View {
 
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 48))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Text(L10n.Search.emptyTitle)
                 .font(.title3)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Text(L10n.Search.emptyMessage)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
+                .shadow(radius: 2)
 
             Spacer()
         }
@@ -60,15 +63,17 @@ struct SearchView: View {
 
             Image(systemName: "exclamationmark.magnifyingglass")
                 .font(.system(size: 48))
-                .foregroundColor(.secondary.opacity(0.5))
+                .foregroundColor(.white.opacity(0.5))
 
             Text(L10n.Search.noResults)
                 .font(.title3)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white)
+                .shadow(color: .black.opacity(0.5), radius: 2)
 
             Text(L10n.Search.tryDifferent)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.8))
+                .shadow(color: .black.opacity(0.5), radius: 2)
 
             Spacer()
         }
@@ -83,7 +88,8 @@ struct SearchView: View {
             // Result count
             Text(L10n.Search.resultsCount.localized(with: viewModel.filteredSearchItems.count))
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.8))
+                .shadow(color: .black.opacity(0.5), radius: 1)
                 .padding(.horizontal)
                 .padding(.top, 8)
 
