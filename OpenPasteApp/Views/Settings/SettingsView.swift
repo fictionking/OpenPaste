@@ -39,7 +39,9 @@ struct SettingsView: View {
     /// Progressive glass background for settings sections
     @ViewBuilder
     private var sectionBackground: some View {
-        Rectangle().fill(.ultraThinMaterial)
+        Rectangle()
+            .fill(.ultraThinMaterial)
+            .background(Color.black.opacity(0.5))
     }
 
     // MARK: - Section Views
@@ -49,11 +51,13 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.Settings.keyboard)
                 .font(.headline)
+                .foregroundColor(.white)
                 .padding(.bottom, 4)
 
             // Clipboard history hotkey
             HStack {
                 Text(L10n.Settings.clipboardHistory)
+                    .foregroundColor(.white)
                     .accessibilityLabel("Global keyboard shortcut for clipboard history")
 
                 Spacer()
@@ -63,7 +67,7 @@ struct SettingsView: View {
                         .font(.body.monospaced())
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
+                .foregroundColor(.white)
                 .accessibilityLabel("Change keyboard shortcut")
                 .accessibilityHint("Current shortcut is \(settings.hotkeyDescription)")
             }
@@ -73,6 +77,7 @@ struct SettingsView: View {
             // Text explosion hotkey
             HStack {
                 Text(L10n.Settings.textExplosion)
+                    .foregroundColor(.white)
                     .accessibilityLabel("Global keyboard shortcut for text explosion")
 
                 Spacer()
@@ -82,7 +87,7 @@ struct SettingsView: View {
                         .font(.body.monospaced())
                 }
                 .buttonStyle(.plain)
-                .foregroundColor(.accentColor)
+                .foregroundColor(.white)
                 .accessibilityLabel("Change text explosion shortcut")
                 .accessibilityHint("Current shortcut is \(settings.explosionHotkeyDescription)")
             }
@@ -97,17 +102,19 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.Settings.dataManagement)
                 .font(.headline)
+                .foregroundColor(.white)
                 .padding(.bottom, 4)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text(L10n.Settings.retentionPeriod)
+                        .foregroundColor(.white)
                         .accessibilityLabel("Clipboard item retention period")
 
                     Spacer()
 
                     Text(L10n.Settings.retentionDays.localized(with: settings.retentionDays))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.7))
                         .accessibilityLabel(L10n.Settings.retentionDays.localized(with: settings.retentionDays))
                         .accessibilityAddTraits(.updatesFrequently)
                 }
@@ -125,7 +132,7 @@ struct SettingsView: View {
 
                 Text(L10n.Settings.retentionHint)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.vertical, 4)
@@ -154,17 +161,19 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.Settings.history)
                 .font(.headline)
+                .foregroundColor(.white)
                 .padding(.bottom, 4)
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text(L10n.Settings.maximumHistory)
+                        .foregroundColor(.white)
                         .accessibilityLabel("Maximum clipboard history size")
 
                     Spacer()
 
                     Text(L10n.Settings.maximumHistoryItems.localized(with: settings.maxHistorySize.formatted()))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.7))
                         .accessibilityLabel(L10n.Settings.maximumHistoryItems.localized(with: settings.maxHistorySize.formatted()))
                         .accessibilityAddTraits(.updatesFrequently)
                 }
@@ -182,7 +191,7 @@ struct SettingsView: View {
 
                 Text(L10n.Settings.historyHint)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.vertical, 4)
@@ -197,22 +206,25 @@ struct SettingsView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.Settings.about)
                 .font(.headline)
+                .foregroundColor(.white)
                 .padding(.bottom, 4)
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("OpenPaste")
                         .font(.headline)
+                        .foregroundColor(.white)
 
                     Text(L10n.Settings.version.localized(with: settings.appVersion))
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.white.opacity(0.7))
                 }
 
                 Spacer()
 
                 Link(L10n.Settings.viewLicense, destination: URL(string: "https://opensource.org/licenses/MIT")!)
                     .font(.caption)
+                    .foregroundColor(.white)
             }
 
             Divider()
@@ -221,6 +233,8 @@ struct SettingsView: View {
                 Text(L10n.Settings.quitApp)
                     .foregroundColor(.red)
             }
+            .background(Color.black.opacity(0.5))
+            .cornerRadius(6)
             .accessibilityLabel("Quit OpenPaste application")
         }
         .padding()
@@ -255,10 +269,11 @@ struct SettingsView: View {
         VStack(spacing: 20) {
             Text(recordingExplosionHotkey ? L10n.Settings.recordExplosionHotkey : L10n.Settings.recordClipboardHotkey)
                 .font(.headline)
+                .foregroundColor(.white)
 
             Text(L10n.Settings.pressKeyCombo)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(.white.opacity(0.7))
 
             // Display current recording
             if let combo = recordingKeyCombo {
@@ -286,7 +301,7 @@ struct SettingsView: View {
             } else {
                 Text(L10n.Settings.recording)
                     .font(.body.monospaced())
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.7))
                     .padding()
             }
 
