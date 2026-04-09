@@ -5,64 +5,70 @@ struct TextExplosionView: View {
     let onClose: () -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Filter bar with close button
-            filterBarWithClose
+        ZStack {
+            // Main content
+            VStack(spacing: 0) {
+                // Filter bar with close button
+                filterBarWithClose
 
-            // Content area
-            if viewModel.isProcessingOCR {
-                Spacer()
-                VStack(spacing: 12) {
-                    ProgressView(value: viewModel.ocrProgress)
-                        .progressViewStyle(.linear)
-                        .frame(width: 200)
+                // Content area
+                if viewModel.isProcessingOCR {
+                    Spacer()
+                    VStack(spacing: 12) {
+                        ProgressView(value: viewModel.ocrProgress)
+                            .progressViewStyle(.linear)
+                            .frame(width: 200)
 
-                    Text(L10n.TextExplosion.processing)
+                        Text(L10n.TextExplosion.processing)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(20)
+                    .background(Color(NSColor.controlBackgroundColor))
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+                    .transition(.opacity)
+                    Spacer()
+                } else if viewModel.isProcessing {
+                    Spacer()
+                    ProgressView()
+                    Text(L10n.TextExplosion.analyzing)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                    Spacer()
+                } else if let error = viewModel.errorMessage {
+                    Spacer()
+                    VStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 48))
+                            .foregroundColor(.orange)
+                        Text(error)
+                            .font(.body)
+                        Text(L10n.TextExplosion.emptyHint)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                } else if viewModel.tokens.isEmpty {
+                    Spacer()
+                    VStack(spacing: 12) {
+                        Image(systemName: "doc.on.doc")
+                            .font(.system(size: 48))
+                            .foregroundColor(.secondary)
+                        Text(L10n.TextExplosion.noText)
+                            .font(.body)
+                        Text(L10n.TextExplosion.emptyHint)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                } else {
+                    tokenGrid
                 }
-                .padding(20)
-                .background(Color(NSColor.controlBackgroundColor))
-                .cornerRadius(8)
-                .shadow(radius: 4)
-                .transition(.opacity)
-                Spacer()
-            } else if viewModel.isProcessing {
-                Spacer()
-                ProgressView()
-                Text(L10n.TextExplosion.analyzing)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                Spacer()
-            } else if let error = viewModel.errorMessage {
-                Spacer()
-                VStack(spacing: 12) {
-                    Image(systemName: "exclamationmark.triangle")
-                        .font(.system(size: 48))
-                        .foregroundColor(.orange)
-                    Text(error)
-                        .font(.body)
-                    Text(L10n.TextExplosion.emptyHint)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-            } else if viewModel.tokens.isEmpty {
-                Spacer()
-                VStack(spacing: 12) {
-                    Image(systemName: "doc.on.doc")
-                        .font(.system(size: 48))
-                        .foregroundColor(.secondary)
-                    Text(L10n.TextExplosion.noText)
-                        .font(.body)
-                    Text(L10n.TextExplosion.emptyHint)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-            } else {
-                tokenGrid
             }
+            .frame(width: 700, height: 280)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
 
             // Permission request overlay
             if case .failed(let message) = viewModel.insertionResult,
@@ -70,9 +76,6 @@ struct TextExplosionView: View {
                 overlayPermission(message: message)
             }
         }
-        .frame(width: 700, height: 280)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: - Filter Bar
@@ -143,9 +146,11 @@ struct TextExplosionView: View {
 
     private func overlayPermission(message: String) -> some View {
         ZStack {
-            Color.black.opacity(0.5)
-                .ignoresSafeArea()
+            // Dark background covering entire panel
+            Color.black.opacity(0.7)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
 
+            // White info box with original size
             VStack(spacing: 16) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 48))
@@ -160,7 +165,7 @@ struct TextExplosionView: View {
                     .foregroundColor(.secondary)
                     .padding(.horizontal)
 
-                Button(action: { openAccessibilitySettings() }) {
+                Button(action: openAccessibilitySettings) {
                     HStack {
                         Image(systemName: "gear")
                         Text(L10n.TextExplosion.openSettings)
@@ -170,15 +175,22 @@ struct TextExplosionView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.blue)
+                        .padding(.horizontal, -4)
+                        .padding(.vertical, -4)
+                )
 
                 Text(L10n.TextExplosion.restartAfterAuth)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             .padding(24)
+            .frame(maxWidth: 400)
             .background(Color(nsColor: .windowBackgroundColor))
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .shadow(radius: 20)
