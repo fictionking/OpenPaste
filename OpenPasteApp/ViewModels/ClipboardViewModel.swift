@@ -93,8 +93,8 @@ final class ClipboardViewModel: ObservableObject {
     /// Number of items to load per batch (pagination)
     private let pageSize: Int = 10
 
-    /// Sliding window size (total items to keep in memory)
-    private let slidingWindowSize: Int = 30
+    /// Maximum items to keep in memory (hard limit)
+    private let maxItemsInMemory: Int = 100
 
     /// Current window position (center of the window)
     private var windowCenterIndex: Int? = nil
@@ -107,6 +107,10 @@ final class ClipboardViewModel: ObservableObject {
 
     /// Whether there are more items to load
     @Published var hasMoreItems: Bool = true
+
+    /// Time boundary: oldest capturedAt among currently loaded items
+    /// Used for loading even older items (scrolling down)
+    private var oldestCapturedAt: Date? = nil
 
     /// Cancellables for Combine subscriptions
     private var cancellables = Set<AnyCancellable>()
@@ -151,14 +155,9 @@ final class ClipboardViewModel: ObservableObject {
         isLoading = true
 
         do {
-            // Get total count first
-            let allItems = try dataStore.fetchItems(
-                predicate: nil,
-                sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                limit: nil,
-                offset: nil
-            )
-            totalItemCount = allItems.count
+            // Get total count WITHOUT loading all items
+            totalItemCount = try dataStore.countItems(predicate: nil)
+            NSLog("📊 Total items in database: \(totalItemCount)")
 
             // Load first batch
             let fetchedItems = try dataStore.fetchItems(
@@ -171,11 +170,24 @@ final class ClipboardViewModel: ObservableObject {
             allItemSummaries = fetchedItems.map { $0.toSummary() }
             currentLoadedCount = allItemSummaries.count
 
+            // Debug: log the time range of loaded items
+            if let first = allItemSummaries.first, let last = allItemSummaries.last {
+                let formatter = DateFormatter()
+                formatter.dateStyle = .short
+                formatter.timeStyle = .short
+                NSLog("📅 Loaded items from \(formatter.string(from: last.capturedAt)) to \(formatter.string(from: first.capturedAt))")
+            }
+
+            // Initialize time boundary from first batch (oldest time for loading more older items)
+            if let last = allItemSummaries.last {
+                oldestCapturedAt = last.capturedAt
+            }
+
             // Initialize sliding window state
             windowCenterIndex = currentLoadedCount / 2
             hasMoreItems = currentLoadedCount < totalItemCount
-            hasMoreNewItems = false
-            hasMoreOldItems = false
+            hasMoreNewItems = false  // Started with newest items, nothing newer
+            hasMoreOldItems = currentLoadedCount < totalItemCount  // May have older items
 
             applyFilters()
             updateAvailableFilters()
@@ -191,24 +203,48 @@ final class ClipboardViewModel: ObservableObject {
     }
 
     /// Load more items (pagination)
+    /// Load older items (scroll down) - items with capturedAt older than current oldest
     func loadMoreItems() async {
-        guard !isLoading, hasMoreItems else { return }
+        guard !isLoading, hasMoreItems, let oldestTime = oldestCapturedAt else { return }
+
+        // Don't load if we're already at the hard limit
+        guard allItemSummaries.count < maxItemsInMemory else {
+            NSLog("⚠️ Reached memory limit of \(maxItemsInMemory) items")
+            return
+        }
 
         isLoading = true
 
         do {
+            // Load items older than the oldest currently loaded item
+            let predicate = NSPredicate(format: "capturedAt < %@", oldestTime as CVarArg)
             let fetchedItems = try dataStore.fetchItems(
-                predicate: nil,
+                predicate: predicate,
                 sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
                 limit: pageSize,
-                offset: currentLoadedCount
+                offset: nil
             )
 
-            // Append new items to existing summaries
-            let newSummaries = fetchedItems.map { $0.toSummary() }
-            allItemSummaries.append(contentsOf: newSummaries)
-            currentLoadedCount = allItemSummaries.count
-            hasMoreItems = fetchedItems.count == pageSize
+            if !fetchedItems.isEmpty {
+                // Append older items to the end
+                let newSummaries = fetchedItems.map { $0.toSummary() }
+                allItemSummaries.append(contentsOf: newSummaries)
+                currentLoadedCount = allItemSummaries.count
+
+                // Update oldest time boundary
+                if let last = newSummaries.last {
+                    oldestCapturedAt = last.capturedAt
+                }
+
+                // Enforce hard limit by removing newest items if needed
+                enforceMemoryLimit()
+
+                hasMoreItems = fetchedItems.count == pageSize
+                NSLog("📜 Loaded \(newSummaries.count) older items, total: \(currentLoadedCount)")
+            } else {
+                hasMoreItems = false
+                NSLog("📭 No more older items available")
+            }
 
             applyFilters()
 
@@ -219,33 +255,47 @@ final class ClipboardViewModel: ObservableObject {
         isLoading = false
     }
 
-    /// Load older items (scroll up)
+    /// Load newer items (scroll up) - items with capturedAt newer than current newest in loaded array
     func loadOldItems() async {
         guard !isLoading, hasMoreOldItems else { return }
+
+        // Don't load if we're already at the hard limit
+        guard allItemSummaries.count < maxItemsInMemory else {
+            NSLog("⚠️ Reached memory limit of \(maxItemsInMemory) items")
+            return
+        }
 
         isLoading = true
 
         do {
-            // Calculate how many old items we can load
-            let oldItemsToLoad = min(pageSize, currentLoadedCount)
+            // Get the newest time from currently loaded array (first item = newest)
+            let currentNewestTime = allItemSummaries.first?.capturedAt
 
-            if oldItemsToLoad > 0 {
-                let fetchedItems = try dataStore.fetchItems(
-                    predicate: nil,
-                    sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                    limit: oldItemsToLoad,
-                    offset: 0
-                )
+            // Load items newer than the newest currently loaded item
+            let predicate = NSPredicate(format: "capturedAt > %@", currentNewestTime! as CVarArg)
+            let fetchedItems = try dataStore.fetchItems(
+                predicate: predicate,
+                sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
+                limit: pageSize,
+                offset: nil
+            )
 
-                // Prepend to the beginning
-                let oldSummaries = fetchedItems.map { $0.toSummary() }
-                allItemSummaries.insert(contentsOf: oldSummaries, at: 0)
-                currentLoadedCount += oldSummaries.count
+            if !fetchedItems.isEmpty {
+                // Prepend newer items to the beginning
+                let newSummaries = fetchedItems.map { $0.toSummary() }
+                allItemSummaries.insert(contentsOf: newSummaries, at: 0)
+                currentLoadedCount += newSummaries.count
 
-                NSLog("📜 Loaded \(oldSummaries.count) old items, total: \(currentLoadedCount)")
+                // Enforce hard limit by removing oldest items if needed
+                enforceMemoryLimit()
+
+                NSLog("📜 Loaded \(newSummaries.count) newer items, total: \(currentLoadedCount)")
+            } else {
+                hasMoreOldItems = false
+                NSLog("📭 No more newer items available")
             }
 
-            hasMoreOldItems = currentLoadedCount < totalItemCount
+            hasMoreOldItems = !fetchedItems.isEmpty && fetchedItems.count == pageSize
             applyFilters()
 
         } catch {
@@ -253,6 +303,25 @@ final class ClipboardViewModel: ObservableObject {
         }
 
         isLoading = false
+    }
+
+    /// Enforce the hard memory limit by removing items from the appropriate end
+    private func enforceMemoryLimit() {
+        let totalCount = allItemSummaries.count
+        guard totalCount > maxItemsInMemory else { return }
+
+        let itemsToRemove = totalCount - maxItemsInMemory
+
+        // Remove oldest items (from end of array)
+        allItemSummaries.removeLast(itemsToRemove)
+        currentLoadedCount = allItemSummaries.count
+
+        // Update oldestCapturedAt since we removed from end
+        if let newOldest = allItemSummaries.last {
+            oldestCapturedAt = newOldest.capturedAt
+        }
+
+        NSLog("🗑️ Removed \(itemsToRemove) oldest items to enforce memory limit (\(maxItemsInMemory))")
     }
 
     /// Delete an item from clipboard history
@@ -465,100 +534,6 @@ final class ClipboardViewModel: ObservableObject {
         }
     }
 
-    // MARK: - Private Methods - Data Handling
-
-    func handleNewClipboardItem(content: Data, contentType: String, sourceApp: String?, title: String? = nil, allPasteboardData: PasteboardData? = nil) async {
-        // Calculate hash for deduplication based on core content only
-        // This ignores metadata that changes on each copy (RTF formatting, timestamps, etc.)
-        let hash: String
-
-        // All content types use their core content for hashing
-        // - Text: the actual text string
-        // - Images: the TIFF/PNG image data
-        // - Files: the file path array
-        // - URLs: the URL string
-        hash = SHA256.hash(data: content).compactMap { String(format: "%02x", $0) }.joined()
-        NSLog("🔢 Hash based on \(contentType) content: \(hash.prefix(16))...")
-
-        // Deduplicate: update existing item if same content hash exists
-        await MainActor.run {
-            let context = dataStore.viewContext
-            let request: NSFetchRequest<ClipboardItem> = ClipboardItem.fetchRequest()
-            request.predicate = NSPredicate(format: "contentHash == %@", hash)
-            request.sortDescriptors = [NSSortDescriptor(key: "capturedAt", ascending: false)]
-            request.fetchLimit = 1
-
-            if let existing = try? context.fetch(request).first {
-                // Duplicate found — update timestamp only, no new file saved
-                existing.capturedAt = Date()
-                existing.sourceApp = sourceApp
-                // Update title: use provided title (rich link) or set default if existing title is empty
-                if let newTitle = title, !newTitle.isEmpty {
-                    existing.title = newTitle
-                } else if existing.title == nil || existing.title!.isEmpty {
-                    existing.title = defaultTitle(for: contentType)
-                }
-                existing.expiresAt = Calendar.current.date(byAdding: .day, value: AppSettings.shared.retentionDays, to: Date()) ?? Date()
-
-                // Update complete pasteboard data if provided
-                if let pasteboardData = allPasteboardData {
-                    existing.allPasteboardData = pasteboardData.encode()
-                    existing.allPasteboardTypes = pasteboardData.encodeTypes()
-                }
-
-                do {
-                    try dataStore.saveItem(existing)
-                    // Update current clipboard item ID when existing item is updated
-                    currentClipboardItemId = existing.id
-                } catch {
-                    showError("Failed to update clipboard item: \(error.localizedDescription)")
-                }
-                return
-            }
-
-            // No duplicate — save image to file only for new items
-            var storageContent = content
-            if contentType == "public.image",
-               let imagePathData = ImageStorageManager.shared.saveImage(content) {
-                storageContent = imagePathData
-            }
-
-            // Create new item with default title if none provided
-            let finalTitle = title ?? defaultTitle(for: contentType)
-            NSLog("📝 Creating new item with title: '\(finalTitle)' (from rich link: \(title != nil))")
-            let newItem = ClipboardItem(context: context)
-            newItem.id = UUID()
-            newItem.content = storageContent
-            newItem.contentHash = hash
-            newItem.contentType = contentType
-            newItem.sourceApp = sourceApp
-            newItem.title = finalTitle.isEmpty ? nil : finalTitle
-            newItem.capturedAt = Date()
-            newItem.isPinned = false
-            newItem.expiresAt = Calendar.current.date(byAdding: .day, value: AppSettings.shared.retentionDays, to: Date()) ?? Date()
-
-            // Store complete pasteboard data if available
-            if let pasteboardData = allPasteboardData {
-                newItem.allPasteboardData = pasteboardData.encode()
-                newItem.allPasteboardTypes = pasteboardData.encodeTypes()
-                NSLog("✅ Stored complete pasteboard data with \(pasteboardData.types.count) types")
-            }
-
-            NSLog("💾 Item title before save: '\(newItem.title ?? "nil")'")
-            do {
-                try dataStore.saveItem(newItem)
-                NSLog("✅ Item saved with title: '\(newItem.title ?? "nil")'")
-                // Update current clipboard item ID when new item is created
-                currentClipboardItemId = newItem.id
-            } catch {
-                showError("Failed to save clipboard item: \(error.localizedDescription)")
-            }
-        }
-
-        // Note: Don't call refresh() here - data will be loaded when panel is shown
-        // This prevents memory accumulation when panel is hidden
-    }
-
     private func applyFilters() {
         isLoading = true
 
@@ -603,12 +578,10 @@ final class ClipboardViewModel: ObservableObject {
                 }
             }
 
-            // Apply sliding window limit
-            if filtered.count > slidingWindowSize {
-                filtered = Array(filtered.suffix(slidingWindowSize))
-                NSLog("🗑️ Limited display to \(slidingWindowSize) most recent items")
-            }
+            // Sort by capturedAt (descending) to ensure correct order
+            filtered.sort { $0.capturedAt > $1.capturedAt }
 
+            // Display all filtered items (sliding window is managed during loading)
             items = filtered
             isLoading = false
         }
@@ -638,38 +611,6 @@ final class ClipboardViewModel: ObservableObject {
     private func showError(_ message: String) {
         errorMessage = message
         showingError = true
-    }
-
-    // MARK: - Private Methods - Title Generation
-
-    /// Generate default title based on content type
-    private func defaultTitle(for contentType: String) -> String {
-        switch contentType {
-        case "public.utf8-plain-text", "public.text":
-            return L10n.ContentType.text
-        case "public.image", "public.tiff", "public.png":
-            return L10n.ContentType.image
-        case "public.folder":
-            return L10n.ContentType.folder
-        case "public.file-url":
-            return L10n.ContentType.file
-        case "public.url", "public.rich-link":
-            return L10n.ContentType.link
-        case "public.email":
-            return L10n.ContentType.email
-        case "public.phone-number":
-            return L10n.ContentType.phone
-        case "public.color-code":
-            return L10n.ContentType.color
-        case "public.html":
-            return "HTML"
-        case "public.rtf":
-            return L10n.ContentType.richText
-        case "com.adobe.pdf":
-            return "PDF"
-        default:
-            return L10n.ContentType.content
-        }
     }
 
     // MARK: - Public Methods - Title Management
@@ -778,8 +719,41 @@ final class ClipboardViewModel: ObservableObject {
     /// Clear all item data from memory to reduce footprint when panel is hidden.
     /// Called by hideFloatingPanel() in AppDelegate.
     func clearItemMemory() {
-        allItemSummaries.removeAll()
-        items.removeAll()
+        // Force memory release by creating new empty arrays instead of removeAll
+        allItemSummaries = []
+        items = []
+
+        // Clear all @Published properties to release their memory
+        searchQuery = ""
+        searchText = ""
+        selectedContentType = nil
+        selectedDateRange = nil
+        selectedSourceApp = nil
+        isLoading = false
+        errorMessage = nil
+        showingError = false
+        availableContentTypes = []
+        availableSourceApps = []
+        recentItemCount = 0
+        categories = []
+        currentClipboardItemId = nil
+        hasMoreOldItems = false
+        hasMoreNewItems = false
+        hasMoreItems = true
+        windowCenterIndex = nil
+        oldestCapturedAt = nil
+        currentLoadedCount = 0
+        totalItemCount = 0
+
+        // Refresh Core Data context to release cached managed objects
+        if let coreDataStore = dataStore as? CoreDataStore {
+            coreDataStore.refreshContext()
+        }
+
+        // Force autoreleasepool drain to release memory immediately
+        autoreleasepool {
+            NSLog("🧹 Cleared all item data from memory")
+        }
     }
 
     // MARK: - Computed Properties - Search

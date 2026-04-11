@@ -77,6 +77,9 @@ struct UnifiedContentView: View {
                             }
                         )
                         .onAppear {
+                            // Don't trigger if already loading (prevent duplicate triggers from re-renders)
+                            guard !viewModel.isLoading else { return }
+
                             // Detect scroll direction
                             if let lastIndex = lastVisibleIndex {
                                 if index > lastIndex {
@@ -90,14 +93,15 @@ struct UnifiedContentView: View {
                             lastVisibleIndex = index
 
                             // Trigger loading based on scroll direction and position
-                            if shouldTriggerLoad(for: index) {
+                            // Only trigger when scroll direction is明确 set (not .none for initial render)
+                            if scrollDirection != .none && shouldTriggerLoad(for: index) {
                                 Task {
-                                    if scrollDirection == .up || scrollDirection == .none {
+                                    if scrollDirection == .up {
                                         // Near top: load older items
                                         if viewModel.hasMoreOldItems {
                                             await viewModel.loadOldItems()
                                         }
-                                    } else {
+                                    } else if scrollDirection == .down {
                                         // Near bottom: load newer items
                                         if viewModel.hasMoreItems {
                                             await viewModel.loadMoreItems()

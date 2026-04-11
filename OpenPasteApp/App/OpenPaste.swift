@@ -101,15 +101,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Setup global hotkey with HotKey library
         setupGlobalHotkey()
 
-        // Create ClipboardViewModel with Core Data persistence
+        // Create services
         let dataStore = CoreDataStore(modelName: CoreDataStore.defaultModelName)
+        let clipboardService = ClipboardService(dataStore: dataStore)
         let expiryService = ExpiryService(dataStore: dataStore)
-        let monitor = ClipboardMonitor { [weak self] content, contentType, sourceApp, title, allPasteboardData in
-            Task { @MainActor in
-                await self?.viewModel?.handleNewClipboardItem(
-                    content: content, contentType: contentType, sourceApp: sourceApp, title: title, allPasteboardData: allPasteboardData)
+
+        // Create clipboard monitor - directly calls service, no ViewModel dependency
+        let monitor = ClipboardMonitor { content, contentType, sourceApp, title, allPasteboardData in
+            do {
+                let itemId = try clipboardService.saveNewItem(
+                    content: content,
+                    contentType: contentType,
+                    sourceApp: sourceApp,
+                    title: title,
+                    allPasteboardData: allPasteboardData
+                )
+                NSLog("📋 New clipboard item saved: \(itemId)")
+            } catch {
+                NSLog("❌ Failed to save clipboard item: \(error)")
             }
         }
+
+        // Create ViewModel with monitor (for pause/resume control only)
         viewModel = ClipboardViewModel(
             dataStore: dataStore, monitor: monitor, expiryService: expiryService)
 
@@ -492,13 +505,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             context.timingFunction = CAMediaTimingFunction(name: .easeIn)
             panel.animator().setFrameOrigin(NSPoint(x: screen.maxX, y: currentFrame.origin.y))
         } completionHandler: {
-            // Destroy the panel completely to release all resources
+            // First, clear the content view to release SwiftUI resources
+            panel.contentView = nil
+
+            // Then destroy the panel completely
             panel.close()
             self.floatingPanel = nil
             self.refreshStatusBarButtonAppearance()
 
-            // Clear all item data from memory to reduce footprint when panel is hidden
-            self.viewModel?.clearItemMemory()
+            // Finally, clear all item data from memory
+            Task { @MainActor in
+                self.viewModel?.clearItemMemory()
+                NSLog("🧹 Panel closed and resources released")
+            }
         }
     }
 

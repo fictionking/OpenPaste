@@ -21,6 +21,12 @@ protocol ClipboardDataStore {
         offset: Int?
     ) throws -> [ClipboardItem]
 
+    /// Count clipboard items with optional filtering
+    /// - Parameter predicate: Optional NSPredicate for filtering
+    /// - Returns: The total count of matching items
+    /// - Throws: NSError if count fails
+    func countItems(predicate: NSPredicate?) throws -> Int
+
     /// Save a clipboard item to the data store
     /// - Parameter item: The ClipboardItem to save
     /// - Throws: NSError if save fails

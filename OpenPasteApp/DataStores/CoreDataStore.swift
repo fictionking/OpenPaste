@@ -75,6 +75,13 @@ final class CoreDataStore: ClipboardDataStore {
         }
     }
 
+    /// Refresh the context to clear cached managed objects
+    /// Call this when panel is hidden to release memory
+    func refreshContext() {
+        viewContext.refreshAllObjects()
+        viewContext.reset()
+    }
+
     // MARK: - ClipboardDataStore Protocol Implementation
 
     func fetchItems(
@@ -130,6 +137,16 @@ final class CoreDataStore: ClipboardDataStore {
         }
 
         return result
+    }
+
+    func countItems(predicate: NSPredicate?) throws -> Int {
+        return try viewContext.performAndWait {
+            let fetchRequest = NSFetchRequest<ClipboardItem>(entityName: "ClipboardItem")
+            if let predicate = predicate {
+                fetchRequest.predicate = predicate
+            }
+            return try viewContext.count(for: fetchRequest)
+        }
     }
 
     func saveItem(_ item: ClipboardItem) throws {
