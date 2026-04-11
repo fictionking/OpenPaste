@@ -5,7 +5,7 @@ import SwiftUI
 struct UnifiedContentView: View {
     @Binding var selectedCategory: CategorySelector
     @ObservedObject var viewModel: ClipboardViewModel
-    let copyHandler: (ClipboardItemData) -> Void
+    let copyHandler: (UUID) -> Void
 
     @State private var selectedIndex: Int? = nil
 
@@ -60,7 +60,7 @@ struct UnifiedContentView: View {
                                 }
                             },
                             onCopy: {
-                                copyHandler(item)
+                                copyHandler(item.id)
                             }
                         )
                     }

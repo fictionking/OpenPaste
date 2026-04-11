@@ -81,8 +81,8 @@ final class ClipboardViewModel: ObservableObject {
     /// Expiry service for cleanup
     private let expiryService: ExpiryService
 
-    /// All items (unfiltered) for filtering
-    private var allItems: [ClipboardItemData] = []
+    /// All item summaries (unfiltered) for filtering - lightweight data structure
+    private var allItemSummaries: [ClipboardItemSummary] = []
 
     /// Cancellables for Combine subscriptions
     private var cancellables = Set<AnyCancellable>()
@@ -133,7 +133,7 @@ final class ClipboardViewModel: ObservableObject {
                 limit: nil
             )
 
-            allItems = fetchedItems.map { $0.toData() }
+            allItemSummaries = fetchedItems.map { $0.toSummary() }
             applyFilters()
             updateAvailableFilters()
 
@@ -165,7 +165,7 @@ final class ClipboardViewModel: ObservableObject {
                 try dataStore.deleteItem(nsItem)
 
                 // Remove from local arrays
-                allItems.removeAll { $0.id == item.id }
+                allItemSummaries.removeAll { $0.id == item.id }
                 items.removeAll { $0.id == item.id }
                 updateRecentItemCount()
             }
@@ -189,7 +189,7 @@ final class ClipboardViewModel: ObservableObject {
             try dataStore.deleteAllItems()
 
             // Clear local arrays
-            allItems.removeAll()
+            allItemSummaries.removeAll()
             items.removeAll()
             updateAvailableFilters()
             updateRecentItemCount()
@@ -219,8 +219,8 @@ final class ClipboardViewModel: ObservableObject {
                 try dataStore.saveItem(nsItem)
 
                 // Update local arrays
-                if let index = allItems.firstIndex(where: { $0.id == item.id }) {
-                    allItems[index] = nsItem.toData()
+                if let index = allItemSummaries.firstIndex(where: { $0.id == item.id }) {
+                    allItemSummaries[index] = nsItem.toSummary()
                 }
                 applyFilters()
             }
@@ -312,7 +312,7 @@ final class ClipboardViewModel: ObservableObject {
                 limit: nil
             )
 
-            allItems = fetchedItems.map { $0.toData() }
+            allItemSummaries = fetchedItems.map { $0.toSummary() }
             applyFilters()
             updateAvailableFilters()
             updateRecentItemCount()
@@ -496,11 +496,11 @@ final class ClipboardViewModel: ObservableObject {
 
     private func updateAvailableFilters() {
         // Extract unique content types
-        let contentTypes = Set(allItems.map { $0.contentType })
+        let contentTypes = Set(allItemSummaries.map { $0.contentType })
         availableContentTypes = contentTypes.sorted()
 
         // Extract unique source apps
-        let apps = Set(allItems.compactMap { $0.sourceApp })
+        let apps = Set(allItemSummaries.compactMap { $0.sourceApp })
         availableSourceApps = apps.sorted()
     }
 
@@ -508,7 +508,7 @@ final class ClipboardViewModel: ObservableObject {
         let now = Date()
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: now) ?? now
 
-        recentItemCount = allItems.filter { item in
+        recentItemCount = allItemSummaries.filter { item in
             item.capturedAt > yesterday
         }.count
     }
@@ -576,8 +576,8 @@ final class ClipboardViewModel: ObservableObject {
                 NSLog("✅ Title saved successfully")
 
                 // Update local arrays
-                if let index = allItems.firstIndex(where: { $0.id == item.id }) {
-                    allItems[index] = nsItem.toData()
+                if let index = allItemSummaries.firstIndex(where: { $0.id == item.id }) {
+                    allItemSummaries[index] = nsItem.toSummary()
                 }
                 applyFilters()
             }
@@ -629,6 +629,34 @@ final class ClipboardViewModel: ObservableObject {
         try dataStore.saveItem(item)
     }
 
+    // MARK: - Memory Management
+
+    /// Fetch full item data (including content and pasteboard data) by ID.
+    /// Used for lazy-loading heavy fields only when paste is triggered.
+    /// - Parameter id: The UUID of the clipboard item
+    /// - Returns: Full ClipboardItemData, or nil if not found
+    func fetchFullItem(by id: UUID) -> ClipboardItemData? {
+        let predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            let fetched = try dataStore.fetchItems(
+                predicate: predicate,
+                sortDescriptors: nil,
+                limit: 1
+            )
+            return fetched.first?.toData()
+        } catch {
+            NSLog("Failed to fetch full item for paste: \(error)")
+            return nil
+        }
+    }
+
+    /// Clear all item data from memory to reduce footprint when panel is hidden.
+    /// Called by hideFloatingPanel() in AppDelegate.
+    func clearItemMemory() {
+        allItemSummaries.removeAll()
+        items.removeAll()
+    }
+
     // MARK: - Computed Properties - Search
 
     /// Filtered items for the search view based on searchText
@@ -638,7 +666,7 @@ final class ClipboardViewModel: ObservableObject {
             return []
         }
 
-        return allItems.filter { item in
+        return allItemSummaries.filter { item in
             // Search in title (if exists)
             let titleMatch = item.title != nil &&
                 item.title!.localizedCaseInsensitiveContains(searchText)
@@ -647,6 +675,21 @@ final class ClipboardViewModel: ObservableObject {
             let contentMatch = item.content.localizedCaseInsensitiveContains(searchText)
 
             return titleMatch || contentMatch
+        }.map { summary in
+            // Convert summary to ClipboardItemData without pasteboard data
+            // The pasteboard data will be lazy-loaded when user clicks copy
+            ClipboardItemData(
+                id: summary.id,
+                content: summary.content,
+                contentType: summary.contentType,
+                sourceApp: summary.sourceApp,
+                capturedAt: summary.capturedAt,
+                isPinned: summary.isPinned,
+                categoryId: summary.categoryId,
+                title: summary.title,
+                allPasteboardData: nil,  // Will be lazy-loaded on paste
+                allPasteboardTypes: nil
+            )
         }
     }
 }
@@ -681,6 +724,34 @@ extension ClipboardItem {
             title: self.title,
             allPasteboardData: self.allPasteboardData,
             allPasteboardTypes: self.allPasteboardTypes
+        )
+    }
+
+    /// Convert to lightweight summary (excludes heavy pasteboard data)
+    func toSummary() -> ClipboardItemSummary {
+        // Convert content Data to String based on content type
+        let contentString: String
+        switch contentType {
+        case "public.image", "public.tiff", "public.png":
+            // For images, content is file path JSON - keep as string
+            contentString = String(data: self.content, encoding: .utf8) ?? "[]"
+        case "public.file-url":
+            // For file URLs, content is already JSON array
+            contentString = String(data: self.content, encoding: .utf8) ?? "[]"
+        default:
+            // For text content, direct conversion
+            contentString = String(data: self.content, encoding: .utf8) ?? ""
+        }
+
+        return ClipboardItemSummary(
+            id: self.id,
+            content: contentString,
+            contentType: self.contentType,
+            sourceApp: self.sourceApp,
+            capturedAt: self.capturedAt,
+            isPinned: self.isPinned,
+            categoryId: self.category?.id,
+            title: self.title
         )
     }
 }

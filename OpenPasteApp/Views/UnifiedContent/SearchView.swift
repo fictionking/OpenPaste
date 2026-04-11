@@ -4,7 +4,7 @@ import SwiftUI
 /// Displays filtered clipboard items based on search text
 struct SearchView: View {
     @ObservedObject var viewModel: ClipboardViewModel
-    let copyHandler: (ClipboardItemData) -> Void
+    let copyHandler: (UUID) -> Void
 
     @FocusState private var isSearchFieldFocused: Bool
 
@@ -119,7 +119,7 @@ struct SearchView: View {
                                 }
                             },
                             onCopy: {
-                                copyHandler(item)
+                                copyHandler(item.id)
                             }
                         )
                     }

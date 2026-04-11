@@ -12,7 +12,7 @@ struct CategoryManagementView: View {
     @ObservedObject var viewModel: ClipboardViewModel
 
     /// Handler for copying content to clipboard
-    var copyHandler: (ClipboardItemData) -> Void = { _ in }
+    var copyHandler: (UUID) -> Void = { _ in }
 
     /// Available categories
     @State private var categories: [CategoryData] = []

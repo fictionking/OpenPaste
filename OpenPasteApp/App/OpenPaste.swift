@@ -164,11 +164,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     /// Copy content to clipboard without triggering new entry
-    /// - Parameter item: The clipboard item data to restore (including all pasteboard formats)
-    func copyToClipboard(_ item: ClipboardItemData) {
+    /// - Parameter itemId: The UUID of the clipboard item to restore (lazy-loads full data)
+    func copyToClipboard(itemId: UUID) {
         MainActor.assumeIsolated {
-            NSLog("📋 copyToClipboard called for item:")
-            NSLog("   - ID: \(item.id)")
+            NSLog("📋 copyToClipboard called for item: \(itemId)")
+
+            // Lazy-load full item data only when paste is triggered
+            guard let item = viewModel?.fetchFullItem(by: itemId) else {
+                NSLog("❌ Failed to load item for paste: \(itemId)")
+                return
+            }
+
             NSLog("   - Content: \(item.content.prefix(50))...")
             NSLog("   - contentType: \(item.contentType)")
             NSLog("   - CapturedAt: \(item.capturedAt)")
@@ -178,7 +184,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             // Restore complete pasteboard data with all formats
             guard let allPasteboardDataValue = item.allPasteboardData else {
-                NSLog("❌ No allPasteboardData available for item: \(item.id)")
+                NSLog("❌ No allPasteboardData available for item: \(itemId)")
                 return
             }
 
@@ -197,7 +203,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSLog("✅ Restored complete pasteboard with \(pasteboardData.types.count) types")
 
             // Update current clipboard item tracking
-            viewModel?.setCurrentClipboardItem(item.id)
+            viewModel?.setCurrentClipboardItem(itemId)
         }
     }
 
@@ -309,6 +315,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 panel.animator().setFrame(targetFrame, display: true)
             }
             refreshStatusBarButtonAppearance()
+
+            // Reload data when panel is shown
+            Task {
+                await viewModel?.refresh()
+            }
         } else {
             createFloatingPanel()
         }
@@ -317,8 +328,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func createFloatingPanel() {
         // Create the hosting view for SwiftUI with ViewModel
         guard let vm = viewModel else { return }
-        let contentView = FloatingPanelView(viewModel: vm) { content in
-            self.copyToClipboard(content)
+        let contentView = FloatingPanelView(viewModel: vm) { itemId in
+            self.copyToClipboard(itemId: itemId)
         }
         let hostingView = NSHostingView(rootView: contentView)
 
@@ -478,6 +489,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } completionHandler: {
             panel.orderOut(nil)
             self.refreshStatusBarButtonAppearance()
+
+            // Clear all item data from memory to reduce footprint when panel is hidden
+            self.viewModel?.clearItemMemory()
         }
     }
 
@@ -691,7 +705,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 /// Uses HStack layout: 70pt sidebar + unified content area
 struct FloatingPanelView: View {
     @ObservedObject var viewModel: ClipboardViewModel
-    let copyHandler: (ClipboardItemData) -> Void
+    let copyHandler: (UUID) -> Void
 
     @State private var selectedCategory: CategorySelector = .preset(.recent)
 
