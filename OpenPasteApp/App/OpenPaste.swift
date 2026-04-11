@@ -404,6 +404,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         refreshStatusBarButtonAppearance()
 
+        // Load data when panel is created
+        Task {
+            await viewModel?.refresh()
+        }
+
         // Add click-outside observer
         addClickOutsideObserver()
     }
