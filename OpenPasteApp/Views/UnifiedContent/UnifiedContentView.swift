@@ -1,5 +1,12 @@
 import SwiftUI
 
+/// Scroll direction for bidirectional loading
+enum ScrollDirection {
+    case none
+    case up    // User is scrolling up (loading older items)
+    case down  // User is scrolling down (loading newer items)
+}
+
 /// Unified content view that displays filtered clipboard items based on selected category
 /// Replaces separate tab views with a single list that filters by category selection
 struct UnifiedContentView: View {
@@ -8,6 +15,12 @@ struct UnifiedContentView: View {
     let copyHandler: (UUID) -> Void
 
     @State private var selectedIndex: Int? = nil
+
+    /// Track the last visible item index for scroll direction detection
+    @State private var lastVisibleIndex: Int? = nil
+
+    /// Track scroll direction
+    @State private var scrollDirection: ScrollDirection = .none
 
     var body: some View {
         Group {
@@ -64,10 +77,32 @@ struct UnifiedContentView: View {
                             }
                         )
                         .onAppear {
-                            // Trigger next batch when nearing the end
-                            if shouldTriggerNextBatch(for: index) {
+                            // Detect scroll direction
+                            if let lastIndex = lastVisibleIndex {
+                                if index > lastIndex {
+                                    // Scrolling down (newer items)
+                                    scrollDirection = .down
+                                } else if index < lastIndex {
+                                    // Scrolling up (older items)
+                                    scrollDirection = .up
+                                }
+                            }
+                            lastVisibleIndex = index
+
+                            // Trigger loading based on scroll direction and position
+                            if shouldTriggerLoad(for: index) {
                                 Task {
-                                    await viewModel.loadMoreItems()
+                                    if scrollDirection == .up || scrollDirection == .none {
+                                        // Near top: load older items
+                                        if viewModel.hasMoreOldItems {
+                                            await viewModel.loadOldItems()
+                                        }
+                                    } else {
+                                        // Near bottom: load newer items
+                                        if viewModel.hasMoreItems {
+                                            await viewModel.loadMoreItems()
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -86,9 +121,23 @@ struct UnifiedContentView: View {
     }
 
     /// Check if we should trigger next batch load
-    private func shouldTriggerNextBatch(for index: Int) -> Bool {
-        let remainingItems = filteredItems.count - index
-        return remainingItems <= 5  // Load more when 5 items from bottom
+    /// Check if we should trigger next batch load based on position and direction
+    private func shouldTriggerLoad(for index: Int) -> Bool {
+        // Load more when within 5 items of either end
+        let itemsFromTop = index
+        let itemsFromBottom = filteredItems.count - index
+
+        // Near bottom: load newer items
+        if itemsFromBottom <= 5 {
+            return true
+        }
+
+        // Near top: load older items
+        if itemsFromTop <= 5 {
+            return true
+        }
+
+        return false
     }
 
     // MARK: - Empty State
