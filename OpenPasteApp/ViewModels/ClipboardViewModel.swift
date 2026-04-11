@@ -490,7 +490,8 @@ final class ClipboardViewModel: ObservableObject {
             }
         }
 
-        await refresh()
+        // Note: Don't call refresh() here - data will be loaded when panel is shown
+        // This prevents memory accumulation when panel is hidden
     }
 
     private func applyFilters() {
