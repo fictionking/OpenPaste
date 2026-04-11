@@ -145,7 +145,7 @@ enum PresetCategory: String, CaseIterable {
     /// Check if a clipboard item matches this preset category
     /// - Parameter item: The clipboard item data to check
     /// - Returns: True if the item belongs to this category
-    func matches(_ item: ClipboardItemData) -> Bool {
+    func matches(_ item: ClipboardItemSummary) -> Bool {
         switch self {
         case .recent:
             // Recent shows everything

@@ -11,12 +11,14 @@ protocol ClipboardDataStore {
     ///   - predicate: Optional NSPredicate for filtering
     ///   - sortDescriptors: Optional sort descriptors for ordering
     ///   - limit: Optional maximum number of items to return
+    ///   - offset: Optional offset for pagination (default: 0)
     /// - Returns: Array of ClipboardItem objects
     /// - Throws: NSError if fetch fails
     func fetchItems(
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]?,
-        limit: Int?
+        limit: Int?,
+        offset: Int?
     ) throws -> [ClipboardItem]
 
     /// Save a clipboard item to the data store

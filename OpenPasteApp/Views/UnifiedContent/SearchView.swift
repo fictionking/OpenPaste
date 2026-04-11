@@ -110,7 +110,7 @@ struct SearchView: View {
                             },
                             onDelete: {
                                 Task {
-                                    await viewModel.deleteItem(item)
+                                    await viewModel.deleteItem(item.id)
                                 }
                             },
                             onTitleChange: { newTitle in

@@ -4,7 +4,7 @@ import CoreImage.CIFilterBuiltins
 
 /// Complete clipboard item card combining header and content
 struct ClipboardItemCard: View {
-    let item: ClipboardItemData
+    let item: ClipboardItemSummary
     var isCurrent: Bool = false
     var onCategoryChange: ((UUID?) -> Void)?
     var onDelete: (() -> Void)?
@@ -68,7 +68,7 @@ struct ClipboardItemCard: View {
 
 #Preview("Text Card") {
     ClipboardItemCard(
-        item: ClipboardItemData(
+        item: ClipboardItemSummary(
             id: UUID(),
             content: "Example clipboard text content that spans multiple lines",
             contentType: "public.utf8-plain-text",
@@ -76,9 +76,7 @@ struct ClipboardItemCard: View {
             capturedAt: Date().addingTimeInterval(-300),
             isPinned: false,
             categoryId: nil,
-            title: nil,
-            allPasteboardData: nil,
-            allPasteboardTypes: nil
+            title: nil
         ),
         onCopy: { print("Copy triggered") }
     )
@@ -88,7 +86,7 @@ struct ClipboardItemCard: View {
 
 #Preview("Pinned Card") {
     ClipboardItemCard(
-        item: ClipboardItemData(
+        item: ClipboardItemSummary(
             id: UUID(),
             content: "Pinned item with important content",
             contentType: "public.utf8-plain-text",
@@ -96,9 +94,7 @@ struct ClipboardItemCard: View {
             capturedAt: Date(),
             isPinned: true,
             categoryId: nil,
-            title: nil,
-            allPasteboardData: nil,
-            allPasteboardTypes: nil
+            title: nil
         ),
         onCopy: { print("Copy triggered") }
     )
@@ -108,7 +104,7 @@ struct ClipboardItemCard: View {
 
 #Preview("Image Card") {
     ClipboardItemCard(
-        item: ClipboardItemData(
+        item: ClipboardItemSummary(
             id: UUID(),
             content: "Image data",
             contentType: "public.image",
@@ -116,9 +112,7 @@ struct ClipboardItemCard: View {
             capturedAt: Date().addingTimeInterval(-600),
             isPinned: false,
             categoryId: nil,
-            title: nil,
-            allPasteboardData: nil,
-            allPasteboardTypes: nil
+            title: nil
         ),
         onCopy: { print("Copy triggered") }
     )

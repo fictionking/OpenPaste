@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Card content router that displays appropriate content view based on content type
 struct CardContent: View {
-    let item: ClipboardItemData
+    let item: ClipboardItemSummary
 
     private let fixedHeight: CGFloat = 108
 
@@ -57,7 +57,7 @@ struct CardContent: View {
 // MARK: - Preview
 
 #Preview("Text Content") {
-    CardContent(item: ClipboardItemData(
+    CardContent(item: ClipboardItemSummary(
         id: UUID(),
         content: "Example clipboard text content that spans multiple lines and should be displayed properly",
         contentType: "public.utf8-plain-text",
@@ -65,15 +65,13 @@ struct CardContent: View {
         capturedAt: Date(),
         isPinned: false,
         categoryId: nil,
-        title: nil,
-        allPasteboardData: nil,
-        allPasteboardTypes: nil
+        title: nil
     ))
     .frame(width: 300)
 }
 
 #Preview("Image Content") {
-    CardContent(item: ClipboardItemData(
+    CardContent(item: ClipboardItemSummary(
         id: UUID(),
         content: "[]",
         contentType: "public.image",
@@ -81,15 +79,13 @@ struct CardContent: View {
         capturedAt: Date(),
         isPinned: false,
         categoryId: nil,
-        title: nil,
-        allPasteboardData: nil,
-        allPasteboardTypes: nil
+        title: nil
     ))
     .frame(width: 300)
 }
 
 #Preview("File Content") {
-    CardContent(item: ClipboardItemData(
+    CardContent(item: ClipboardItemSummary(
         id: UUID(),
         content: "[\"file:///Users/example/Documents/report.pdf\"]",
         contentType: "public.file-url",
@@ -97,9 +93,7 @@ struct CardContent: View {
         capturedAt: Date(),
         isPinned: false,
         categoryId: nil,
-        title: nil,
-        allPasteboardData: nil,
-        allPasteboardTypes: nil
+        title: nil
     ))
     .frame(width: 300)
 }

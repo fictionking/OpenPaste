@@ -106,7 +106,8 @@ final class ClipboardRepository {
         let items = try dataStore.fetchItems(
             predicate: predicate,
             sortDescriptors: sortDescriptors,
-            limit: limit
+            limit: limit,
+            offset: nil
         )
 
         // Load content into cache if panel is visible (id and content are non-optional)
@@ -181,7 +182,8 @@ final class ClipboardRepository {
         return try dataStore.fetchItems(
             predicate: predicate,
             sortDescriptors: sortDescriptors,
-            limit: limit
+            limit: limit,
+            offset: nil
         )
     }
 

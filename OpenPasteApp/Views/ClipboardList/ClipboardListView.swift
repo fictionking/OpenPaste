@@ -7,7 +7,7 @@ struct ClipboardListView: View {
     // MARK: - Properties
 
     /// Clipboard items to display
-    @State private var items: [ClipboardItemData] = []
+    @State private var items: [ClipboardItemSummary] = []
 
     /// Total number of items in the data store
     @State private var totalCount = 0
@@ -107,7 +107,7 @@ struct ClipboardListView: View {
     /// Check if the next batch should be triggered for this item
     /// - Parameter item: The item that just appeared
     /// - Returns: True if near the end of loaded items
-    private func shouldTriggerNextBatch(for item: ClipboardItemData) -> Bool {
+    private func shouldTriggerNextBatch(for item: ClipboardItemSummary) -> Bool {
         guard let index = items.firstIndex(where: { $0.id == item.id }) else {
             return false
         }
@@ -166,9 +166,9 @@ struct ClipboardListView: View {
     ///   - count: Number of items to generate
     ///   - offset: Starting index for item IDs
     /// - Returns: Array of mock ClipboardItemData
-    private func generateMockItems(count: Int, offset: Int = 0) -> [ClipboardItemData] {
+    private func generateMockItems(count: Int, offset: Int = 0) -> [ClipboardItemSummary] {
         (0..<count).map { index in
-            ClipboardItemData(
+            ClipboardItemSummary(
                 id: UUID(),
                 content: "Clipboard item \(offset + index + 1)",
                 contentType: "public.utf8-plain-text",
@@ -176,9 +176,7 @@ struct ClipboardListView: View {
                 capturedAt: Date(),
                 isPinned: offset + index < 3, // Pin first 3 items
                 categoryId: nil,
-                title: nil,
-                allPasteboardData: nil,
-                allPasteboardTypes: nil
+                title: nil
             )
         }
     }

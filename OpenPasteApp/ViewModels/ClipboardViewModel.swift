@@ -12,8 +12,8 @@ import CryptoKit
 final class ClipboardViewModel: ObservableObject {
     // MARK: - Published Properties
 
-    /// Clipboard items displayed in the UI
-    @Published var items: [ClipboardItemData] = []
+    /// Clipboard items displayed in the UI (lightweight summaries)
+    @Published var items: [ClipboardItemSummary] = []
 
     /// Current search query text
     @Published var searchQuery: String = "" {
@@ -84,6 +84,15 @@ final class ClipboardViewModel: ObservableObject {
     /// All item summaries (unfiltered) for filtering - lightweight data structure
     private var allItemSummaries: [ClipboardItemSummary] = []
 
+    /// Number of items currently loaded in memory
+    private var currentLoadedCount: Int = 0
+
+    /// Number of items to load per batch (pagination)
+    private let pageSize: Int = 50
+
+    /// Whether there are more items to load
+    @Published var hasMoreItems: Bool = true
+
     /// Cancellables for Combine subscriptions
     private var cancellables = Set<AnyCancellable>()
 
@@ -122,18 +131,23 @@ final class ClipboardViewModel: ObservableObject {
         currentClipboardItemId = itemId
     }
 
-    /// Refresh the clipboard items list
+    /// Refresh the clipboard items list (loads first batch only)
     func refresh() async {
         isLoading = true
 
         do {
+            // Load only the first batch
             let fetchedItems = try dataStore.fetchItems(
                 predicate: nil,
                 sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                limit: nil
+                limit: pageSize,
+                offset: nil
             )
 
             allItemSummaries = fetchedItems.map { $0.toSummary() }
+            currentLoadedCount = allItemSummaries.count
+            hasMoreItems = fetchedItems.count == pageSize
+
             applyFilters()
             updateAvailableFilters()
 
@@ -147,26 +161,56 @@ final class ClipboardViewModel: ObservableObject {
         isLoading = false
     }
 
+    /// Load more items (pagination)
+    func loadMoreItems() async {
+        guard !isLoading, hasMoreItems else { return }
+
+        isLoading = true
+
+        do {
+            let fetchedItems = try dataStore.fetchItems(
+                predicate: nil,
+                sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
+                limit: pageSize,
+                offset: currentLoadedCount
+            )
+
+            // Append new items to existing summaries
+            let newSummaries = fetchedItems.map { $0.toSummary() }
+            allItemSummaries.append(contentsOf: newSummaries)
+            currentLoadedCount = allItemSummaries.count
+            hasMoreItems = fetchedItems.count == pageSize
+
+            applyFilters()
+
+        } catch {
+            showError("Failed to load more items: \(error.localizedDescription)")
+        }
+
+        isLoading = false
+    }
+
     /// Delete an item from clipboard history
-    /// - Parameter item: The item to delete
-    func deleteItem(_ item: ClipboardItemData) async {
+    /// - Parameter itemId: The ID of the item to delete
+    func deleteItem(_ itemId: UUID) async {
         isLoading = true
 
         do {
             // Find the corresponding NSManagedObject
-            let predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
+            let predicate = NSPredicate(format: "id == %@", itemId as CVarArg)
             let fetchedItems = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
 
             if let nsItem = fetchedItems.first {
                 try dataStore.deleteItem(nsItem)
 
                 // Remove from local arrays
-                allItemSummaries.removeAll { $0.id == item.id }
-                items.removeAll { $0.id == item.id }
+                allItemSummaries.removeAll { $0.id == itemId }
+                items.removeAll { $0.id == itemId }
                 updateRecentItemCount()
             }
 
@@ -211,7 +255,8 @@ final class ClipboardViewModel: ObservableObject {
             let fetchedItems = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
 
             if let nsItem = fetchedItems.first {
@@ -247,13 +292,14 @@ final class ClipboardViewModel: ObservableObject {
     /// - Parameters:
     ///   - item: The item to categorize
     ///   - categoryId: The category ID to assign
-    func assignItem(_ item: ClipboardItemData, toCategory categoryId: UUID) async {
+    func assignItem(_ item: ClipboardItemSummary, toCategory categoryId: UUID) async {
         do {
             let predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
             let fetchedItems = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
 
             if let nsItem = fetchedItems.first {
@@ -274,13 +320,14 @@ final class ClipboardViewModel: ObservableObject {
 
     /// Remove item from its category
     /// - Parameter item: The item to uncategorize
-    func removeFromCategory(_ item: ClipboardItemData) async {
+    func removeFromCategory(_ item: ClipboardItemSummary) async {
         do {
             let predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
             let fetchedItems = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
 
             if let nsItem = fetchedItems.first {
@@ -303,29 +350,8 @@ final class ClipboardViewModel: ObservableObject {
     }
 
     private func loadInitialData() async {
-        isLoading = true
-
-        do {
-            let fetchedItems = try dataStore.fetchItems(
-                predicate: nil,
-                sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                limit: nil
-            )
-
-            allItemSummaries = fetchedItems.map { $0.toSummary() }
-            applyFilters()
-            updateAvailableFilters()
-            updateRecentItemCount()
-
-        } catch {
-            // Check if it's a clipboard access denied error
-            if (error as NSError).code == -100 {
-                showError("Clipboard access denied. Please grant OpenPaste permission to access your clipboard in System Preferences > Privacy & Security > Clipboard")
-            } else {
-                showError("Failed to load clipboard items: \(error.localizedDescription)")
-            }
-        }
-
+        // Skip loading on startup - data will be loaded when panel is shown
+        // This reduces memory footprint when app is running in background
         isLoading = false
     }
 
@@ -482,10 +508,11 @@ final class ClipboardViewModel: ObservableObject {
                 let fetchedItems = try dataStore.fetchItems(
                     predicate: predicate,
                     sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                    limit: nil
+                    limit: nil,
+                    offset: nil
                 )
 
-                items = fetchedItems.map { $0.toData() }
+                items = fetchedItems.map { $0.toSummary() }
             } catch {
                 showError("Failed to filter items: \(error.localizedDescription)")
             }
@@ -558,14 +585,15 @@ final class ClipboardViewModel: ObservableObject {
     /// - Parameters:
     ///   - item: The item to update
     ///   - newTitle: The new title to set
-    func updateTitle(for item: ClipboardItemData, to newTitle: String) async {
+    func updateTitle(for item: ClipboardItemSummary, to newTitle: String) async {
         NSLog("📝 Updating title for item \(item.id) to: '\(newTitle)'")
         do {
             let predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
             let fetchedItems = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
 
             if let nsItem = fetchedItems.first {
@@ -601,16 +629,19 @@ final class ClipboardViewModel: ObservableObject {
     ///   - predicate: Optional NSPredicate for filtering
     ///   - sortDescriptors: Optional sort descriptors
     ///   - limit: Optional limit on number of items
+    ///   - offset: Optional offset for pagination
     /// - Returns: Array of clipboard item entities
     func fetchItems(
         predicate: NSPredicate?,
         sortDescriptors: [NSSortDescriptor]?,
-        limit: Int?
+        limit: Int?,
+        offset: Int? = nil
     ) throws -> [ClipboardItem] {
         return try dataStore.fetchItems(
             predicate: predicate,
             sortDescriptors: sortDescriptors,
-            limit: limit
+            limit: limit,
+            offset: offset
         )
     }
 
@@ -641,7 +672,8 @@ final class ClipboardViewModel: ObservableObject {
             let fetched = try dataStore.fetchItems(
                 predicate: predicate,
                 sortDescriptors: nil,
-                limit: 1
+                limit: 1,
+                offset: nil
             )
             return fetched.first?.toData()
         } catch {
@@ -661,7 +693,7 @@ final class ClipboardViewModel: ObservableObject {
 
     /// Filtered items for the search view based on searchText
     /// Searches both title and content fields
-    var filteredSearchItems: [ClipboardItemData] {
+    var filteredSearchItems: [ClipboardItemSummary] {
         guard !searchText.isEmpty else {
             return []
         }
@@ -675,21 +707,6 @@ final class ClipboardViewModel: ObservableObject {
             let contentMatch = item.content.localizedCaseInsensitiveContains(searchText)
 
             return titleMatch || contentMatch
-        }.map { summary in
-            // Convert summary to ClipboardItemData without pasteboard data
-            // The pasteboard data will be lazy-loaded when user clicks copy
-            ClipboardItemData(
-                id: summary.id,
-                content: summary.content,
-                contentType: summary.contentType,
-                sourceApp: summary.sourceApp,
-                capturedAt: summary.capturedAt,
-                isPinned: summary.isPinned,
-                categoryId: summary.categoryId,
-                title: summary.title,
-                allPasteboardData: nil,  // Will be lazy-loaded on paste
-                allPasteboardTypes: nil
-            )
         }
     }
 }

@@ -92,7 +92,8 @@ final class ExpiryService {
             let expiredItems = try dataStore.fetchItems(
                 predicate: NSPredicate(format: "expiresAt < %@ AND category == nil", now as CVarArg),
                 sortDescriptors: [] as [NSSortDescriptor]?,
-                limit: nil as Int?
+                limit: nil as Int?,
+                offset: nil
             )
 
             let expiredCount = expiredItems.count

@@ -30,7 +30,7 @@ struct CategoryManagementView: View {
     @State private var newCategoryType: CategoryType = .manual
 
     /// Clipboard items filtered by selected category
-    @State private var filteredItems: [ClipboardItemData] = []
+    @State private var filteredItems: [ClipboardItemSummary] = []
 
     /// Error message
     @State private var errorMessage: String?
@@ -151,7 +151,7 @@ struct CategoryManagementView: View {
                                         },
                                         onDelete: {
                                             Task {
-                                                await viewModel.deleteItem(item)
+                                                await viewModel.deleteItem(item.id)
                                             }
                                         },
                                         onTitleChange: { newTitle in
@@ -284,9 +284,10 @@ struct CategoryManagementView: View {
             let fetched = try viewModel.fetchItems(
                 predicate: predicate,
                 sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                limit: nil
+                limit: nil,
+                offset: nil
             )
-            filteredItems = fetched.map { $0.toData() }
+            filteredItems = fetched.map { $0.toSummary() }
         } catch {
             filteredItems = []
         }
@@ -295,7 +296,7 @@ struct CategoryManagementView: View {
     private func itemCount(for category: CategoryData) -> Int {
         do {
             let predicate = NSPredicate(format: "category.id == %@", category.id as CVarArg)
-            let items = try viewModel.fetchItems(predicate: predicate, sortDescriptors: nil, limit: nil)
+            let items = try viewModel.fetchItems(predicate: predicate, sortDescriptors: nil, limit: nil, offset: nil)
             return items.count
         } catch {
             return 0
@@ -349,7 +350,7 @@ struct CategoryManagementView: View {
             guard let itemId = UUID(uuidString: itemIdString) else { continue }
             do {
                 let predicate = NSPredicate(format: "id == %@", itemId as CVarArg)
-                let fetched = try viewModel.fetchItems(predicate: predicate, sortDescriptors: nil, limit: 1)
+                let fetched = try viewModel.fetchItems(predicate: predicate, sortDescriptors: nil, limit: 1, offset: nil)
                 if let item = fetched.first {
                     let cats = try viewModel.fetchCategories()
                     if let cat = cats.first(where: { $0.id == category.id }) {

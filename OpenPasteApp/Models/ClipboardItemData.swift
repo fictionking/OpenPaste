@@ -24,6 +24,23 @@ struct ClipboardItemSummary: Identifiable, Equatable {
         lhs.categoryId == rhs.categoryId &&
         lhs.title == rhs.title
     }
+
+    /// Convert summary to full ClipboardItemData (for Preview compatibility)
+    /// Note: allPasteboardData and allPasteboardTypes will be nil
+    func toItemData() -> ClipboardItemData {
+        return ClipboardItemData(
+            id: id,
+            content: content,
+            contentType: contentType,
+            sourceApp: sourceApp,
+            capturedAt: capturedAt,
+            isPinned: isPinned,
+            categoryId: categoryId,
+            title: title,
+            allPasteboardData: nil,
+            allPasteboardTypes: nil
+        )
+    }
 }
 
 /// Data model for clipboard item display (value type for UI layer)

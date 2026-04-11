@@ -51,7 +51,7 @@ struct UnifiedContentView: View {
                             },
                             onDelete: {
                                 Task {
-                                    await viewModel.deleteItem(item)
+                                    await viewModel.deleteItem(item.id)
                                 }
                             },
                             onTitleChange: { newTitle in
@@ -99,7 +99,7 @@ struct UnifiedContentView: View {
 
     // MARK: - Computed Properties
 
-    private var filteredItems: [ClipboardItemData] {
+    private var filteredItems: [ClipboardItemSummary] {
         switch selectedCategory {
         case .preset(let preset):
             // Filter by preset category
@@ -177,7 +177,7 @@ struct UnifiedContentView: View {
     // MARK: - Context Menu
 
     @ViewBuilder
-    private func categoryMenuContent(for item: ClipboardItemData) -> some View {
+    private func categoryMenuContent(for item: ClipboardItemSummary) -> some View {
         if !viewModel.categories.isEmpty {
             Menu(L10n.Category.addTo) {
                 ForEach(viewModel.categories) { category in

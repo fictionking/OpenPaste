@@ -80,7 +80,8 @@ final class CoreDataStore: ClipboardDataStore {
     func fetchItems(
         predicate: NSPredicate? = nil,
         sortDescriptors: [NSSortDescriptor]? = nil,
-        limit: Int? = nil
+        limit: Int? = nil,
+        offset: Int? = nil
     ) throws -> [ClipboardItem] {
         var result: [ClipboardItem] = []
 
@@ -90,6 +91,9 @@ final class CoreDataStore: ClipboardDataStore {
             fetchRequest.sortDescriptors = sortDescriptors
             if let limit = limit {
                 fetchRequest.fetchLimit = limit
+            }
+            if let offset = offset {
+                fetchRequest.fetchOffset = offset
             }
 
             do {
@@ -110,6 +114,9 @@ final class CoreDataStore: ClipboardDataStore {
                 fetchRequest.sortDescriptors = sortDescriptors
                 if let limit = limit {
                     fetchRequest.fetchLimit = limit
+                }
+                if let offset = offset {
+                    fetchRequest.fetchOffset = offset
                 }
                 do {
                     _ = try viewContext.fetch(fetchRequest)

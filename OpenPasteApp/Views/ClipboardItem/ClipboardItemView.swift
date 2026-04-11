@@ -7,8 +7,8 @@ import AppKit
 struct ClipboardItemView: View {
     // MARK: - Properties
 
-    /// The clipboard item data to display
-    let item: ClipboardItemData
+    /// The clipboard item summary to display
+    let item: ClipboardItemSummary
 
     /// Whether this item matches the current clipboard content
     var isCurrent: Bool = false
@@ -47,7 +47,7 @@ struct ClipboardItemView: View {
 #Preview("Text Item") {
     VStack(spacing: 8) {
         ClipboardItemView(
-            item: ClipboardItemData(
+            item: ClipboardItemSummary(
                 id: UUID(),
                 content: "Example clipboard text content that spans multiple lines",
                 contentType: "public.utf8-plain-text",
@@ -55,14 +55,12 @@ struct ClipboardItemView: View {
                 capturedAt: Date().addingTimeInterval(-300),
                 isPinned: false,
                 categoryId: nil,
-                title: nil,
-                allPasteboardData: nil,
-                allPasteboardTypes: nil
+                title: nil
             )
         )
 
         ClipboardItemView(
-            item: ClipboardItemData(
+            item: ClipboardItemSummary(
                 id: UUID(),
                 content: "Pinned item",
                 contentType: "public.utf8-plain-text",
@@ -70,9 +68,7 @@ struct ClipboardItemView: View {
                 capturedAt: Date(),
                 isPinned: true,
                 categoryId: nil,
-                title: nil,
-                allPasteboardData: nil,
-                allPasteboardTypes: nil
+                title: nil
             )
         )
     }
@@ -82,7 +78,7 @@ struct ClipboardItemView: View {
 
 #Preview("Image Item") {
     ClipboardItemView(
-        item: ClipboardItemData(
+        item: ClipboardItemSummary(
             id: UUID(),
             content: "Image data",
             contentType: "public.image",
@@ -90,9 +86,7 @@ struct ClipboardItemView: View {
             capturedAt: Date().addingTimeInterval(-600),
             isPinned: false,
             categoryId: nil,
-            title: nil,
-            allPasteboardData: nil,
-            allPasteboardTypes: nil
+            title: nil
         )
     )
     .padding()
@@ -101,7 +95,7 @@ struct ClipboardItemView: View {
 
 #Preview("File Item") {
     ClipboardItemView(
-        item: ClipboardItemData(
+        item: ClipboardItemSummary(
             id: UUID(),
             content: "[\"file:///Users/example/Documents/report.pdf\"]",
             contentType: "public.file-url",
@@ -109,9 +103,7 @@ struct ClipboardItemView: View {
             capturedAt: Date(),
             isPinned: false,
             categoryId: nil,
-            title: nil,
-            allPasteboardData: nil,
-            allPasteboardTypes: nil
+            title: nil
         )
     )
     .padding()
