@@ -487,7 +487,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             context.timingFunction = CAMediaTimingFunction(name: .easeIn)
             panel.animator().setFrameOrigin(NSPoint(x: screen.maxX, y: currentFrame.origin.y))
         } completionHandler: {
-            panel.orderOut(nil)
+            // Destroy the panel completely to release all resources
+            panel.close()
+            self.floatingPanel = nil
             self.refreshStatusBarButtonAppearance()
 
             // Clear all item data from memory to reduce footprint when panel is hidden
