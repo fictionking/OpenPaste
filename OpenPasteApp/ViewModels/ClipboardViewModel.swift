@@ -90,9 +90,6 @@ final class ClipboardViewModel: ObservableObject {
     /// Number of items to load per batch (pagination)
     private let pageSize: Int = 10
 
-    /// Maximum number of items to keep in memory (sliding window)
-    private let maxItemsInMemory: Int = 30
-
     /// Whether there are more items to load
     @Published var hasMoreItems: Bool = true
 
@@ -183,13 +180,6 @@ final class ClipboardViewModel: ObservableObject {
             allItemSummaries.append(contentsOf: newSummaries)
             currentLoadedCount = allItemSummaries.count
             hasMoreItems = fetchedItems.count == pageSize
-
-            // Implement sliding window: remove oldest items if we exceed maxItemsInMemory
-            if allItemSummaries.count > maxItemsInMemory {
-                let excessCount = allItemSummaries.count - maxItemsInMemory
-                allItemSummaries.removeFirst(excessCount)
-                NSLog("🗑️ Removed \(excessCount) old items to maintain memory limit of \(maxItemsInMemory)")
-            }
 
             applyFilters()
 
