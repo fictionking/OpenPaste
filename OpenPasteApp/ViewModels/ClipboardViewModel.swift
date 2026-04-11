@@ -497,26 +497,47 @@ final class ClipboardViewModel: ObservableObject {
         isLoading = true
 
         Task {
-            let predicate = SearchPredicateBuilder.buildPredicate(
-                searchText: searchQuery,
-                contentType: selectedContentType,
-                dateRange: selectedDateRange,
-                sourceApp: selectedSourceApp
-            )
+            // Filter the already-loaded allItemSummaries in memory
+            var filtered = allItemSummaries
 
-            do {
-                let fetchedItems = try dataStore.fetchItems(
-                    predicate: predicate,
-                    sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
-                    limit: nil,
-                    offset: nil
-                )
-
-                items = fetchedItems.map { $0.toSummary() }
-            } catch {
-                showError("Failed to filter items: \(error.localizedDescription)")
+            // Filter by content type
+            if let contentType = selectedContentType {
+                filtered = filtered.filter { $0.contentType == contentType }
             }
 
+            // Filter by source app
+            if let sourceApp = selectedSourceApp {
+                filtered = filtered.filter { $0.sourceApp == sourceApp }
+            }
+
+            // Filter by date range
+            if let dateRange = selectedDateRange {
+                let now = Date()
+                let startDate: Date
+                switch dateRange {
+                case .today:
+                    startDate = Calendar.current.startOfDay(for: now)
+                case .yesterday:
+                    startDate = Calendar.current.date(byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: now)) ?? now
+                case .pastWeek:
+                    startDate = Calendar.current.date(byAdding: .day, value: -7, to: now) ?? now
+                case .pastMonth:
+                    startDate = Calendar.current.date(byAdding: .month, value: -1, to: now) ?? now
+                case .allTime:
+                    startDate = Date.distantPast
+                }
+                filtered = filtered.filter { $0.capturedAt >= startDate }
+            }
+
+            // Filter by search query
+            if !searchQuery.isEmpty {
+                filtered = filtered.filter { item in
+                    item.title?.localizedCaseInsensitiveContains(searchQuery) == true ||
+                    item.content.localizedCaseInsensitiveContains(searchQuery)
+                }
+            }
+
+            items = filtered
             isLoading = false
         }
     }
