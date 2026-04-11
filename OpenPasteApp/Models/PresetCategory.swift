@@ -190,6 +190,59 @@ enum PresetCategory: String, CaseIterable {
         }
     }
 
+    /// Build NSPredicate for database query
+    /// - Returns: NSPredicate for filtering clipboard items in Core Data
+    func predicate() -> NSPredicate {
+        switch self {
+        case .recent:
+            // Recent shows everything (no filter)
+            return NSPredicate(value: true)
+
+        case .text:
+            // Text content types
+            return NSPredicate(format: "contentType IN %@", [
+                "public.utf8-plain-text", "public.rtf", "public.html",
+                "com.apple.flat-rtfd", "public.text"
+            ])
+
+        case .code:
+            // Code content types (simplified - code detection may need content scanning)
+            return NSPredicate(format: "contentType IN %@", [
+                "public.source-code", "public.script", "public.program"
+            ])
+
+        case .image:
+            // Image content types
+            return NSPredicate(format: "contentType IN %@", [
+                "public.image", "public.tiff", "public.png", "public.jpeg"
+            ])
+
+        case .file:
+            // File attachments
+            return NSPredicate(format: "contentType == %@", "public.file-url")
+
+        case .link:
+            // URLs
+            return NSPredicate(format: "contentType == %@", "public.url")
+
+        case .email:
+            // Email addresses
+            return NSPredicate(format: "contentType == %@", "public.email")
+
+        case .phoneNumber:
+            // Phone numbers
+            return NSPredicate(format: "contentType == %@", "public.phone-number")
+
+        case .colorCode:
+            // Hex color codes
+            return NSPredicate(format: "contentType == %@", "public.color-code")
+
+        case .favorite1, .favorite2, .favorite3, .favorite4:
+            // Favorites - match by category ID
+            return NSPredicate(format: "category.id == %@", favoriteUUID as CVarArg)
+        }
+    }
+
     /// UUID for this favorite category (used for matching)
     var favoriteUUID: UUID {
         // Generate consistent UUID based on raw value

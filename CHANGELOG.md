@@ -1,31 +1,20 @@
 # Changelog
 
-## [1.4] - 2026-04-11
-
-### Improved
-- **Memory Optimization**: Further reduced memory usage through complete pagination implementation
-- **Startup Performance**: App now loads instantly without fetching clipboard history on startup
-- **Scroll Performance**: Data is loaded progressively as you scroll (50 items per batch)
-- **Memory Efficiency**: Only visible items are kept in memory, releasing resources when panel is hidden
-
-### Changed
-- **Data Loading**: Implemented lazy loading with initial batch of 50 items, loading more on scroll
-- **Startup Behavior**: Clipboard data is now loaded only when the floating panel is shown
-- **Memory Architecture**: Complete migration to `ClipboardItemSummary` throughout the UI layer
-
----
-
 ## [1.3] - 2026-04-11
 
 ### Improved
 - **Memory Optimization**: Reduced memory footprint by ~80% through lightweight summary data structure and lazy loading
 - **Panel Lifecycle**: Clear clipboard data from memory when panel is hidden, reload on display
 - **Performance**: Load only necessary data for list display, defer heavy pasteboard data until paste operation
+- **Startup Performance**: App now loads instantly without fetching clipboard history on startup
+- **Scroll Performance**: Data is loaded progressively as you scroll (10 items per batch)
+- **Category Filtering**: Fixed category display to query database directly instead of filtering in-memory items
 
 ### Changed
 - **Data Architecture**: Introduced `ClipboardItemSummary` for efficient in-memory storage
 - **Paste Loading**: Changed to UUID-based lazy loading for full clipboard data
 - **Background Management**: Automatic memory cleanup when floating panel closes
+- **Service Layer**: Moved clipboard item saving logic from ViewModel to ClipboardService for better architecture
 
 ---
 

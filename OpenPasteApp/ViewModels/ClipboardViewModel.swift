@@ -70,6 +70,9 @@ final class ClipboardViewModel: ObservableObject {
     /// Current clipboard item ID (for highlighting the active item)
     @Published var currentClipboardItemId: UUID? = nil
 
+    /// Current selected category for filtering
+    @Published var currentCategory: CategorySelector? = nil
+
     // MARK: - Properties
 
     /// Data store for clipboard operations
@@ -151,17 +154,32 @@ final class ClipboardViewModel: ObservableObject {
     }
 
     /// Refresh the clipboard items list (loads first batch only)
-    func refresh() async {
+    /// - Parameter category: Optional category to filter by
+    func refresh(category: CategorySelector? = nil) async {
         isLoading = true
 
-        do {
-            // Get total count WITHOUT loading all items
-            totalItemCount = try dataStore.countItems(predicate: nil)
-            NSLog("📊 Total items in database: \(totalItemCount)")
+        // Update current category
+        currentCategory = category
 
-            // Load first batch
+        do {
+            // Build predicate based on category
+            let predicate: NSPredicate?
+            switch category {
+            case .preset(let preset):
+                predicate = preset.predicate()
+            case .custom(let categoryId):
+                predicate = NSPredicate(format: "category.id == %@", categoryId as CVarArg)
+            case .search, .settings, .none:
+                predicate = nil
+            }
+
+            // Get total count for the category
+            totalItemCount = try dataStore.countItems(predicate: predicate)
+            NSLog("📊 Total items in database\(category != nil ? " for category" : ""): \(totalItemCount)")
+
+            // Load first batch with category filter
             let fetchedItems = try dataStore.fetchItems(
-                predicate: nil,
+                predicate: predicate,
                 sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
                 limit: pageSize,
                 offset: nil
@@ -189,7 +207,8 @@ final class ClipboardViewModel: ObservableObject {
             hasMoreNewItems = false  // Started with newest items, nothing newer
             hasMoreOldItems = currentLoadedCount < totalItemCount  // May have older items
 
-            applyFilters()
+            // Don't apply filters - data is already filtered by category
+            items = allItemSummaries
             updateAvailableFilters()
 
             // Update recent item count for Dock badge

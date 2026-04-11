@@ -38,6 +38,12 @@ struct UnifiedContentView: View {
                 contentView
             }
         }
+        .onChange(of: selectedCategory) { oldValue, newValue in
+            // Reload data when category changes
+            Task {
+                await viewModel.refresh(category: newValue)
+            }
+        }
     }
 
     // MARK: - Content Views
