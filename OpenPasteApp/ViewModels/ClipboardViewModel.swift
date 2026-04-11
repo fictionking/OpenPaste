@@ -538,6 +538,13 @@ final class ClipboardViewModel: ObservableObject {
                 }
             }
 
+            // Apply sliding window limit to prevent memory growth
+            let maxItemsInMemory: Int = 50
+            if filtered.count > maxItemsInMemory {
+                filtered = Array(filtered.suffix(maxItemsInMemory))
+                NSLog("🗑️ Limited display to \(maxItemsInMemory) most recent items")
+            }
+
             items = filtered
             isLoading = false
         }
