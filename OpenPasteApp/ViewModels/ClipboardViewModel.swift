@@ -87,8 +87,23 @@ final class ClipboardViewModel: ObservableObject {
     /// Number of items currently loaded in memory
     private var currentLoadedCount: Int = 0
 
+    /// Total count of items in database
+    private var totalItemCount: Int = 0
+
     /// Number of items to load per batch (pagination)
     private let pageSize: Int = 10
+
+    /// Sliding window size (total items to keep in memory)
+    private let slidingWindowSize: Int = 30
+
+    /// Current window position (center of the window)
+    private var windowCenterIndex: Int? = nil
+
+    /// Whether there are more older items to load (scroll up)
+    @Published var hasMoreOldItems: Bool = false
+
+    /// Whether there are more newer items to load (scroll down)
+    @Published var hasMoreNewItems: Bool = false
 
     /// Whether there are more items to load
     @Published var hasMoreItems: Bool = true
@@ -136,7 +151,16 @@ final class ClipboardViewModel: ObservableObject {
         isLoading = true
 
         do {
-            // Load only the first batch
+            // Get total count first
+            let allItems = try dataStore.fetchItems(
+                predicate: nil,
+                sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
+                limit: nil,
+                offset: nil
+            )
+            totalItemCount = allItems.count
+
+            // Load first batch
             let fetchedItems = try dataStore.fetchItems(
                 predicate: nil,
                 sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
@@ -146,7 +170,12 @@ final class ClipboardViewModel: ObservableObject {
 
             allItemSummaries = fetchedItems.map { $0.toSummary() }
             currentLoadedCount = allItemSummaries.count
-            hasMoreItems = fetchedItems.count == pageSize
+
+            // Initialize sliding window state
+            windowCenterIndex = currentLoadedCount / 2
+            hasMoreItems = currentLoadedCount < totalItemCount
+            hasMoreNewItems = false
+            hasMoreOldItems = false
 
             applyFilters()
             updateAvailableFilters()
@@ -185,6 +214,42 @@ final class ClipboardViewModel: ObservableObject {
 
         } catch {
             showError("Failed to load more items: \(error.localizedDescription)")
+        }
+
+        isLoading = false
+    }
+
+    /// Load older items (scroll up)
+    func loadOldItems() async {
+        guard !isLoading, hasMoreOldItems else { return }
+
+        isLoading = true
+
+        do {
+            // Calculate how many old items we can load
+            let oldItemsToLoad = min(pageSize, currentLoadedCount)
+
+            if oldItemsToLoad > 0 {
+                let fetchedItems = try dataStore.fetchItems(
+                    predicate: nil,
+                    sortDescriptors: [NSSortDescriptor(key: "capturedAt", ascending: false)],
+                    limit: oldItemsToLoad,
+                    offset: 0
+                )
+
+                // Prepend to the beginning
+                let oldSummaries = fetchedItems.map { $0.toSummary() }
+                allItemSummaries.insert(contentsOf: oldSummaries, at: 0)
+                currentLoadedCount += oldSummaries.count
+
+                NSLog("📜 Loaded \(oldSummaries.count) old items, total: \(currentLoadedCount)")
+            }
+
+            hasMoreOldItems = currentLoadedCount < totalItemCount
+            applyFilters()
+
+        } catch {
+            showError("Failed to load old items: \(error.localizedDescription)")
         }
 
         isLoading = false
@@ -538,11 +603,10 @@ final class ClipboardViewModel: ObservableObject {
                 }
             }
 
-            // Apply sliding window limit to prevent memory growth
-            let maxItemsInMemory: Int = 50
-            if filtered.count > maxItemsInMemory {
-                filtered = Array(filtered.suffix(maxItemsInMemory))
-                NSLog("🗑️ Limited display to \(maxItemsInMemory) most recent items")
+            // Apply sliding window limit
+            if filtered.count > slidingWindowSize {
+                filtered = Array(filtered.suffix(slidingWindowSize))
+                NSLog("🗑️ Limited display to \(slidingWindowSize) most recent items")
             }
 
             items = filtered
