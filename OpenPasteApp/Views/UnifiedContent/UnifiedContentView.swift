@@ -63,11 +63,32 @@ struct UnifiedContentView: View {
                                 copyHandler(item.id)
                             }
                         )
+                        .onAppear {
+                            // Trigger next batch when nearing the end
+                            if shouldTriggerNextBatch(for: index) {
+                                Task {
+                                    await viewModel.loadMoreItems()
+                                }
+                            }
+                        }
+                    }
+
+                    // Loading indicator at bottom
+                    if viewModel.isLoading && !filteredItems.isEmpty {
+                        ProgressView()
+                            .padding()
+                            .accessibilityLabel("Loading more items")
                     }
                 }
                 .padding()
             }
         }
+    }
+
+    /// Check if we should trigger next batch load
+    private func shouldTriggerNextBatch(for index: Int) -> Bool {
+        let remainingItems = filteredItems.count - index
+        return remainingItems <= 5  // Load more when 5 items from bottom
     }
 
     // MARK: - Empty State
