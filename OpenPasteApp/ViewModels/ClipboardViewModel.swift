@@ -88,7 +88,7 @@ final class ClipboardViewModel: ObservableObject {
     private var currentLoadedCount: Int = 0
 
     /// Number of items to load per batch (pagination)
-    private let pageSize: Int = 50
+    private let pageSize: Int = 10
 
     /// Whether there are more items to load
     @Published var hasMoreItems: Bool = true
