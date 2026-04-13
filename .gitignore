@@ -95,6 +95,7 @@ iOSInjectionProject/
 # Claude Code
 .claude/
 .omc/
+.work/
 
 # IDE
 .vscode/
